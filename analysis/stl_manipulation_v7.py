@@ -5,8 +5,6 @@ from matplotlib import pyplot as plt
 from sklearn.cluster import KMeans
 from stl import mesh
 
-from stl_scale_functions import create_interpolated_centerline, scale_stl_mesh_interpolated, save_new_mesh_v2
-
 plt.style.use(['grid', 'science'])
 
 
@@ -81,13 +79,13 @@ def compute_branch_centerlines(mesh, bifurcation_z, z_interval):
 
 
 # Load the STL file
-your_stl_file = 'CT_2_1_A.stl'
+your_stl_file = 'patient1/P1-pre_axial-v10.stl'
 aorta_mesh = mesh.Mesh.from_file('data/' + your_stl_file)
 
 # Manually specified bifurcation point (in mm from top)
-bifurcation_z = 51
+bifurcation_z = -440
 # Replace the call to your previous function with this one
-main_centerline, branch_centerlines = compute_branch_centerlines(aorta_mesh, bifurcation_z, 6)
+main_centerline, branch_centerlines = compute_branch_centerlines(aorta_mesh, bifurcation_z, 1)
 
 singlular_centerline = branch_centerlines[0][:-2]
 singlular_centerline.extend(main_centerline)
@@ -105,11 +103,19 @@ ax = fig.add_subplot(111, projection='3d')
 xs, ys, zs = zip(*singlular_centerline)
 
 ax.plot(xs, ys, zs, 'r-', linewidth=2)
+
+
+xs, ys, zs = zip(*branch_centerlines[1][8:])
+ax.plot(xs, ys, zs, 'g-', linewidth=2)
+
 # make all 3 axes equal
 max_range = np.array([xs, ys, zs]).max()
-ax.set_xlim([0, max_range])
-ax.set_ylim([0, max_range])
-ax.set_zlim([0, max_range])
+# ax.set_xlim([-80, max_range])
+# ax.set_ylim([-60, max_range])
+# ax.set_zlim([-600, max_range])
+
+
+ax.set_aspect('equal', adjustable='box')
 
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
@@ -119,16 +125,16 @@ plt.show()
 
 
 
-# Create the interpolated centerline functions
-f_x, f_y = create_interpolated_centerline(singlular_centerline)
-
-scale_factor = 1.45
-
-scaled_mesh_vectors_interpolated = scale_stl_mesh_interpolated(aorta_mesh, f_x, f_y, scale_factor)
-
-save_name = 'outputs/V10/' + your_stl_file[:-4] + f'_scaled_m1-5_{scale_factor}_v6.stl'
-
-save_new_mesh_v2(scaled_mesh_vectors_interpolated, your_stl_file, scale_factor, save_name)
+# # Create the interpolated centerline functions
+# f_x, f_y = create_interpolated_centerline(singlular_centerline)
+#
+# scale_factor = 1.45
+#
+# scaled_mesh_vectors_interpolated = scale_stl_mesh_interpolated(aorta_mesh, f_x, f_y, scale_factor)
+#
+# save_name = 'outputs/V14/' + your_stl_file[:-4] + f'_scaled_m1-5_{scale_factor}_v6.stl'
+#
+# save_new_mesh_v2(scaled_mesh_vectors_interpolated, your_stl_file, scale_factor, save_name)
 
 
 print("done")

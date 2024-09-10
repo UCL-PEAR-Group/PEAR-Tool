@@ -22,7 +22,7 @@ def visualize_mesh(stl_file_path):
 # Specify the path to your STL file
 # stl_file_path = 'data/CT_2_1_A.stl'
 
-stl_file_path = 'outputs/V4/CT_2_1_A_scaled_down_fake.stl'
+stl_file_path = 'data/patient1/P1-pre_axial-v11.stl'
 
 # Visualize the mesh
 visualize_mesh(stl_file_path)
