@@ -8,6 +8,11 @@ The first numerical results are preserved in the [reference archive](archive/).
 Update this document and [DECISIONS.md](DECISIONS.md) when a modelling decision
 changes; retain previous numerical snapshots so changes can be traced.
 
+The [goal and concept comparison](GOAL_AND_CONCEPT_MATRIX.md) and
+[operating-case matrix](OPERATING_MATRIX.md) now distinguish the proposed
+shared chamber (1A) and two dedicated chambers (1B). They do not extend the
+current hydraulic solver to either complete architecture.
+
 ## 1. Purpose and current status
 
 Estimate geometric displacement, delivered liquid volume, pressure history
@@ -26,8 +31,8 @@ independently validated against a physical pump.
 | Quantity | Current value or range | Status / provenance |
 | --- | --- | --- |
 | Nominal mean circuit flow | 5 L/min | User-prescribed |
-| Nominal delivery frequency | 75 beats/min | User-prescribed; overrides the earlier PDS nominal rate |
-| Exploratory frequency range | 40–180 beats/min | PDS range used in the previous sweep |
+| Nominal per-circuit pulse frequency h | 75 beats/min | User-prescribed; overrides the earlier PDS nominal rate; distinct from physical chamber frequency f in concept 1A |
+| Archived physical chamber frequency f | 40–180 cycles/min | Previous one-chamber sweep; PDS per-circuit range is h = 40–180 bpm, implying f = 2h for 1A |
 | Mean-flow range | 2–7 L/min | PDS; compatible combinations remain to be chosen |
 | Geometric swept volume | 66.6667 mL | Ideal 5 L/min ÷ 75/min reference; not actual delivered volume |
 | Face diameter / travel | 50 mm / 33.95 mm | Illustrative; both remain design variables |
@@ -60,7 +65,7 @@ Define A as piston-face area, D as face diameter and S as piston travel.
 - A = π D² / 4.
 - Geometric swept volume Vₛ = A S.
 - With D and S in mm, Vₛ [mL] = π D² S / 4000.
-- With f in beats/min and Vnet in mL/beat, Qmean [L/min] = f Vnet / 1000.
+- For one dedicated chamber, with f in delivery cycles/min and Vnet in mL/cycle, Qmean [L/min] = f Vnet / 1000.
 - Therefore Vnet,required [mL/beat] = 1000 Qtarget / f.
 
 The last two relations are cycle-volume accounting, not empirical pump laws.
@@ -239,9 +244,33 @@ prediction accuracy.
 - The earlier MATLAB files cite MathWorks format documentation; that port is
   superseded. The current notebook and scripts use the executed Python solver.
 
-## 9. Next staged decisions
+## 9. Architecture accounting added on 21 November 2026
 
-1. Review the variable register and agree which remaining inputs become measured
+For a per-circuit pulse rate h, concept 1A needs two sequential physical chamber
+cycles per heart period: f = 2h. Concept 1B needs f_R = f_L = h in two separate
+chambers. Thus a 180 bpm per-circuit target requires 360 cycles/min for 1A,
+beyond the existing 180 cycles/min sweep. Even at lower rates, alternating
+pressure boundaries and gas-state carry-over remain unimplemented.
+
+For both concepts, net volume per circuit pulse is 1000 Qtarget/h. At 5 L/min
+and 75 bpm this is 66.67 mL; at 180 bpm it is 27.78 mL. With the illustrative
+66.67 mL stroke, keeping 5 L/min at 180 bpm needs an ideal 58.33% reduction
+in net delivery. It is not achieved just by switching between R and L.
+
+The new matrix is accounting only. Periodicity for 1A must be checked over the
+complete R+L sequence, retaining chamber/gas state across switches. For both
+concepts, finite reservoirs and distinct pulmonary/systemic loads are needed
+to assess stable recirculation. Current constant-boundary tests cannot do so.
+
+The current PDS explicitly lists pulmonary mean arterial cases 15/25/35 mmHg.
+Right-atrial preload, pulmonary peak and complete arterial waveforms remain
+open. Systemic constant-load sensitivities must not be reused as pulmonary
+requirements or treated as reproduced physiological waveforms.
+
+## 10. Next staged decisions
+
+1. Review the operating-case matrix for both architectures, then the variable
+   register, and agree which remaining inputs become measured
    quantities, selected component properties or prescribed operating conditions.
 2. Agree compatible flow/frequency combinations and whether net-delivery control
    must retain fixed mechanical travel.

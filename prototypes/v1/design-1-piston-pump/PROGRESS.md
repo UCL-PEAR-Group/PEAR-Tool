@@ -40,3 +40,24 @@
 Keep completed numerical verification, calibration and independent validation
 as separate entries. No physical calibration or independent validation has
 been completed by the Python packaging and register update.
+
+
+## Both piston architectures scoped — 21 November 2026
+
+- Added a goal statement, measurable objectives, qualitative concept comparison,
+  parameter trade-offs and staged decision gates in GOAL_AND_CONCEPT_MATRIX.md.
+- Preserved the user's sketch and recorded the interpretation of 1A/1B.
+- Added 11 candidate operating points for both architectures (22 CSV rows),
+  generated reproducibly with Python and checked by volume/time accounting.
+- Distinguished per-circuit pulse frequency from physical chamber cycle rate;
+  identified 360 cycles/min for shared-chamber operation at 180 bpm per circuit.
+- Read the current PDS, including separate pulmonary mean loads and open
+  waveform requirements. Kept the user's 75 bpm nominal reference.
+- Updated the variable register with architecture budgets and unimplemented
+  routing/timing interfaces. No coupled chamber, switching or reservoir solver
+  has been implemented. No hydraulic cases were rerun for this documentation
+  and accounting update; previous numerical results remain unchanged.
+
+Immediate next decision: select the compatible flow/rate/load combinations
+and define the shared-chamber routing/timing alongside the dual-chamber phase
+relationship. Then extend the hydraulic model only enough to assess those cases.

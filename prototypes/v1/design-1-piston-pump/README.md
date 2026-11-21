@@ -1,6 +1,11 @@
 # Design 1: Piston Pump
 
-Python is the primary model language. Start with [MODEL.md](MODEL.md) and the
+Start with the [goal and concept comparison](GOAL_AND_CONCEPT_MATRIX.md) and
+[operating-case matrix](OPERATING_MATRIX.md) ([CSV](OPERATING_MATRIX.csv)).
+Both the single chamber with alternating duties (1A) and two dedicated
+ventricular chambers (1B) remain under consideration.
+
+Python is the primary model language. Continue with [MODEL.md](MODEL.md) and the
 [variable register](VARIABLES.md) ([CSV](VARIABLES.csv)). Editable calculations
 and plots are in [Pump_Model.ipynb](python/Pump_Model.ipynb). The notebook is
 optional: every simulation can run through the command line.
@@ -46,9 +51,21 @@ shell during this update. A separate Jupyter kernel could not bind sockets
 in this environment, so frontend rendering remains unchecked. The committed
 notebook has outputs cleared to keep code review clean.
 
+To regenerate the architecture volume/timing budget (standard library only):
+
+```sh
+python python/build_operating_matrix.py
+```
+
+This does not run hydraulic simulations or modify the archived results.
+
 ## Files and model status
 
-- `python/`: active model, runner, plotting script, notebook and CSV renderer.
+- `GOAL_AND_CONCEPT_MATRIX.md`: project goal, concept comparison and evidence gates.
+- `OPERATING_MATRIX.md`, `OPERATING_MATRIX.csv`: 11 operating points × two
+  architectures, with explicit per-circuit and physical-chamber frequencies.
+- `references/`: unaltered user sketch and provenance.
+- `python/`: active model, runner, plotting script, notebook and matrix/register generators.
 - `VARIABLES.csv`: editable source of the variable register; run
   `python python/render_variables.py` to update `VARIABLES.md`.
 - `MODEL.md`: maintained equations, input provenance, interpretation and choices.

@@ -8,12 +8,12 @@ A free design parameter can be varied between candidate designs and still remain
 
 The current model has **three independent continuous physical states**: chamber pressure, inlet flow and outlet flow. The two integrated-volume states are accounting accumulators. Gas volume, liquid inventory and force are dependent quantities. This state count is not a count of mechanical degrees of freedom.
 
-The inlet and outlet of each chamber have their own entries; a future two-ventricle model should suffix them `_R` and `_L`. The current code simulates one chamber, not the four-valve whole-heart system.
+The inlet and outlet of each chamber have their own entries; a future two-ventricle model should suffix them `_R` and `_L`. The current code simulates one chamber, not the four-valve whole-heart system. The operating matrix separately distinguishes per-circuit pulse rate h from physical chamber rate f: f=2h for the shared chamber (1A), and f=h per chamber for two dedicated chambers (1B). Architecture budget entries do not implement the coupled hydraulics.
 
 ## Dependencies to preserve
 
 - Piston area A = πD²/4; swept volume Vs = A S. Choose two of D, S and Vs; calculate the third.
-- Required net volume per beat = 1000 × target flow [L/min] / delivery frequency [min⁻¹]. This is distinct from geometric displacement.
+- Required net volume per circuit pulse = 1000 × circuit target flow [L/min] / per-circuit pulse rate h [min⁻¹]. This is distinct from geometric displacement.
 - Period T = 60/f; advance time = γT; return time = (1−γ)T.
 - Gas amount/reference condition is fixed for a closed pocket, while its instantaneous pressure, volume and compliance vary. Gas-law pressure is absolute.
 - Actual mean flow, net-delivery ratio and maximum force are responses of the coupled system, not independent inputs to be freely prescribed together.
@@ -27,10 +27,10 @@ The tables use the units actually present in the code. Internal flow is mL/s; ex
 | Symbol / code | Meaning | Physical role | Python type | Units | Current value / status | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
 | Qtarget / `Q_target_Lmin` | Desired mean circuit flow | Prescribed target | float | L/min | 5 nominal; 2–7 range; Requirement only | A target for comparison; not imposed as outlet flow by the current pressure-driven solution. |
-| f / `f` | Delivery frequency | Prescribed / operating input | float | deliveries/min | 75 nominal; sweep 40–180; Implemented | One delivery event per chamber cycle in this model. A multiplexed design needs separate circuit and mechanical frequencies. |
+| f / `f` | Physical chamber delivery-cycle frequency | Prescribed / operating input | float | cycles/min per chamber | 75 nominal; sweep 40–180; Implemented | Current one-chamber solver: one fill/eject cycle per event. Concept 1A requires f=2h; concept 1B requires f=h per chamber for per-circuit pulse rate h. |
 | pout,target,mean / `p_out_mean_target` | Desired mean outlet pressure | Prescribed target | float | mmHg gauge | 90 nominal; 60–120 PDS; Requirement only | Requirement distinct from the constant outlet test boundary. |
 | pout,target,peak / `p_out_peak_target` | Desired / permitted instantaneous outlet pressure | Prescribed target | float | mmHg gauge | PDS references 120 / 160; upper intended 200; Requirement only | Select the required test condition; these are not measured internal-pressure ratings. |
-| T / `T` | Cycle period | Derived timing | float | s | 0.8 at 75/min; Implemented | T = 60/f. |
+| T / `T` | Physical chamber cycle period | Derived timing | float | s | 0.8 at 75/min; Implemented | T=60/f. For equal R/L allocations 1A T=30/h; 1B T=60/h. Switching/dwell must fit the schedule. |
 | γ / `ejection_fraction` | Fraction of cycle assigned to advance | Selectable timing input | float | 1 | 0.4; sensitivity 0.3 / 0.5; Implemented | Motion is prescribed, not yet closed-loop controlled. |
 | te / `te` | Advance duration | Derived timing | float | s | 0.32 at baseline; Implemented | te = γT. |
 | tf / `T-te` | Return duration | Derived timing | float | s | 0.48 at baseline; Implemented | tf = (1−γ)T; excludes a separate dwell stage. |
@@ -180,3 +180,18 @@ The tables use the units actually present in the code. Internal flow is mL/s; ex
 | y / `y` | ODE state vector | Numerical setting / diagnostic | ndarray[float64], shape (5,) | Mixed state units | [pc, Qi, Qo, Vin,int, Vout,int]; Implemented | Three independent physical ODE states plus two integral accumulators. |
 | solver / `method` | ODE integration method | Numerical setting / diagnostic | str | category | Radau; Implemented | Numerical choice, not a model property. |
 | mmHg→Pa / `MMHG` | Pressure-unit conversion factor | Numerical setting / diagnostic | float | Pa/mmHg | 133.322387415; Implemented | Fixed conversion constant. |
+
+## 9. Architecture budgets and planned routing
+
+| Symbol / code | Meaning | Physical role | Python type | Units | Current value / status | Notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| concept / `concept` | Piston architecture label | Design option | str | category | 1A / 1B; Matrix only | 1A shared chamber with alternating R/L duty; 1B two dedicated chambers. Not a hydraulic solver switch. |
+| h / `h_per_limb_per_min` | Pulse rate at each circuit arterial outlet | Prescribed target | float | pulses/min | 75 nominal; 40–180 PDS; Matrix only | Distinct from physical chamber f. Matrix assumes one delivery per circuit per heart period. |
+| Nch / `physical_chamber_count` | Number of physical pump chambers | Architecture property | int | chambers | 1 for 1A; 2 for 1B; Matrix only | Not number of mechanical degrees of freedom. |
+| fch / `delivery_cycles_per_physical_chamber_per_min` | Required delivery-cycle frequency per physical chamber | Derived timing | float | cycles/min | 2h for 1A; h for 1B; Matrix only | 360/min for 1A at 180 bpm per circuit; no hydraulic simulation at that rate yet. |
+| Qpasses / `target_liquid_passes_per_chamber_Lmin` | Target net liquid passes through each physical chamber | Derived volume budget | float | L/min | 2Q for 1A; Q for 1B; Matrix only | Excludes bypass. Does not double the reported circulation flow. |
+| sroute / `routing_state` | Shared-chamber connection state | Future discrete state | str / Enum | category | R-fill / R-eject / L-fill / L-eject / transition to define; Not implemented | Physical port map and transition isolation remain unselected; preserve gas and residual liquid state across switches. |
+| tswitch / `switching_time_s` | Time reserved for valve routing transitions | Future timing input | float | s | Not selected; Not implemented | Must fit within the heart period; current prescribed motion reserves no separate switching dwell. |
+| deltaRL / `ventricular_phase_offset` | Right/left chamber motion offset | Selectable timing input | float | fraction of heart period | Not selected; Not implemented | Concurrent or offset motion possible in 1B; valve openings still depend on pressure loads. |
+| pPAmean / `pulmonary_mean_pressure_target` | Mean pulmonary arterial load | Prescribed target | float | mmHg gauge | 15 / 25 / 35; Requirement only | Current PDS p.1; pulmonary peak and right-atrial inlet boundary remain open. |
+| Qphantom / `phantom_inlet_flow_target` | Flow target at the declared phantom anatomical plane | Prescribed signal | float / ndarray[float64] | L/min | Trace and branch split not selected; Not implemented | Do not automatically equate local abdominal flow to total pump output. |

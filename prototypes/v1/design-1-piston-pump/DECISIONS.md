@@ -26,3 +26,19 @@ The 50 mm face, 33.95 mm travel and 66.7 mL geometric stroke remain illustrative
 D011 supersedes D007; D012 supersedes the MATLAB portion of D010. Archived
 Python results and the earlier MATLAB source are preserved. No new physical
 model or independent-flow controller is introduced by the language change.
+
+
+## Architecture comparison — 21 November 2026
+
+| ID | Date | Decision | Basis | Status |
+| --- | --- | --- | --- | --- |
+| D014 | 2026-11-21 | Retain 1A single chamber alternating R/L duties and 1B two dedicated ventricular chambers | User's latest instruction and sketch | Both active; no winner selected |
+| D015 | 2026-11-21 | Distinguish per-circuit pulse rate h from physical chamber rate f | One fill/eject cycle for each ventricular duty; f=2h for 1A and f=h per chamber for 1B | Explicit accounting assumption; revisit if topology or pulse definition changes |
+| D016 | 2026-11-21 | Use operating-case budgets and evidence gates before weighted scoring | Hydraulic feasibility and measurable EVAR boundary conditions must be established | Working comparison framework; no invented weights or scores |
+| D017 | 2026-11-21 | Preserve the sketch unmodified and distinguish its interpretation from a dimensioned design | Right edge of supplied image is cropped | Recorded in references/ |
+| D018 | 2026-11-21 | Keep pulmonary/systemic pressure loads and pump/phantom measurement planes distinct | Current PDS pp. 1/5; anatomical-plane specificity supported by Les et al. | Inputs to next model extension; no new hydraulic simulation |
+
+The existing fixed-stroke and independent-flow options remain open. No new
+stroke, valve arrangement, phase offset, gas amount or cylinder has been
+selected. The matrix gives proposed cases for review, not an assertion that
+all listed points must be achieved by one fixed-stroke configuration.
