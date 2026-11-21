@@ -1,45 +1,67 @@
 # Design 1: Piston Pump
 
-Start with [MODEL.md](MODEL.md), the maintained calculation and decision
-record. It links the archived calculations and explains fixed-stroke flow
-control. The MATLAB entry point is [Pump_Model_Live.m](matlab/Pump_Model_Live.m).
+Python is the primary model language. Start with [MODEL.md](MODEL.md) and the
+[variable register](VARIABLES.md) ([CSV](VARIABLES.csv)). Editable calculations
+and plots are in [Pump_Model.ipynb](python/Pump_Model.ipynb). The notebook is
+optional: every simulation can run through the command line.
 
-## What is available
+## Run locally
 
-- `MODEL.md`: readable model definition, input provenance, equations, results,
-  decisions and remaining questions.
-- `matlab/`: MATLAB functions, a plain-text Live Script and a regression check
-  against the executed Python reference results.
-- `archive/pump_hydraulic_sweep/`: the original 118-case calculation, CSV/JSON
-  outputs, plots, verification records and LaTeX report.
-- `archive/pump_coupled_model/`: earlier coupled-model derivation and source.
-- `archive/pump_tradeoffs/`: initial geometry/displacement trade-off plots.
-- `DECISIONS.md` and `PROGRESS.md`: dated decisions and work status.
-- `MANIFEST.sha256`: hashes of the preserved source/data/report archive.
+From this directory, using Python 3.12:
 
-## MATLAB use
-
-Open `matlab/Pump_Model_Live.m` in MATLAB R2025a or newer for the plain-text
-Live Editor format. The computational functions use standard MATLAB; no
-Simulink or Simscape toolbox is required. On older releases, the text markup
-appears as comments and the code can be run as a script (plotting requires
-`tiledlayout`, introduced in R2019b).
-
-From the `matlab` directory, first run:
-
-```matlab
-verify_reference
-Pump_Model_Live
-% Optional full rerun; saves to ../results/matlab without overwriting archive:
-run_sweep
+```sh
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python python/run_model.py check
+python python/run_model.py baseline
 ```
 
-**Execution status:** the archived results were executed in Python. The MATLAB
-port has not been run in MATLAB in the preparation environment, because no
-MATLAB runtime was available. `verify_reference` must pass before MATLAB
-outputs replace the reference results. Syntax checks are not runtime
-verification, and agreement between implementations is not physical validation.
+The baseline writes `results/python/baseline.json` and `baseline.png`.
+Those generated outputs are ignored by Git; the original archive is preserved.
+To change an operating case, edit a JSON file containing `Case` fields:
 
-Only the small, current model is migrated. No actuator, controller, bypass
-valve or whole-circulation model is claimed to be implemented. The fixed-stroke
-control alternatives in `MODEL.md` remain open design choices.
+```sh
+python python/run_model.py baseline --config python/example_case.json
+python python/run_model.py sweep
+```
+
+The sweep regenerates all 118 cases and the two trend figures in
+`results/python/`. It does not alter the archive. The executed reference used
+Python 3.12 and the versions pinned in `requirements.txt`; local installation
+on the user's computer has not been performed by this task.
+
+For the optional notebook, install the extra kernel dependencies and open it
+in VS Code's Jupyter extension or another Jupyter frontend:
+
+```sh
+python -m pip install -r requirements-notebook.txt
+```
+
+Select the virtual environment's Python kernel. The notebook locates the model
+from either its own directory, this design directory or the repository root.
+It performs one new baseline simulation and plots its output; the archived
+sweep is identified separately. All notebook code cells were executed sequentially in an in-process IPython
+shell during this update. A separate Jupyter kernel could not bind sockets
+in this environment, so frontend rendering remains unchecked. The committed
+notebook has outputs cleared to keep code review clean.
+
+## Files and model status
+
+- `python/`: active model, runner, plotting script, notebook and CSV renderer.
+- `VARIABLES.csv`: editable source of the variable register; run
+  `python python/render_variables.py` to update `VARIABLES.md`.
+- `MODEL.md`: maintained equations, input provenance, interpretation and choices.
+- `DECISIONS.md`, `PROGRESS.md`: dated decisions and work status.
+- `python/verification_status.json`: executed regression and notebook checks.
+- `archive/`: unchanged earlier source, data, figures and LaTeX reports.
+- `MANIFEST.sha256`: original archive hashes.
+- `matlab/`: superseded experimental port, not the active implementation; it was
+  never executed in MATLAB. It is retained as a record of the earlier choice.
+
+The Python hydraulic equations and baseline parameters are unchanged from the
+executed reference. Regression checks cover three representative cases,
+conservation, motion endpoints and the expected low-pressure guard. These are
+numerical checks, not calibration or independent physical validation. Actuator
+loads, feedback control, bypass paths and the whole circulation remain outside
+the present solver.

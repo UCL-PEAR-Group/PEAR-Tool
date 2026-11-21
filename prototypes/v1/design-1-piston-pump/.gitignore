@@ -1,4 +1,7 @@
 results/matlab/
+results/python/
+.venv/
+.ipynb_checkpoints/
 *.asv
 *.autosave
 __pycache__/

@@ -1,0 +1,21 @@
+"""Render VARIABLES.md from the canonical VARIABLES.csv register."""
+from pathlib import Path
+import csv
+ROOT=Path(__file__).resolve().parents[1]
+INTRO='# System variable register\n\nThis register covers the current one-chamber pump model, its performance targets, numerical settings and the identified near-term interfaces. It is not a claim that every future actuator, controller or Windkessel variable has already been defined.\n\n**Physical role and Python data type are separate classifications.** A continuous physical quantity can be a prescribed input, a design parameter, a dynamic state or a calculated output. Almost all scalar physical quantities use `float`; their time histories use NumPy floating-point arrays (JSON archives serialise them as lists). Valve states use `bool`; sample/cycle counts use `int`; labels use `str`.\n\nA free design parameter can be varied between candidate designs and still remain fixed throughout a test. A constitutive coefficient is not a control knob simply because the code lets us change it: it must represent a real component or material. Entries marked **not implemented** are a planning inventory, not additional equations already present.\n\nThe current model has **three independent continuous physical states**: chamber pressure, inlet flow and outlet flow. The two integrated-volume states are accounting accumulators. Gas volume, liquid inventory and force are dependent quantities. This state count is not a count of mechanical degrees of freedom.\n\nThe inlet and outlet of each chamber have their own entries; a future two-ventricle model should suffix them `_R` and `_L`. The current code simulates one chamber, not the four-valve whole-heart system.\n\n## Dependencies to preserve\n\n- Piston area A = πD²/4; swept volume Vs = A S. Choose two of D, S and Vs; calculate the third.\n- Required net volume per beat = 1000 × target flow [L/min] / delivery frequency [min⁻¹]. This is distinct from geometric displacement.\n- Period T = 60/f; advance time = γT; return time = (1−γ)T.\n- Gas amount/reference condition is fixed for a closed pocket, while its instantaneous pressure, volume and compliance vary. Gas-law pressure is absolute.\n- Actual mean flow, net-delivery ratio and maximum force are responses of the coupled system, not independent inputs to be freely prescribed together.\n- The current atmospheric-rear force is chamber gauge pressure × face area. It is not generally outlet pressure minus inlet pressure multiplied by area.\n\nThe tables use the units actually present in the code. Internal flow is mL/s; exported trace flow is L/min. `VARIABLES.csv` is the machine-readable version with separate physical-nature and Python-type columns.\n\n'
+
+def main():
+    with (ROOT/'VARIABLES.csv').open(newline='') as handle:
+        rows=list(csv.DictReader(handle))
+    lines=[INTRO]
+    for group in dict.fromkeys(row['group'] for row in rows):
+        lines += ['## '+group,'','| Symbol / code | Meaning | Physical role | Python type | Units | Current value / status | Notes |','| --- | --- | --- | --- | --- | --- | --- |']
+        for row in rows:
+            if row['group']!=group:continue
+            values=[row['symbol']+' / `'+row['code_name']+'`',row['meaning'],row['role'],row['python_type'],row['units'],row['current_value']+'; '+row['status'],row['notes']]
+            lines.append('| '+' | '.join(value.replace('|',' / ').replace('\n',' ') for value in values)+' |')
+        lines.append('')
+    (ROOT/'VARIABLES.md').write_text('\n'.join(lines))
+    print(f'Rendered {len(rows)} variable entries.')
+
+if __name__=='__main__':main()

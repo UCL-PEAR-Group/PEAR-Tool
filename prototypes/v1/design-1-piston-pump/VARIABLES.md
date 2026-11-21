@@ -1,0 +1,182 @@
+# System variable register
+
+This register covers the current one-chamber pump model, its performance targets, numerical settings and the identified near-term interfaces. It is not a claim that every future actuator, controller or Windkessel variable has already been defined.
+
+**Physical role and Python data type are separate classifications.** A continuous physical quantity can be a prescribed input, a design parameter, a dynamic state or a calculated output. Almost all scalar physical quantities use `float`; their time histories use NumPy floating-point arrays (JSON archives serialise them as lists). Valve states use `bool`; sample/cycle counts use `int`; labels use `str`.
+
+A free design parameter can be varied between candidate designs and still remain fixed throughout a test. A constitutive coefficient is not a control knob simply because the code lets us change it: it must represent a real component or material. Entries marked **not implemented** are a planning inventory, not additional equations already present.
+
+The current model has **three independent continuous physical states**: chamber pressure, inlet flow and outlet flow. The two integrated-volume states are accounting accumulators. Gas volume, liquid inventory and force are dependent quantities. This state count is not a count of mechanical degrees of freedom.
+
+The inlet and outlet of each chamber have their own entries; a future two-ventricle model should suffix them `_R` and `_L`. The current code simulates one chamber, not the four-valve whole-heart system.
+
+## Dependencies to preserve
+
+- Piston area A = πD²/4; swept volume Vs = A S. Choose two of D, S and Vs; calculate the third.
+- Required net volume per beat = 1000 × target flow [L/min] / delivery frequency [min⁻¹]. This is distinct from geometric displacement.
+- Period T = 60/f; advance time = γT; return time = (1−γ)T.
+- Gas amount/reference condition is fixed for a closed pocket, while its instantaneous pressure, volume and compliance vary. Gas-law pressure is absolute.
+- Actual mean flow, net-delivery ratio and maximum force are responses of the coupled system, not independent inputs to be freely prescribed together.
+- The current atmospheric-rear force is chamber gauge pressure × face area. It is not generally outlet pressure minus inlet pressure multiplied by area.
+
+The tables use the units actually present in the code. Internal flow is mL/s; exported trace flow is L/min. `VARIABLES.csv` is the machine-readable version with separate physical-nature and Python-type columns.
+
+
+## 1. Requirements and operating inputs
+
+| Symbol / code | Meaning | Physical role | Python type | Units | Current value / status | Notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| Qtarget / `Q_target_Lmin` | Desired mean circuit flow | Prescribed target | float | L/min | 5 nominal; 2–7 range; Requirement only | A target for comparison; not imposed as outlet flow by the current pressure-driven solution. |
+| f / `f` | Delivery frequency | Prescribed / operating input | float | deliveries/min | 75 nominal; sweep 40–180; Implemented | One delivery event per chamber cycle in this model. A multiplexed design needs separate circuit and mechanical frequencies. |
+| pout,target,mean / `p_out_mean_target` | Desired mean outlet pressure | Prescribed target | float | mmHg gauge | 90 nominal; 60–120 PDS; Requirement only | Requirement distinct from the constant outlet test boundary. |
+| pout,target,peak / `p_out_peak_target` | Desired / permitted instantaneous outlet pressure | Prescribed target | float | mmHg gauge | PDS references 120 / 160; upper intended 200; Requirement only | Select the required test condition; these are not measured internal-pressure ratings. |
+| T / `T` | Cycle period | Derived timing | float | s | 0.8 at 75/min; Implemented | T = 60/f. |
+| γ / `ejection_fraction` | Fraction of cycle assigned to advance | Selectable timing input | float | 1 | 0.4; sensitivity 0.3 / 0.5; Implemented | Motion is prescribed, not yet closed-loop controlled. |
+| te / `te` | Advance duration | Derived timing | float | s | 0.32 at baseline; Implemented | te = γT. |
+| tf / `T-te` | Return duration | Derived timing | float | s | 0.48 at baseline; Implemented | tf = (1−γ)T; excludes a separate dwell stage. |
+| t / `t / time_s` | Time / sampled cycle time | Independent coordinate | float / ndarray[float64] | s | 0 to T in a reported cycle; Implemented |  |
+| φ / `phase` | Cycle fraction | Derived coordinate | float / ndarray[float64] | 1 | 0–1; Implemented | phase = cycle time/T. |
+
+## 2. Geometry and displacement
+
+| Symbol / code | Meaning | Physical role | Python type | Units | Current value / status | Notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| Dp / `diameter_mm` | Plunger-face diameter | Free design parameter | float | mm | 50 illustrative; Implemented | Chosen before manufacture; fixed during each simulation. |
+| Ap / `π(Dp/1000)^2/4` | Plunger-face area | Derived geometry | float | m² | 0.0019635 at Dp = 50 mm; Derived expression | No wetted rod area deduction. |
+| S / `stroke_mm` | Piston travel | Dependent geometry / alternative design input | float | mm | 33.95 at baseline; Derived, not a Case field | S = 4000 Vs/(π Dp²), for Vs in mL. Code currently selects Dp and Vs, then infers S. |
+| Vs / `swept_ml` | Geometric swept volume | Free design parameter, fixed per run | float | mL | 5000/75 = 66.6667; Implemented | Vs = Ap S; Dp, S and Vs cannot all be varied independently. |
+| Vmin / `residual_ml` | Minimum total chamber volume | Free design parameter | float | mL | 40 assumed; Implemented | Contains both residual liquid and retained gas; not the same as swept volume. |
+| Vmax / `residual_ml+swept_ml` | Maximum total chamber volume | Derived geometry | float | mL | 106.6667; Derived expression | At full retraction. |
+| Vch(t) / `residual_ml+swept_ml-u` | Instantaneous total chamber volume | Derived trajectory | ndarray[float64] | mL | Variable; Derived expression | Vch = Vmin + Vs − u. |
+| x(t) / `u/Ap with unit conversion` | Piston position from full retraction | Prescribed trajectory, derived from volume | ndarray[float64] | mm | 0 to S; Derived expression | x_mm = 1000 u_mL / Ap_mm2. |
+| dx/dt / `qp/Ap with unit conversion` | Piston velocity | Derived trajectory | ndarray[float64] | mm/s | Variable; Derived expression | Not currently a separately saved trace. |
+| d²x/dt² / `dq/Ap with unit conversion` | Piston acceleration | Derived trajectory | ndarray[float64] | mm/s² | Variable; Derived expression | Used indirectly through prescribed volume dynamics; no solid inertia force yet. |
+| u(t) / `u / piston_displacement_ml` | Displacement volume, positive on advance | Prescribed trajectory | ndarray[float64] | mL | 0 to Vs; Implemented | Quintic advance/return profile. |
+| du/dt / `qp / vp / q from motion` | Piston displacement rate | Derived trajectory | float / ndarray[float64] | mL/s | Variable; Implemented | Not identical to outlet flow when gas storage is changing. |
+| d²u/dt² / `dq from motion` | Displacement-volume acceleration | Derived trajectory | float / ndarray[float64] | mL/s² | Variable; Implemented | Used explicitly in the imposed-full-fill reference. |
+| Lc / `cylinder_length_mm` | Total cylinder length | Future design parameter | float | mm | Unselected; Not implemented | Must accommodate travel, plunger, ports and clearance. |
+| tp / `plunger_thickness_mm` | Plunger thickness | Future design parameter | float | mm | Unselected; Not implemented | Relevant to physical envelope, not current hydraulic balance. |
+| cend / `end_clearance_mm` | End clearance / port allowance | Future design parameter | float | mm | Unselected; Not implemented | Cylinder length minus plunger thickness alone does not determine usable travel. |
+
+## 3. Valves and connected hydraulic legs
+
+| Symbol / code | Meaning | Physical role | Python type | Units | Current value / status | Notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| di / `valve_in_mm` | Inlet clear bore | Free design parameter | float | mm | 16 baseline; 8 / 12 / 16 / 20 sweep; Implemented | Inlet and outlet bores can be set independently in Case. |
+| do / `valve_out_mm` | Outlet clear bore | Free design parameter | float | mm | 16 baseline; 8 / 12 / 16 / 20 sweep; Implemented | Previous sweep varied both together, not independently. |
+| Avi, Avo / `Av in coeff` | Valve flow areas | Derived geometry | float | m² | π dv²/4 after unit conversion; Derived expression | One area per leg. Equivalent bore is not necessarily nominal connector diameter. |
+| Cd / `Cd` | Valve discharge coefficient | Constitutive / calibration parameter | float | 1 | 0.7; sensitivity 0.6 / 0.8; Implemented | One shared coefficient in current code; not yet measured. |
+| dtube / `tube_d_mm` | Connected line bore | Free design / interface parameter | float | mm | 20 assumed; Implemented | Same value for both legs in current code. |
+| At / `At in coeff` | Connected line area | Derived geometry | float | m² | π dtube²/4 after unit conversion; Derived expression | Derived expression |
+| ℓ / `tube_l_m` | Effective liquid inertial length | Design / interface parameter | float | m | 0.2 assumed; Implemented | Same value for both legs; not piston travel or cylinder length. |
+| K / `line_loss_K` | Lumped quadratic line-loss coefficient | Constitutive / calibration parameter | float | 1 | 1 assumed; Implemented | Not a derived Darcy friction factor and not a calibrated viscosity model. |
+| Bi, Bo / `Bi / Bo` | Quadratic hydraulic resistance coefficients | Derived constitutive coefficients | float | mmHg/(mL/s)² internally | Calculated from density, Cd, areas and K; Derived expression | SI equivalent: Pa·s²/m⁶. |
+| Ii, Io / `Ii / Io` | Hydraulic inertances | Derived constitutive coefficients | float | mmHg/(mL/s²) internally | Calculated from ρℓ/At; Derived expression | SI equivalent: Pa·s²/m³. |
+| si, so / `opened / active` | Inlet/outlet open states | Discrete hybrid states | list[bool] | open/closed | Event-dependent; Implemented | Two booleans per model chamber. Current passive checks are not mechanically linked. |
+| Δpcr,i, Δpcr,o / `valve_cracking_pressure` | Physical valve cracking pressures | Future constitutive parameters | float | mmHg | Assumed zero; Implicit zero; finite values not implemented | The 1e-6 mmHg numerical opening tolerance is not a physical cracking pressure. |
+| τvalve / `valve_response_time_s` | Valve opening / closure response time | Future constitutive parameter | float | s | Not selected; Not implemented | Leaflet or actuator valve dynamics are currently omitted. |
+| Qleak / `leakage_flow` | Leakage flow | Future constitutive response | float | mL/s | Assumed zero; Implicit zero; nonzero law not implemented | Would require a specified pressure-dependent leakage law. |
+
+## 4. Fluid and retained gas
+
+| Symbol / code | Meaning | Physical role | Python type | Units | Current value / status | Notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| ρ / `rho` | Liquid density | Fluid property | float | kg/m³ | 1000 assumed; Implemented | Water-like value; not measured BMF properties. |
+| μ / `dynamic_viscosity_Pas` | Liquid dynamic viscosity | Future fluid property | float | Pa·s | Unspecified; Not implemented | Requires viscosity-dependent losses; non-Newtonian BMF may require μ(shear rate, temperature). |
+| Tfluid / `fluid_temperature_C` | Liquid temperature | Future condition / measured input | float | °C | Unspecified in this model; Not implemented | Thermal dependence of density and viscosity is not solved. |
+| Kbulk / `liquid_bulk_modulus_Pa` | Liquid bulk modulus | Future constitutive parameter | float | Pa | Incompressible-liquid assumption; Implicit incompressible limit | Finite liquid compressibility is not included. |
+| Vg0 / `gas_ref_ml` | Reference sealed gas volume | Reference condition / design parameter | float | mL | 10; sensitivity 1 / 20; Implemented | Volume at specified reference pressure, not a constant volume during motion. |
+| pg0,gauge / `gas_ref_pressure_mmhg` | Reference gas pressure | Reference condition | float | mmHg gauge | 10 assumed; Implemented | Together with gas amount/volume defines reference state. |
+| patm / `atmosphere_mmhg` | Atmospheric pressure | Environmental parameter | float | mmHg absolute | 760 assumed; Implemented | Needed to convert all gas pressures to absolute. |
+| pg0,abs / `atmosphere_mmhg+gas_ref_pressure_mmhg` | Absolute reference gas pressure | Derived reference condition | float | mmHg absolute | 770 at baseline; Derived expression | Gas-law pressure must be absolute. |
+| n / `n` | Polytropic exponent | Constitutive assumption | float | 1 | 1.2; sensitivity 1 / 1.4; Implemented | Assumed effective exponent; no gas heat-transfer equation. |
+| Vg(t) / `vg / gas_ml` | Instantaneous gas volume | Dependent gas state | float / ndarray[float64] | mL | Calculated from pc; Implemented | Vg = Vg0 (pg0,abs/pc,abs)^(1/n). Not an additional independent ODE state. |
+| Cg(t) / `C in rhs` | Instantaneous gas compliance | Derived constitutive quantity | float / ndarray[float64] | mL/mmHg internally | Vg/(n pc,abs); Implemented | SI equivalent: m³/Pa. |
+| mg / `gas_mass_kg` | Retained gas mass | Future derived reference quantity | float | kg | Unspecified; Not independently used in current model | Closed-gas assumption fixes mass; calculating it needs reference temperature and gas properties. |
+| Tg(t) / `gas_temperature_K` | Gas temperature | Future thermodynamic state | float | K | Not solved; Not implemented | A full energy/heat-transfer model would replace or justify the chosen exponent. |
+
+## 5. Boundary pressures and evolving chamber states
+
+| Symbol / code | Meaning | Physical role | Python type | Units | Current value / status | Notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| pi / `pin_mmhg` | Upstream pressure at model leg entrance | Boundary condition | float | mmHg gauge | 10 constant; Implemented | Represents upstream reservoir/load. Time-dependent boundary not yet wired into Case. |
+| po / `pout_mmhg` | Downstream pressure at model leg exit | Boundary condition | float | mmHg gauge | 90; sensitivities 120 / 200 constant; Implemented | Distinct from chamber pressure and from a specified pressure waveform. |
+| pb / `rear_pressure_gauge` | Pressure on rear face of plunger | Boundary condition | float | mmHg gauge | 0 fixed; Implicit constant | Current force function assumes atmospheric rear; pb is not inlet pressure. |
+| pc(t) / `y[0] / pc_gauge_mmhg` | Chamber pressure | Independent continuous ODE state | float / ndarray[float64] | mmHg gauge | Initial pc = pi; Implemented | Varies over the cycle. |
+| pc,abs(t) / `atmosphere_mmhg+pc` | Absolute chamber pressure | Derived pressure | float / ndarray[float64] | mmHg absolute | Variable; Derived expression | Used for gas law and pressure guard. |
+| Qi(t) / `y[1] / qin_Lmin` | Inlet flow | Independent continuous ODE state | float / ndarray[float64] | mL/s internally; L/min in trace | Initially zero; Implemented | Forward check-valve flow; multiplied by 0.06 for the saved trace. |
+| Qo(t) / `y[2] / qout_Lmin` | Outlet flow | Independent continuous ODE state | float / ndarray[float64] | mL/s internally; L/min in trace | Initially zero; Implemented | Outlet flow differs from piston displacement rate during gas storage. |
+| Vin,int(t) / `y[3]` | Integrated inlet volume | Integral accumulator state | float / ndarray[float64] | mL | Reset to zero each cycle; Implemented | Used for delivered-volume and conservation accounting. |
+| Vout,int(t) / `y[4]` | Integrated outlet volume | Integral accumulator state | float / ndarray[float64] | mL | Reset to zero each cycle; Implemented | Not an extra mechanical degree of freedom. |
+| Vl(t) / `vl / liquid_ml` | Liquid inventory inside chamber | Dependent volume state | ndarray[float64] | mL | Vmin + Vs − u − Vg; Implemented | Derived rather than independently integrated. |
+| Δpi(t), Δpo(t) / `pin-pc / pc-pout` | Forward pressure differences across each leg | Derived hydraulic quantities | float / ndarray[float64] | mmHg | Variable; Derived expression | Each includes the modelled valve and line segment, not necessarily only the physical valve. |
+
+## 6. Calculated outputs and performance
+
+| Symbol / code | Meaning | Physical role | Python type | Units | Current value / status | Notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| Fp(t) / `pressure_force_N` | Signed hydraulic balancing force | Calculated response | ndarray[float64] | N | Calculated per case; Implemented | Ap(pc−pb); excludes seals and solid inertia. |
+| Fp,max / `force_absmax_N` | Largest absolute hydraulic force in final cycle | Calculated response | float | N | Calculated per case; Implemented | Maximum over sampled final periodic cycle; not a component rating. |
+| Fpush / `force_peak_N` | Largest positive signed pressure force | Calculated response | float | N | Calculated per case; Implemented | May be interpreted as peak advancing-axis balancing demand. |
+| Fmin / `force_min_N` | Most negative signed pressure force | Calculated response | float | N | Calculated per case; Implemented | Signed value; retraction-demand magnitude is max(0,−Fmin). |
+| pc,max / `pc_peak_mmhg` | Maximum chamber pressure | Calculated response | float | mmHg gauge | Calculated per case; Implemented | Not maximum outlet-boundary pressure. |
+| pc,min / `pc_min_mmhg` | Minimum chamber pressure | Calculated response | float | mmHg gauge | Calculated per case; Implemented | Add atmospheric pressure for absolute value. |
+| Vnet / `delivered_ml` | Outlet volume delivered in the final cycle | Calculated response | float | mL/beat | Calculated per case; Implemented | Integral of Qo; distinct from geometric swept volume. |
+| Vin,cycle / `inlet_ml` | Inlet volume entering in the final cycle | Calculated response | float | mL/beat | Calculated per case; Implemented | Should equal outlet cycle volume at periodic operation. |
+| Qmean / `Q_Lmin` | Mean delivered outlet flow | Calculated response | float | L/min | Calculated per case; Implemented | f × Vnet / 1000. |
+| rV / `eta` | Net-delivery / swept-volume ratio | Calculated response | float | 1 | Calculated per case; Implemented | A calculated ratio, not a free control input; can exceed 1 in this ideal inertial valve model. |
+| Qi,max / `qin_peak_Lmin` | Peak instantaneous inlet flow | Calculated response | float | L/min | Calculated per case; Implemented | Not the cycle mean. |
+| Qo,max / `qout_peak_Lmin` | Peak instantaneous outlet flow | Calculated response | float | L/min | Calculated per case; Implemented | Not the cycle mean. |
+| ΔVfill / `fill_deficit_ml` | Liquid deficit at full retraction | Calculated response | float | mL | Calculated per case; Implemented | Relative to inventory at reference inlet pressure; distinct from net-delivery shortfall. |
+| Vl,min / `liquid_min_ml` | Minimum liquid inventory | Calculated response | float | mL | Calculated per case; Implemented | Must remain above the model inventory guard. |
+| Vg,max / `gas_max_ml` | Maximum gas volume | Calculated response | float | mL | Calculated per case; Implemented | Dynamic value, not reference gas volume. |
+| Vnet,required / `1000*Qtarget/f` | Required net delivery for target flow and frequency | Derived requirement | float | mL/beat | 66.67 nominal; 27.78 at 180/min for 5 L/min; Derived requirement | This is a requirement, not a guarantee that the selected geometry can supply it. |
+| Qgeom / `f*swept_ml/1000` | Ideal geometric displacement flow | Derived ideal reference | float | L/min | 5 at 75/min; 12 at 180/min; Derived reference | Assumes one complete ideal liquid delivery per cycle. |
+| Ftotal / `total_actuator_force_N` | Total actuator force | Future calculated response | float | N | Not calculated; Out of current scope | Would add seal friction and moving-solid inertia with consistent signs; mechanism loads remain deferred. |
+| Fseal, meff / `seal_force_N / moving_mass_kg` | Seal friction and moving mass | Future constitutive / mechanical parameters | float | N; kg | Not specified; Out of current scope | Not included in current peak hydraulic force. |
+
+## 7. Circuit interfaces, control and measurements — planned
+
+| Symbol / code | Meaning | Physical role | Python type | Units | Current value / status | Notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| Rwk / `windkessel_resistance` | Equivalent circuit resistance(s) | External subsystem parameter | float / ndarray[float64] | Pa·s/m³ or mmHg·min/L | Not specified; Not implemented | Not the valve coefficient B. A selected Windkessel may have several resistances. |
+| Cwk / `windkessel_compliance` | Equivalent circuit compliance(s) | External subsystem parameter | float / ndarray[float64] | m³/Pa or mL/mmHg | Not specified; Not implemented | Distinct from chamber gas compliance Cg. |
+| Vres, hres / `reservoir_volume / reservoir_head` | Atrial / lung reservoir inventories and heads | External subsystem state | float / ndarray[float64] | mL; m | Not specified; Not implemented | Constant-boundary tests do not model depletion or recirculation delay. |
+| pcirc(t) / `circuit_pressure_history` | Supplied upstream/downstream pressure histories | External boundary signals | float / ndarray[float64] | mmHg gauge | Not specified; Not implemented | Future coupled Windkessel interface; use one per ventricular loop. |
+| β(t) / `bypass_command` | Commanded diversion fraction / valve setting | Candidate manipulated variable | float / ndarray[float64] | 1 | Not specified; Not implemented | Not selected or implemented; an actuator setting need not equal actual diverted fraction. |
+| Qbypass(t) / `bypass_flow` | Actual diverted flow | Future hydraulic state / response | float / ndarray[float64] | mL/s | Not specified; Not implemented | Requires bypass geometry, valve law and reservoir boundary. |
+| topen, tclose / `active_valve_timing` | Actively commanded valve times | Candidate manipulated inputs | float / ndarray[float64] | s or cycle fraction | Not specified; Not implemented | Current valves are passive pressure-driven events. |
+| pm,i, pm,o / `measured_pressure` | Measured pressures at specified sensor taps | Measured signals | float / ndarray[float64] | mmHg gauge | Not specified; Not implemented | A valve pressure drop needs taps on both sides; current model leg also includes a line segment. |
+| Qm,i, Qm,o / `measured_flow` | Measured inlet and outlet flow signals | Measured signals | float / ndarray[float64] | L/min | Not specified; Not implemented | Mean flow control needs cycle averaging and specified measurement location. |
+| fs, Δts / `sample_rate_Hz / sample_interval_s` | DAQ sampling rate and interval | Instrumentation settings | float / ndarray[float64] | Hz; s | Not specified; Not implemented | Separate from ODE solver time step and plotted sample count. |
+| up, uQ, ux / `pressure_uncertainty / flow_uncertainty / position_uncertainty` | Measurement uncertainties | Instrumentation / calibration parameters | float / ndarray[float64] | mmHg; L/min; mm | Not specified; Not implemented | Define standard or expanded uncertainty and propagation method when sensors are selected. |
+| eQ / `flow_control_error` | Mean-flow target minus measured mean flow | Future controller variable | float / ndarray[float64] | L/min | Not specified; Not implemented | No controller currently implemented. |
+| Kp, Ki, Kd / `controller_gains` | Feedback control gains | Future tuning parameters | float / ndarray[float64] | Depend on the chosen input/output and controller form | Not specified; Not implemented | A gain cannot be assigned units or a value before the control architecture is selected. |
+
+## 8. Numerical controls and diagnostics
+
+| Symbol / code | Meaning | Physical role | Python type | Units | Current value / status | Notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| rtol / `rtol` | ODE relative tolerance | Numerical setting / diagnostic | float | 1 | 2e-7; Implemented | Refinement used 2e-9. |
+| atol / `atol` | ODE absolute tolerances | Numerical setting / diagnostic | list[float] | Mixed state units | [1e-7,1e-7,1e-7,1e-8,1e-8]; Implemented | Order: pc, Qi, Qo, integrated inlet and outlet volume. |
+| Nstep / `max_step_div` | Maximum-step denominator | Numerical setting / diagnostic | int | 1 | 120; Implemented | Maximum step = T/Nstep; refinement 360. |
+| Ncycles / `max_cycles` | Maximum cycles attempted | Numerical setting / diagnostic | int | cycles | 24; Implemented | At least three cycles before periodicity is accepted. |
+| Nsamples / `npoints` | Final-cycle sample count | Numerical setting / diagnostic | int | samples | 2401; Implemented | Refinement 7201; separate from adaptive integration steps. |
+| Nfull / `npts` | Gas-free reference sample count | Numerical setting / diagnostic | int | samples | 4001; Implemented | Used by full_fill. |
+| εperiodic / `periodic threshold` | Scaled periodic endpoint tolerance | Numerical setting / diagnostic | float | 1 | 2e-7; Implemented | Fixed implementation threshold; state scaling described in source. |
+| εopen / `opening_tol` | Numerical valve opening offset | Numerical setting / diagnostic | float | mmHg | 1e-6; Implemented | Avoids zero-time event chatter; not physical valve cracking pressure. |
+| pguard / `pressure_floor_abs_mmhg` | Minimum absolute pressure guard | Numerical setting / diagnostic | float | mmHg absolute | 50; Implemented | Exploratory validity floor, not measured cavitation threshold. |
+| Vguard / `liquid inventory floor` | Minimum retained liquid inventory guard | Numerical setting / diagnostic | float | mL | 0.1; Implemented | Fixed implementation threshold. |
+| Nevents / `event chatter limit` | Maximum events in one cycle | Numerical setting / diagnostic | int | events | 30; Implemented | Implementation guard. |
+| record_trace / `keep_trace` | Whether full-cycle arrays are returned | Numerical setting / diagnostic | bool | true/false | False by default; Implemented | Baseline/notebook requests True. |
+| status / `status` | Run outcome | Numerical setting / diagnostic | str | category | periodic / not_periodic / low_pressure_guard / liquid_inventory_guard; Implemented | Solver errors raise exceptions. |
+| Nused / `cycles` | Cycles actually simulated | Numerical setting / diagnostic | int | cycles | Calculated; Implemented | Run diagnostic. |
+| εend / `periodic_residual` | Scaled endpoint state change | Numerical setting / diagnostic | float | 1 | Calculated; Implemented | Numerical periodicity measure. |
+| εV / `balance_error_ml` | Maximum chamber-volume balance residual | Numerical setting / diagnostic | float | mL | Calculated; Implemented | Conservation check, not measurement uncertainty. |
+| εcycle / `net_cycle_error_ml` | Absolute inlet/outlet cycle-volume difference | Numerical setting / diagnostic | float | mL | Calculated; Implemented | Conservation at periodic operation. |
+| Qmin,num / `min_flow_ml_s` | Smallest sampled valve flow | Numerical setting / diagnostic | float | mL/s | Calculated; Implemented | Checks numerical violation of forward-only valves. |
+| valid_ref / `pressure_screen_pass` | Pressure screen for imposed-full-fill reference | Numerical setting / diagnostic | bool | true/false | Calculated; Implemented | A pass does not guarantee no local cavitation. |
+| case_group / `group` | Parameter sweep category | Numerical setting / diagnostic | str | category | main / outlet_load / thermal / discharge_coefficient / timing; Implemented | Metadata, not a physical variable. |
+| y / `y` | ODE state vector | Numerical setting / diagnostic | ndarray[float64], shape (5,) | Mixed state units | [pc, Qi, Qo, Vin,int, Vout,int]; Implemented | Three independent physical ODE states plus two integral accumulators. |
+| solver / `method` | ODE integration method | Numerical setting / diagnostic | str | category | Radau; Implemented | Numerical choice, not a model property. |
+| mmHg→Pa / `MMHG` | Pressure-unit conversion factor | Numerical setting / diagnostic | float | Pa/mmHg | 133.322387415; Implemented | Fixed conversion constant. |

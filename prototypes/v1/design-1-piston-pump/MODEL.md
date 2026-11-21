@@ -1,7 +1,9 @@
 # Design 1: Piston Pump — living model
 
 This document is the maintained explanation of the model. The executable
-calculation entry point is [Pump_Model_Live.m](matlab/Pump_Model_Live.m).
+calculation entry point is [Pump_Model.ipynb](python/Pump_Model.ipynb), with
+[run_model.py](python/run_model.py) for command-line use. See the complete
+[variable register](VARIABLES.md) for roles, types, units and implementation status.
 The first numerical results are preserved in the [reference archive](archive/).
 Update this document and [DECISIONS.md](DECISIONS.md) when a modelling decision
 changes; retain previous numerical snapshots so changes can be traced.
@@ -15,9 +17,9 @@ model represents one ventricular pump chamber and imposed pressure loads.
 It does not simulate both circulation loops or an actual Windkessel circuit.
 
 The archived Python sweep contains 118 attempted dynamic cases: 117 periodic
-solutions and one stopped by a low-pressure guard. The MATLAB translation is
-prepared, with runtime comparison pending. Neither implementation is calibrated
-or independently validated against a physical pump.
+solutions and one stopped by a low-pressure guard. Python is the active implementation. The earlier MATLAB translation is
+superseded and remains unexecuted. The Python model is not calibrated or
+independently validated against a physical pump.
 
 ## 2. Inputs, assumptions and units
 
@@ -205,11 +207,14 @@ out local valve cavitation. A separate liquid-inventory guard is 0.1 mL.
 One case stopped: 180/min, 8 mm valves, 1 mL reference air. No periodic force
 result is fabricated for it.
 
-The MATLAB port uses ode15s and explicit valve events. `verify_reference.m`
-checks three representative cases against the executed CSV data to 0.1% in
-force and flow, plus conservation, endpoint kinematics and the expected guard.
-This check has not yet been executed in MATLAB. Source parsing alone cannot
-establish numerical equivalence.
+The active Python entry point `python/run_model.py check` has been executed.
+It reproduces three archived cases within 1e-6 relative error in peak force,
+mean flow and minimum pressure, and checks conservation, endpoint kinematics
+and the expected low-pressure guard. The hydraulic equations and default
+parameters are unchanged. The optional notebook code cells also ran in an in-process IPython shell;
+Jupyter frontend rendering remains unchecked;
+see `python/verification_status.json`. No MATLAB execution is required for
+the active workflow. The old port remains an unexecuted historical alternative.
 
 Constant reservoirs exclude reservoir depletion and recirculation shortages.
 Actual Windkessel pressure histories, finite valve motion, compressibility of
@@ -231,13 +236,13 @@ prediction accuracy.
 - Iannetti et al. (2015), reciprocating-pump cavitation/compressibility study:
   https://doi.org/10.17265/2332-8215/2015.01.005. Explains regimes excluded here;
   it does not validate the present lumped model.
-- MathWorks, [Live Code File Formats](https://www.mathworks.com/help/matlab/matlab_prog/file-format-for-live-scripts.html):
-  official software documentation for the plain-text Live Script format,
-  supported since R2025a. This source supports the file format, not pump physics.
+- The earlier MATLAB files cite MathWorks format documentation; that port is
+  superseded. The current notebook and scripts use the executed Python solver.
 
 ## 9. Next staged decisions
 
-1. Run the MATLAB comparison and record the release, errors and pass/fail result.
+1. Review the variable register and agree which remaining inputs become measured
+   quantities, selected component properties or prescribed operating conditions.
 2. Agree compatible flow/frequency combinations and whether net-delivery control
    must retain fixed mechanical travel.
 3. Compare the additional flow-control paths before selecting one.

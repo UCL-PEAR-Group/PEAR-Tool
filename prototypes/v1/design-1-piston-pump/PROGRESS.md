@@ -13,12 +13,19 @@
 - Explained compatible fixed-stroke operating points and candidate controls
   for independently selecting circuit flow and pulse frequency.
 
-## Pending verification
+## Python restored as primary — 21 November 2026
 
-- Run `verify_reference` in MATLAB and record the release and output.
-- Open and run `Pump_Model_Live.m` in MATLAB's Live Editor; inspect plots and
-  table rendering. A source-only syntax check is not a substitute for this.
-- Rerun the full MATLAB sweep and compare statuses and outputs with the archive.
+- Latest user instruction supersedes the MATLAB migration.
+- Added an active Python directory, local run commands, pinned dependencies,
+  optional executable notebook and complete variable register.
+- Executed three reference comparisons, conservation checks, motion endpoint
+  checks and the expected low-pressure stop. Executed all notebook code cells in-process; frontend rendering unchecked.
+- Physical equations and numerical defaults match the previous Python model.
+- The original 118-case sweep was not repeated for this packaging-only change;
+  original results remain available and the new runner can regenerate them.
+- MATLAB source remains a superseded, unexecuted alternative.
+
+## Pending calibration and validation
 - Calibrate hydraulic coefficients using selected components and fluid data.
 - Independently validate the assembled physical model against measurements.
 
@@ -31,5 +38,5 @@
   and representative Windkessel boundary histories.
 
 Keep completed numerical verification, calibration and independent validation
-as separate entries. Do not mark MATLAB execution complete on the basis of
-the Python results or syntax parsing.
+as separate entries. No physical calibration or independent validation has
+been completed by the Python packaging and register update.

@@ -4,7 +4,7 @@ This branch tracks the first benchtop prototype for MECH0073 / PEAR.
 
 | Workstream | Working branch | Entry point | Status |
 | --- | --- | --- | --- |
-| Design 1: Piston Pump | `v1-prototype-design-1-piston-pump` | [Living model document](https://github.com/UCL-PEAR-Group/PEAR-Tool/blob/v1-prototype-design-1-piston-pump/prototypes/v1/design-1-piston-pump/MODEL.md) | Exploratory hydraulic model; MATLAB migration awaiting runtime verification |
+| Design 1: Piston Pump | `v1-prototype-design-1-piston-pump` | [Living model document](https://github.com/UCL-PEAR-Group/PEAR-Tool/blob/v1-prototype-design-1-piston-pump/prototypes/v1/design-1-piston-pump/MODEL.md) | Exploratory Python hydraulic model; variable register and notebook available |
 
 ## Branch workflow
 
