@@ -1,5 +1,11 @@
 # Design 1: Piston Pump — living model
 
+The staged, literature-led derivation now starts with
+[Derivation 01: full-liquid chamber and pressure force](research/DERIVATION_01_FULL_LIQUID.md).
+It establishes sign conventions, phase-specific pressure/force expressions and
+limits of the incompressible approximation. It does not alter the exploratory
+solver documented below or constitute a new numerical result.
+
 This document is the maintained explanation of the model. The executable
 calculation entry point is [Pump_Model.ipynb](python/Pump_Model.ipynb), with
 [run_model.py](python/run_model.py) for command-line use. See the complete

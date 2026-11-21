@@ -1,5 +1,8 @@
 # Design 1: Piston Pump
 
+Continue the analytical development with
+[Derivation 01: full-liquid chamber, pressure and force](research/DERIVATION_01_FULL_LIQUID.md).
+
 Latest step: [cardiovascular piston-pump literature review](research/PISTON_PUMP_LITERATURE_REVIEW.md)
 and [formula-driven pressure starter workbook](spreadsheet/Pump_pressure_literature_starter.xlsx).
 The baseline is 5 L/min at 75 pulses/min per circuit. The workbook contains a

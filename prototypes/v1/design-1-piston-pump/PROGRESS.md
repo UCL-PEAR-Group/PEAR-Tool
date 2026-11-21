@@ -1,5 +1,20 @@
 # Progress and next checks
 
+## Full-liquid analytical derivation — 21 November 2026
+
+- Derived moving-chamber continuity, the open-path pressure law, and separate
+  filling/ejection pressure expressions with consistent units and signs.
+- Combined ejection motion and pressure into an explicit hydraulic-force
+  expression. Identified limits when valve-state assumptions fail or both valves
+  close; retained gas and finite compliance remain subsequent stages.
+- Recorded the supplied Windkessel interface without selecting hardware or a
+  new waveform. The 5 L/min, 75/min target remains fixed for the first case.
+- Checked dimensions, phase signs and limiting behaviour analytically. No new
+  simulation, workbook change, calibration or physical validation was performed.
+
+Next derivation input: ejection/filling timing and a smooth waveform with the
+required 66.67 mL delivery integral, followed by valve-state consistency checks.
+
 ## Literature-led pressure derivation started — 21 November 2026
 
 - User selected 5 L/min and 75 pulses/min as the first operating point and a
