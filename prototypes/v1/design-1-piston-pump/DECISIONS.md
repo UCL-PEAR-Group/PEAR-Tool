@@ -1,5 +1,18 @@
 # Decision record
 
+## Literature and pressure starting point — 21 November 2026
+
+- User baseline: 5 L/min at 75 pulses/min per circuit (66.67 mL net delivery).
+- Use a spreadsheet for visible analytical prototyping while retaining Python
+  for the existing exploratory dynamics and later numerical verification.
+- Use Franzetti's accessible derivation as a starting framework, with explicit
+  checks and extensions; do not adopt another rig's force or friction values.
+- Distinguish waveform sources, responsive ventricular emulators, MCS test rigs,
+  supplemental pulsators and tissue-conditioning pumps in the evidence register.
+- The current spreadsheet is a local full-fill, open-outlet calculation. It
+  neither predicts maximum force nor resolves the retained-gas dynamics.
+- Both 1A and 1B remain open. The detailed derivation continues collaboratively.
+
 | ID | Date | Decision | Basis | Status |
 | --- | --- | --- | --- | --- |
 | D001 | 2026-11-21 | Use a flat-face plunger with no wetted rod area deduction | User concept | Accepted |

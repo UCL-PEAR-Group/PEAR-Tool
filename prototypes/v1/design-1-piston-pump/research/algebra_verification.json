@@ -1,0 +1,17 @@
+{
+  "taper_inputs": {
+    "mu_Pa_s": 0.0034,
+    "length_m": 0.2,
+    "din_m": 0.02,
+    "dout_m": 0.01
+  },
+  "numerical_integral_Pa_s_per_m3": 808082.6976805166,
+  "corrected_closed_form_Pa_s_per_m3": 808082.6977252498,
+  "printed_expression_Pa_s_per_m3": 2424248.0931757493,
+  "relative_quadrature_error": 5.535716329774232e-11,
+  "equal_diameter_limit": "Corrected: 128 mu L/(pi D^4). Printed: three times this.",
+  "scope": "Checks the printed equation only; original simulation code not inspected.",
+  "baseline_net_mL_per_pulse": 66.66666666666667,
+  "baseline_period_s": 0.8,
+  "baseline_50mm_full_fill_travel_mm": 33.953054526271
+}

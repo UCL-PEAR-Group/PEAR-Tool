@@ -1,5 +1,27 @@
 # Progress and next checks
 
+## Literature-led pressure derivation started — 21 November 2026
+
+- User selected 5 L/min and 75 pulses/min as the first operating point and a
+  spreadsheet for transparent analytical prototyping.
+- Reviewed the supplied Franzetti paper/thesis, the requested Mazhar review,
+  and primary content for eleven additional papers. Recorded access limitations,
+  pump purpose and platform overlap in a fourteen-entry register.
+- Added a pressure-model equation map, distinguishing local algebra from
+  unimplemented dynamic gas, valve, reservoir and Windkessel coupling.
+- Created a three-sheet formula workbook with 43 formulas, two diameter charts,
+  editable inputs, source register and calculation limitations.
+- Checked baseline values independently, three input perturbations, absence of
+  formula errors, exported formula/chart presence and rendered all sheets.
+- Verified the apparent missing 1/3 in thesis printed Eq 2.5 by direct integration
+  and the straight-pipe limit. Original thesis simulation code was not inspected.
+- Existing Python simulations and archive were not changed or rerun. Maximum
+  force, full-cycle spreadsheet dynamics, native Excel testing and physical
+  calibration/validation remain outstanding.
+
+Next: agree the first chamber control volume, pressure measurement locations and
+valve/line pressure law, then derive the full-liquid time history before gas.
+
 ## Completed — 21 November 2026
 
 - Established prototype and Design 1 branch organisation.

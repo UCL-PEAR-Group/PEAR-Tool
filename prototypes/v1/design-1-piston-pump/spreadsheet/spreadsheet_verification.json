@@ -1,0 +1,18 @@
+{
+  "baseline": {
+    "net_mL": 66.66666666666667,
+    "travel_mm": 33.953054526271,
+    "ejection_flow_L_min": 12.5,
+    "valve_loss_mmHg": 8.217315014937716,
+    "chamber_mmHg": 99.86656300769577,
+    "local_force_N": 26.142782731590092
+  },
+  "perturbations": [
+    "Doubling piston bore quarters travel and quadruples force at fixed local pressure",
+    "Halving valve bore multiplies constant-Cd loss by 16",
+    "Doubling bpm at fixed mean flow halves required delivery; ejection-average flow stays constant at fixed fraction"
+  ],
+  "formula_errors": 0,
+  "native_excel_tested": false,
+  "physical_validation": false
+}

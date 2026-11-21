@@ -1,5 +1,11 @@
 # Design 1: Piston Pump
 
+Latest step: [cardiovascular piston-pump literature review](research/PISTON_PUMP_LITERATURE_REVIEW.md)
+and [formula-driven pressure starter workbook](spreadsheet/Pump_pressure_literature_starter.xlsx).
+The baseline is 5 L/min at 75 pulses/min per circuit. The workbook contains a
+local open-valve calculation, not a completed dynamic model or maximum-force estimate.
+See [spreadsheet scope and verification](spreadsheet/README.md).
+
 Start with the [goal and concept comparison](GOAL_AND_CONCEPT_MATRIX.md) and
 [operating-case matrix](OPERATING_MATRIX.md) ([CSV](OPERATING_MATRIX.csv)).
 Both the single chamber with alternating duties (1A) and two dedicated
