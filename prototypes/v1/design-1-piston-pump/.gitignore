@@ -1,0 +1,9 @@
+results/matlab/
+*.asv
+*.autosave
+__pycache__/
+*.pyc
+*.aux
+*.log
+*.out
+*.fmt

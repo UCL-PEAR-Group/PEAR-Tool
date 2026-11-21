@@ -1,0 +1,11 @@
+{
+  "checked_at": "2026-11-21",
+  "matlab_runtime_executed": false,
+  "live_editor_rendering_checked": false,
+  "static_parser": "MISS_HIT",
+  "parser_version": "0.9.44",
+  "parser_result": "8 MATLAB files parsed successfully; no lint issues",
+  "reference_results": "Executed Python archive; see archive/pump_hydraulic_sweep/verification.json and additional_verification.json",
+  "required_next_command": "verify_reference",
+  "scope": "Syntax parsing is not numerical or experimental validation."
+}

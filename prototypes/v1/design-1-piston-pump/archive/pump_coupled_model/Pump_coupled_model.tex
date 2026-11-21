@@ -1,0 +1,250 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=21mm,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,booktabs,tabularx,array,xcolor,fancyhdr,hyperref,microtype}
+\definecolor{navy}{HTML}{17324D}
+\definecolor{teal}{HTML}{007F85}
+\hypersetup{colorlinks=true,linkcolor=teal,urlcolor=teal,citecolor=teal,pdftitle={Coupled piston-pump model: first derivation}}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\small MECH0073}\fancyhead[R]{\small\nouppercase{\rightmark}}\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\parindent}{0pt}\setlength{\parskip}{6pt}
+\setlength{\abovedisplayskip}{7pt}\setlength{\belowdisplayskip}{7pt}
+\renewcommand{\arraystretch}{1.18}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\stage}[1]{\markright{#1}{\Large\bfseries\color{navy}#1}\par\medskip}
+\newcommand{\topic}[1]{\par\smallskip{\bfseries\color{navy}#1}\par}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\pa}{p_{\mathrm{a}}}
+\newcommand{\pc}{p_{\mathrm{c}}}
+\newcommand{\po}{p_{\mathrm{o}}}
+\newcommand{\pabs}{p_{\mathrm{c,abs}}}
+\begin{document}
+\stage{Scope, variables and operating choices}
+{\LARGE\bfseries Coupled piston-pump model}\par
+{\large First derivation for geometry, valves and converter loading}
+
+\textbf{Purpose.} Calculate chamber pressure, liquid delivery and piston force from a prescribed motion and hydraulic load. Use those outputs to screen geometry and later analyse the rotary-to-linear converter. This is an analytical model specification, not a calibrated simulation or a selected design. Numerical integration and component selection remain subsequent stages.
+
+\begin{tabularx}{\linewidth}{@{}p{.24\linewidth}Y@{}}\toprule
+\textbf{Status} & \textbf{Current position}\\\midrule
+Prescribed working point & Mean liquid flow $\bar Q=5$ L/min; delivery frequency $f=75$ events/min per circuit; required delivery $V_d=66.67$ mL/event.\\
+Geometry during a run & Flat wetted piston face; no wetted-rod area subtraction. Diameter $D$ and travel $S$ are fixed during a run, but still design variables.\\
+Air & Deliberately retained pocket; amount treated as known once reference pressure, volume and thermal condition are specified. Its instantaneous volume varies.\\
+Initial assumptions & Negligible external leakage; rigid chamber baseline; one liquid phase plus a retained gas pocket when included. Valve backflow is a separate issue from seal leakage.\\
+External system & Atrial reservoirs and pulmonary/systemic loads supply boundary pressures and return flows. Their parameters are not designed here.\\
+Open decision & Both fixed-displacement operation and independent flow/frequency control remain under consideration. Passive versus commanded valve operation remains unspecified.\\\bottomrule
+\end{tabularx}
+
+\topic{The fixed-stroke constraint comes before optimisation}
+For periodic operation, define net delivered liquid volume and volumetric delivery ratio by
+\begin{equation}
+V_d=\int_0^T Q_o(t)\,\dd t,\qquad
+\eta_v=\frac{V_d}{V_s},\qquad
+\bar Q=\frac{f\,\eta_v V_s}{1000},\quad T=\frac{60}{f}.
+\label{eq:mean}
+\end{equation}
+In the last relation only, $\bar Q$ is in L/min, $V_s$ in mL and $f$ in events/min. A completely filled ideal stroke has $\eta_v=1$. For $V_s=66.67$ mL, changing from 75 to 180 events/min changes ideal flow from 5 to 12 L/min. Keeping 5 L/min at 180 events/min requires $V_d=27.78$ mL/event; the ratio to that same geometric stroke is 0.417. This is a requirement calculation, not a predicted efficiency.
+
+Independent flow and frequency therefore require a second means of changing \emph{effective delivery}: adjustable travel, controlled diversion/recirculation, or another explicitly modelled valve/drive strategy. Changing only the within-cycle speed profile preserves ideal delivered volume. Uncontrolled underfilling is an outcome to characterise, not an established flow-control method.
+
+The current project PDS lists 2--7 L/min and 40--180 beats/min, with compatible combinations selected individually. Its nominal rate is 70; the present 75 is the user's chosen working point. Frequency refers to delivery into each circuit, not automatically crankshaft speed.
+
+\newpage
+\stage{Geometry and chamber conservation}
+\topic{1. Fix the sign convention and usable volume}
+Let $x=0$ denote full retraction and $x=S$ full advance; positive $\dot x$ compresses the chamber. In SI units,
+\begin{equation}
+A_p=\frac{\pi D^2}{4},\qquad V_c(x)=V_{\max}-A_p x,\qquad
+V_s=A_p S=V_{\max}-V_{\min}.
+\label{eq:geometry}
+\end{equation}
+$V_c$ includes all chamber-side volume assigned to this pressure node, including a connected air-pocket cavity. $V_{\min}>0$ retains residual liquid and gas space. For a piston entirely inside a simple bore, an available-travel estimate is
+\begin{equation}
+S_{\mathrm{available}}=L_{\mathrm{internal}}-t_p-c_{\mathrm{front}}-c_{\mathrm{rear}},
+\end{equation}
+where $t_p$ is piston thickness and the $c$ terms are end clearances. Actual seal, port and converter geometry can reduce this further. Setting $S=L-t_p$ assumes zero clearance and is not a general design identity.
+
+\topic{2. Derive the chamber equation}
+Take $Q_i>0$ into the chamber and $Q_o>0$ out. For incompressible liquid, no leakage, and a retained gas volume $V_g$,
+\begin{equation}
+V_c=V_\ell+V_g,\qquad \dot V_\ell=Q_i-Q_o,
+\qquad -A_p\dot x=Q_i-Q_o+\dot V_g.
+\label{eq:mass}
+\end{equation}
+For a fixed mass of ideal gas with a constant polytropic exponent $n$,
+\begin{equation}
+\pabs V_g^n=p_{g0,\mathrm{abs}}V_{g0}^n,
+\qquad V_g=V_{g0}\left(\frac{p_{g0,\mathrm{abs}}}{\pabs}\right)^{1/n},
+\qquad \dot V_g=-\frac{V_g}{n\pabs}\dot{\pc}.
+\label{eq:gas}
+\end{equation}
+Here $p_{g0,\mathrm{abs}},V_{g0}$ are a paired reference state, not independently imposed instantaneous values. Gas and chamber pressure are taken equal; any membrane pressure difference is initially neglected. Use $p_{\mathrm{abs}}=p_{\mathrm{gauge}}+p_{\mathrm{atm}}$. Atmospheric pressure is constant, so gauge and absolute pressure derivatives coincide. Substitution gives
+\begin{equation}
+\boxed{C_{\mathrm{eff}}\dot{\pc}=Q_i-Q_o+A_p\dot x},\qquad
+C_{\mathrm{eff}}=\underbrace{\frac{V_g}{n\pabs}}_{\text{gas}}
++\underbrace{\frac{V_\ell}{K_\ell}}_{\text{liquid}}
++\underbrace{C_w}_{\text{wall}}.
+\label{eq:chamber}
+\end{equation}
+The added terms represent first-order liquid compressibility and chamber-wall compliance: $K_\ell$ is liquid bulk modulus and $C_w$ pressure-induced wall volume change per pressure. $C_{\mathrm{eff}}$ has units m$^3$/Pa; every term in the balance is m$^3$/s. The rigid, incompressible, gas-free limit is an algebraic constraint, $Q_o-Q_i=A_p\dot x$, not a pressure equation with division by zero.
+
+\topic{3. Define the two filling branches consistently}
+\textbf{Adequate filling:} the prescribed end-of-fill liquid target is reached. With retained gas, this does not mean 100\% liquid occupancy. \textbf{Supply-limited filling:} measured/predicted liquid content falls below that target; the retained gas expands and chamber pressure changes. A useful reference is $V_{\ell,\mathrm{target}}=V_{\max}-V_g(p_{\mathrm{fill,ref}})$ at $x=0$, with deficit $\max(0,V_{\ell,\mathrm{target}}-V_{\ell,\mathrm{end}})$. Its fill ratio is distinct from $\eta_v$. Without an existing pocket, compressibility, deformation or a phase-change mechanism, an arbitrary unfilled void cannot be introduced while preserving volume conservation.
+
+\newpage
+\stage{Inlet and outlet valve coupling}
+\topic{4. Use local pressure differences and effective opening area}
+Let $\pa$ be pressure immediately upstream of the inlet valve, $\pc$ chamber pressure, and $\po$ pressure immediately downstream of the outlet valve, reduced to a common elevation. For each open leg $j\in\{i,o\}$, a first lumped model is
+\begin{align}
+\pa-\pc &= R_iQ_i+B_iQ_i|Q_i|+I_i\dot Q_i,\label{eq:inlet}\\
+\pc-\po &= R_oQ_o+B_oQ_o|Q_o|+I_o\dot Q_o.\label{eq:outlet}
+\end{align}
+These are model approximations with distinct viscous, local-loss and acceleration terms. A cracking-pressure term is added for a spring-loaded check valve on its forward-open branch. Valve pressure-gradient models combining nonlinear loss and inertia have a cardiovascular modelling precedent \cite{broome}; numerical coefficients must come from the selected components or calibration.
+
+For a circular clear bore and opening fraction $0<\alpha_j\leq1$, an initial effective-area parametrisation is
+\begin{equation}
+A_{v,j}=\alpha_j\frac{\pi d_{v,j}^2}{4},\qquad
+B_j=\frac{\rho}{2C_{d,j}^{\,2}A_{v,j}^{\,2}}.
+\label{eq:valve}
+\end{equation}
+$d_{v,j}$ is valve bore diameter, $C_{d,j}$ a dimensionless discharge coefficient, and $\rho$ liquid density. Real valve lift/angle need not map linearly to effective area: that relation must be measured or supplied. A nominal connection size alone is insufficient.
+
+For an associated straight, circular tube of length $\ell_j$ and diameter $d_{t,j}$, an initial approximation is
+\begin{equation}
+R_j=\frac{128\mu\ell_j}{\pi d_{t,j}^4},\qquad
+I_j\simeq\frac{\rho\ell_j}{A_{t,j}},\qquad A_{t,j}=\frac{\pi d_{t,j}^2}{4}.
+\label{eq:line}
+\end{equation}
+Here $\mu$ is liquid dynamic viscosity. The resistance formula assumes fully developed laminar Newtonian flow; $I_j$ is a lumped liquid-column approximation. Extra tube/fitting losses require consistent additions. Do not count the same valve loss in both an empirical pressure--flow curve and $B_j$. $R$, $B$, and $I$ have units Pa\,s/m$^3$, Pa\,s$^2$/m$^6$, and Pa\,s$^2$/m$^3$, respectively.
+
+\topic{What changing diameter actually does}
+Neglecting inertia and linear resistance gives $Q=C_dA_v\sqrt{2\Delta p/\rho}$ for forward flow. At fixed available pressure difference, a larger opening admits more flow. At prescribed piston displacement with adequate filling, the demanded flow instead sets the pressure drop: $\Delta p\propto Q^2/d_v^4$ for unchanged $C_d$ and opening fraction. Thus valve diameter changes filling capability and load; it is not an independent flow setpoint in the ideal displacement-controlled limit. Use instantaneous $Q(t)$, not cycle-mean flow, for valve loading.
+
+\topic{Valve state and model closure}
+A commanded open valve can permit either flow direction; closing sets flow to zero in this first model. Passive check valves require an opening/closing law with $Q\geq0$; with inertance, forward flow can persist briefly after the pressure gradient reverses. Closure transients need refinement if pressure overshoot matters. A shared command does not guarantee identical pressure-driven behaviour on both ventricles. Equations~\eqref{eq:chamber}--\eqref{eq:outlet} need $x(t)$, valve laws, initial states and external $\pa,\po$ histories or load models to be solvable.
+
+\newpage
+\stage{Piston force and converter loading}
+\topic{5. Calculate the required axial force}
+For a horizontal piston with a vented rear, let $m_{\mathrm{mov}}$ denote the translating solid mass represented at the piston. The signed drive force, positive in the advancing direction, is
+\begin{equation}
+\boxed{F_{\mathrm{drive}}(t)=A_p[\pc(t)-p_b(t)]
++m_{\mathrm{mov}}\ddot x(t)+F_{\mathrm{fr}}(t)}.
+\label{eq:force}
+\end{equation}
+$p_b$ is the pressure behind the piston, expressed using the same reference as $\pc$. $F_{\mathrm{fr}}$ is the signed force contribution needed to overcome seal/guide friction; a starting approximation away from rest is $F_C\operatorname{sgn}(\dot x)+b\dot x$. Static friction at rest is an interval, not automatically zero. Add axial gravity or other loads if the installation requires them. Fluid-column inertia is already reflected in $\pc$ through the hydraulic model and must not be added again as a duplicate lumped force.
+
+\topic{Full retraction with an open inlet}
+Full retraction specifies $x=0$ and $V_c=V_{\max}$; it does not specify pressure or force. From the inlet-leg relation, allowing a forward cracking-pressure contribution $p_{\mathrm{cr},i}$ where appropriate,
+\begin{equation}
+\pc=\pa-p_{\mathrm{cr},i}-R_iQ_i-B_iQ_i|Q_i|-I_i\dot Q_i.
+\label{eq:retracted}
+\end{equation}
+Substitute this pressure and the actual $\ddot x$ into Equation~\eqref{eq:force}. At a smooth turning point, $\dot x=0$ but $\ddot x$ is generally not zero. With gas compliance or fluid inertia, $Q_i$ also need not be zero at that instant.
+
+For a \emph{settled dwell} with negligible valve cracking pressure, no flow or acceleration, no elevation difference, and rear pressure equal to atmosphere, $\pc\simeq\pa$ and
+\begin{equation}
+F_{\mathrm{pressure,retracted}}\simeq A_p p_{a,\mathrm{gauge}}.
+\end{equation}
+If the outlet valve is open instead, the corresponding settled limit is $\pc\simeq\po$. The connected port and actual flow state must therefore be specified. At 10 mmHg chamber gauge pressure, an illustrative 50 mm face gives 2.62 N of pressure force; at 200 mmHg it gives 52.36 N. Neither is a design maximum, and 50 mm has not been selected. The retraction-state pressure must come from its waveform rather than a cycle mean.
+
+\topic{6. Transfer the full load history to the converter}
+The structural load case is $F_{\mathrm{drive}}(t)$ across filling, acceleration, ejection and reversal, including signs and repeated loading. End-retraction force alone is insufficient. For an ideal one-coordinate converter with $x=x(\theta)$, the piston-load contribution to shaft torque follows virtual work:
+\begin{equation}
+\tau_{\mathrm{load}}(\theta)=F_{\mathrm{drive}}(\theta)\frac{\dd x}{\dd\theta}.
+\end{equation}
+Rotating/link inertia and converter losses remain to be added consistently. Small shaft torque near dead centre does not imply small rod, pin or bearing forces. Joint-force distribution, buckling and fatigue are later mechanism-specific calculations.
+
+With reduction ratio $G=\omega_m/\omega_c$, an idealised motoring relation is $\tau_m=\tau_c/(G\eta_g)$ and $\omega_m=G\omega_c$. Gearing trades torque for speed and adds losses; it does not remove the required mechanical power or acceleration capability. Select the motor after estimating the torque--speed duty, but retain its feasibility constraints now.
+
+\newpage
+\stage{High frequency, reservoirs and measurements}
+\topic{7. Distinguish filling time from circuit transit time}
+Let filling occupy fraction $\beta$ of the period. Then $t_{\mathrm{fill}}=60\beta/f$ s. If $V_{\mathrm{in}}$ mL must enter during this interval,
+\begin{equation}
+\langle Q_i\rangle_{\mathrm{fill}}=\frac{60V_{\mathrm{in}}}{1000t_{\mathrm{fill}}}
+\quad\text{L/min}.
+\end{equation}
+For illustration, $\beta=0.5$ and $V_{\mathrm{in}}=66.67$ mL give 0.400 s and 10 L/min at 75/min, but 0.167 s and 24 L/min at 180/min. Peak filling flow is higher for a non-uniform waveform. The 50\% split is a comparison assumption, not a chosen cardiac timing.
+
+For the same stroke and a time-scaled motion profile, $\dot x$ scales with $f$ and $\ddot x$ with $f^2$. Ideal displacement flow scales with $f$, while quadratic valve loss and liquid acceleration pressure scale with $f^2$. Moving from 75 to 180/min multiplies those latter terms by $2.4^2=5.76$, under the stated assumptions. This is why small stroke volume alone cannot justify neglecting dynamics.
+
+An atrial reservoir can supply local filling without waiting for the same parcel of fluid to complete a circuit. Its balance is
+\begin{equation}
+\frac{\dd V_a}{\dd t}=Q_{\mathrm{return}}-Q_i.
+\label{eq:reservoir}
+\end{equation}
+For a vented reservoir, local pressure additionally depends on free-surface height; for a sealed reservoir it also depends on its gas/compliance law. Over a periodic cycle, average return must match average withdrawal. Reservoir volume must exceed the maximum cumulative withdrawal deficit while retaining usable outlet submergence. In a closed two-ventricle loop with no shunt/leak, sustained mean left/right delivery must match; otherwise volume accumulates in one part of the loop. Buffers cannot correct a sustained imbalance indefinitely.
+
+\topic{8. Measurements that make the model identifiable}
+\begin{tabularx}{\linewidth}{@{}p{.29\linewidth}Y@{}}\toprule
+\textbf{Signal} & \textbf{Purpose}\\\midrule
+$\pa,\pc,\po$ & Pressure difference across each valve and direct piston pressure load. Inlet/outlet measurements alone do not generally recover chamber pressure.\\
+$Q_i(t),Q_o(t)$ & Filling/ejection volumes, signed backflow, delivery ratio and reservoir balance. A single cycle-mean flow measurement cannot separate these.\\
+$x(t)$ or crank encoder & Actual travel, phase and tracking; velocities/accelerations from a smooth fitted trajectory or known kinematics.\\
+Reservoir level; temperature & Available inlet volume/head and the fluid/gas property conditions.\\\bottomrule
+\end{tabularx}
+Use a common time base and pressure datum; record sensor bandwidth, delay, uncertainty and added hydraulic resistance. The liquid balance and pressure equation predict observables for validation. Sensing enables feedback but the controller can adjust only existing actuators: motor trajectory and, if present, valve commands or bypasses. It cannot make fixed, fully filled travel independently set both frequency and mean flow.
+
+\newpage
+\stage{Model hierarchy and parameter decisions}
+\topic{9. Keep gas thermodynamics and liquid mechanics distinct}
+Use a sealed-air calculation to check the pressure--volume relation, then model water with continuity, resistance, inertia and pressure-dependent storage; retain the air pocket in that water model. Add the BMF's measured density, viscosity and temperature dependence next. A liquid is not obtained simply by changing parameters in the ideal-gas law. If the chosen BMF is shear-dependent, its constitutive law must replace a constant-viscosity assumption where consequential.
+
+For $V_g=0$ with both valves shut, a moving piston requires liquid/wall compressibility or a dwell; a perfectly rigid incompressible model cannot accept displacement. A reciprocating-pump CFD study explicitly treats this coupling and distinguishes valve-region and expansion-related cavitation \cite{iannetti}. If pressure approaches conditions for vapour formation or gas release, the single-pocket model's validity ends; flag this state rather than inventing air volume. A retained-air mock-loop study shows that thermal response may require more than a fixed exponent \cite{karabegovic}. No exponent or performance is transferred from those studies to this rig.
+
+\topic{10. Screen feasibility before weighting preferences}
+The table is an unweighted decision framework. Feasibility checks should precede any weighted score, so a favourable cost/size score cannot compensate for failure to meet the selected operating conditions.
+
+{\small\begin{tabularx}{\linewidth}{@{}p{.20\linewidth}YY@{}}\toprule
+\textbf{Parameter} & \textbf{Main benefit when increased} & \textbf{Main cost / interaction}\\\midrule
+Piston diameter $D$ & Less travel for the same swept volume & Greater pressure force; seal/packaging changes\\
+Travel $S$ & More geometric delivery per event & Greater envelope and motion demand; changes frequency--flow relation\\
+Effective valve area & Less pressure loss at a prescribed flow & Valve size, moving mass, response and available stock\\
+Fill fraction $\beta$ & More time for liquid replenishment & Less ejection time at fixed rate; greater ejection-flow demand\\
+Reference air volume & More chamber compliance; smaller pressure change for a given stored displacement & Greater pressure-dependent stroke storage and altered timing\\
+Inlet pressure/head & More available filling pressure & Different filling load, gas state and reservoir requirement\\
+Reservoir usable volume & Greater transient buffer capacity & Packaging; no remedy for persistent mean-flow mismatch\\
+Tube diameter / length & Wider or shorter paths reduce initial resistance/inertance estimates & Interfaces, sensors and spatial layout\\
+Gear reduction & Less required motor torque for a given crank torque & Higher motor speed; losses and reflected inertia\\\bottomrule
+\end{tabularx}}
+
+\textbf{Next calculation.} Choose candidate $D,S$ and valve effective areas, specify a reference gas state and a motion family, and supply selected upstream/downstream load cases. Solve the coupled equations to periodic operation and obtain $\bar Q$, valve pressure drops, minimum chamber pressure, reservoir excursions and axial force histories. Keep both control strategies open until that feasibility map exists. Then compare only feasible candidates for cost, size, manufacturability, control authority and waveform fidelity.
+
+\newpage
+\stage{Verification, assumptions and references}
+\topic{Checks before treating calculated loads as design evidence}
+\begin{enumerate}
+\item \textbf{Dimensions and limiting cases.} Check the units of every term; recover $Q_o-Q_i=A_p\dot x$ as storage tends to zero. Recover zero gas-volume change for unchanged absolute pressure.
+\item \textbf{Conservation.} At periodic operation, the integrated chamber and reservoir balances must close. Outlet delivered volume must use signed flow and the declared measurement plane.
+\item \textbf{Numerical verification.} When a solver is implemented, refine time step and valve-event handling; check convergence of peak force, minimum pressure and delivered volume, not only cycle means.
+\item \textbf{Calibration.} Fit valve effective area/loss coefficients, seal friction and effective gas thermal response from appropriate separate measurements. Do not tune all unknowns against one outlet waveform.
+\item \textbf{Independent validation.} Compare predicted pressure, flow and force-related outputs at conditions not used for calibration, with propagated measurement uncertainty. Benchtop agreement does not establish clinical predictive validity.
+\end{enumerate}
+
+\topic{Scope and unresolved inputs}
+This derivation treats each ventricle as a separate chamber; duplicate its equations with its own pressures and connect through reservoir/load balances. A single chamber switched between ventricular roles requires explicit circuit state and event scheduling. The motor/crank frequency cannot be inferred from delivery frequency without that mapping. A common crank also requires the sum of the phased chamber torque contributions.
+
+Unknowns still include actual bore/travel, gas reference state, valve type and opening law, tubing geometry, liquid properties, moving mass, friction, ejection/filling waveform, reservoir characteristics and external load dynamics. Mean and peak PDS pressures alone do not specify $p(t)$. The initial lumped model does not resolve local valve jets, distributed wave propagation, cavitation or gas dissolution. Those omissions must be revisited if measurements or pressure minima make them consequential.
+
+The chamber, force, reservoir and frequency relations are derived here from geometry, conservation, the stated constitutive assumptions and Newton's law. Literature supports the chosen modelling structure; it supplies no fitted coefficients for this proposed rig. The arithmetic checks below were evaluated directly; no time-domain pump simulation has been run:
+\begin{center}\small
+\begin{tabular}{@{}lr@{}}\toprule
+\textbf{Check} & \textbf{Calculated result}\\\midrule
+$5$ L/min at $75$ events/min & $66.67$ mL/event\\
+$66.67$ mL/event at $180$ events/min & $12.00$ L/min\\
+$5$ L/min at $180$ events/min & $27.78$ mL/event\\
+$D=50$ mm, $p_c-p_b=10$ mmHg & $2.62$ N\\
+$D=50$ mm, $p_c-p_b=200$ mmHg & $52.36$ N\\
+Fixed-stroke frequency scaling, $(180/75)^2$ & $5.76$\\\bottomrule
+\end{tabular}
+\end{center}
+
+\newpage
+{\footnotesize
+\begin{thebibliography}{9}
+\bibitem{broome} Broom\'e M, Maksuti E, Bj\"allmark A, Frenckner B, Janerot-Sj\"oberg B. Closed-loop real-time simulation model of hemodynamics and oxygen transport in the cardiovascular system. Biomed Eng Online. 2013;12:69. \href{https://doi.org/10.1186/1475-925X-12-69}{doi:10.1186/1475-925X-12-69}. Full text consulted for valve loss/inertia and lumped resistance/inertance structure.
+\bibitem{iannetti} Iannetti A, Stickland MT, Dempster WM. A CFD study on the mechanisms which cause cavitation in positive displacement reciprocating pumps. Journal of Hydraulic Engineering. 2015;1(1):47--59. \href{https://doi.org/10.17265/2332-8215/2015.01.005}{doi:10.17265/2332-8215/2015.01.005}. Accessible author manuscript consulted; this study is CFD-based.
+\bibitem{karabegovic} Karabegovic A, Hinteregger M, Janeczek C, Reichenfelser W, Soragnese V, Mohl W, Gf\"ohler M. A systemic mock circulation for in-vitro testing of a pneumatically operated left ventricular assist device. Proceedings of the 19th IFAC World Congress; 2014. p. 8409--8414. \href{https://skoge.folk.ntnu.no/prost/proceedings/ifac2014/media/files/2587.pdf}{Accessible conference manuscript}, Sections 3.1 and 4.2.
+\end{thebibliography}}
+\textbf{Project provenance:} current \texttt{PDS\_Pump.pdf}, pages 1 and 5 (modified 19 November 2026), and the user's working-point, geometry, air-pocket and operating-strategy instructions in this conversation. Requirements are not experimental results.
+\end{document}
