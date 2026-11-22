@@ -132,4 +132,14 @@ No numerical model or controller has been implemented in this update.
 | ID | Date | Decision / proposal | Basis | Status |
 | --- | --- | --- | --- | --- |
 | D038 | 2026-11-22 | Derive selectable phase-only and phase-plus-pressure opening with latched commands and scheduled finite closure | User directs continuation of the piston/valve derivation | Candidate for review in Derivation 05; no numerical thresholds, timing values or hardware selected |
-| D039 | 2026-11-22 | Preserve paired commands in 1B and separate duty routing in 1A; propose both-ready pressure guards for the pair | Earlier linked-state intent and circuit assignments | Common guard is proposed, not confirmed; opening-dependent losses and near-closure hydraulics still required before a force result |
+| D039 | 2026-11-22 | Preserve paired commands in 1B and separate duty routing in 1A; propose both-ready pressure guards for the pair | Earlier linked-state intent and circuit assignments | Common guard proposed; detailed closure is deferred by D041. A true switching-inclusive maximum force remains unresolved |
+
+
+## Adjustable duties and ideal transitions — 22 November 2026
+
+| ID | Date | Decision | Basis | Status |
+| --- | --- | --- | --- | --- |
+| D040 | 2026-11-22 | Make the shared-chamber right-duty fraction adjustable; retain 0.5 initially | Explicit user clarification that R/L duties need not occupy equal time | Budget generator exposes --right-duty-fraction; separate duty budgets verified. Coupled piecewise hydraulic model not implemented |
+| D041 | 2026-11-22 | Idealise opening/closing transitions for now and refine once a valve is selected | Explicit user staging instruction | Ideal switch a=u with zero transition duration is the documented baseline; no division by zero in the finite-ramp formula, no silent removal of fluid inertia, and no switching-surge force rating |
+
+See [duty allocation and ideal valves](research/DUTY_ALLOCATION_AND_IDEAL_VALVES.md).

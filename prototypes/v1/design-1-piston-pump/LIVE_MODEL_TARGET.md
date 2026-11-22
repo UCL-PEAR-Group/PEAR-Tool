@@ -28,14 +28,17 @@ to be derived and the combined model has not been implemented or verified.
 Application work must not displace that task.
 [Derivation 05](research/DERIVATION_05_PHASE_AND_PRESSURE_VALVE_SEQUENCE.md) now
 specifies candidate phase/pressure guards and finite aperture timing; actual
-opening-dependent losses and near-closure hydraulics remain to be resolved.
+opening-dependent losses and near-closure hydraulics remain later refinements.
+The user has now chosen ideal valve transitions for the current stage; the
+interface must label this assumption and exclude unmodelled switching surges
+from any reported force-rating claim.
 
 ## What the first interactive version should show
 
 | Element | Inputs or displayed outputs | Interpretation |
 | --- | --- | --- |
 | Piston view | Position, selected bore/travel, chamber and retained-gas volumes | Schematic driven by the same numerical solution as the plots; no converter design required |
-| Timing controls | Per-circuit bpm, ejection/filling allocation, waveform and smoothing | Explicit timing assumptions; distinguish motion allocation from actual valve-open durations |
+| Timing controls | Per-circuit bpm, shared right-duty fraction lambda_R (default 0.5), within-duty advance fractions, waveform and smoothing | Separate R/L duty budgets from advance/return allocation and actual valve-open durations |
 | Pressure plots | Chamber, inlet reservoir and arterial/load-inlet pressure | Label measurement locations and gauge/absolute reference; compare with corresponding physiology |
 | Flow plots | Inlet and outlet instantaneous flow, cycle mean and net delivery | Actual outputs of continuity and valve dynamics in the coupled model |
 | Valve indication | Commands, effective opening, routing and cycle state; opening/closing times | Piston phase/position participates in commands; optional pressure conditions remain to be selected; calculate actual flow from hydraulics |
@@ -70,9 +73,11 @@ in the fixed-pump mode. Changing bore, travel or gas charge creates a new design
 case; it does not imply those properties can change physically during a run.
 
 For 1A, distinguish per-circuit pulse rate h from physical chamber rate f. Under
-the current one-delivery-per-duty interpretation, f = 2h; for 1B each chamber has
-f = h. Timing/routing and carry-over states must be implemented before either
-whole architecture is represented as solved.
+the current one-delivery-per-duty interpretation, the mean event count is 2h.
+Let TH = 60/h, TR = lambda_R TH and TL = (1-lambda_R) TH. The adjustable default
+is lambda_R = 0.5; a single uniform T = 60/(2h) is invalid for unequal slots.
+For 1B each chamber has the full TH and h cycles/min. Timing/routing and carry-over
+states must be implemented before either whole architecture is represented as solved.
 
 ## Proposed software structure
 

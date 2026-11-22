@@ -1,12 +1,18 @@
 # Design 1: Piston Pump
 
+Current scope: [adjustable right/left duties and ideal valve transitions](research/DUTY_ALLOCATION_AND_IDEAL_VALVES.md).
+The shared-chamber allocation defaults to 50:50 and is adjustable with
+`python python/build_operating_matrix.py --right-duty-fraction 0.6`. This changes
+timing budgets only. Detailed valve transition dynamics are deferred until valve
+selection; no switching-surge force rating is implied.
+
 Waveform options: [published candidates, adjustable timing and comparison plots](research/WAVEFORM_CANDIDATES.md).
 
 Latest analytical step: [Derivation 05: phase and pressure valve sequence](research/DERIVATION_05_PHASE_AND_PRESSURE_VALVE_SEQUENCE.md).
 This defines candidate phase windows, optional pressure conditions, latched
-commands, finite opening/closure timing and the position needed for gas-pressure
-build-up. Parameters remain free; near-closure hydraulics and a combined
-simulation are still pending.
+commands, a future finite-opening refinement and the position needed for
+gas-pressure build-up. Current valve transitions are idealised; a combined
+simulation and component-specific switching loads are still pending.
 
 Previous analytical step: [Derivation 04: retained-air storage and valve events](research/DERIVATION_04_RETAINED_AIR_AND_VALVE_EVENTS.md).
 The retained-air storage derivation remains applicable. The user has now confirmed

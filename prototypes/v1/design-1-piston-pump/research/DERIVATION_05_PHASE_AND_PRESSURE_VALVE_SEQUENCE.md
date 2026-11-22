@@ -1,5 +1,10 @@
 # Derivation 05 — piston-phase windows and pressure-conditioned valve commands
 
+**User scope update:** right/left duty allocation is adjustable, with equal time
+as the starting assumption. Valve transitions are idealised for the present
+stage; the finite-aperture sections below are deferred refinements, not required
+inputs now. See [adjustable duties and ideal valves](DUTY_ALLOCATION_AND_IDEAL_VALVES.md).
+
 22 November 2026. A candidate analytical sequence for review, following the
 user's direction to proceed. The confirmed design uses enforced valves,
 coordinates them with piston motion and may use pressure to govern transitions.
@@ -26,8 +31,11 @@ paper and not a validated reproduction of cardiac valve behaviour.
 
 ## 2. Tie valve eligibility to the existing motion
 
-For a constant-rate case, let f be physical chamber cycles per minute, T the
-period in seconds, t0 a cycle origin and phi dimensionless cycle phase:
+For a uniform constant-rate chamber cycle, let f be cycles per minute, T the
+period in seconds, t0 a cycle origin and phi dimensionless cycle phase. This
+formula applies to each dedicated chamber and to equal shared-chamber slots.
+For unequal shared slots, use the piecewise duty phases in the linked timing
+note; the mean event rate 2h does not specify either individual slot:
 
 $$
 T=\frac{60}{f},\qquad
@@ -57,7 +65,8 @@ flow durations, that needs a different constraint on the completed solution.
 | 180/min | 1B: each dedicated chamber | 180/min | 0.333 s | 0.133 s | 0.200 s |
 | 180/min | 1A: equal right/left duty slots | 360/min | 0.167 s | 0.0667 s | 0.100 s |
 
-These are kinematic budgets, not demonstrations of achievable operation. For 1A,
+The 1A rows above use the adjustable default lambda_R = 0.5. They are kinematic
+budgets, not demonstrations of achievable operation. For 1A,
 selector movement and any isolation interval must fit into the two duty slots,
 or the motion allocation must be revised. No additional dwell is silently added.
 
@@ -383,8 +392,9 @@ These are a useful control specification but not a complete numerical pump model
 | Timing/threshold values | Keep phase limits, margins and transition durations free | Must fit the rate envelope and eventual component/sensor behaviour |
 | Effective opening and near-closure hydraulics | Derive from candidate valve geometry/data next | Required for pressure peaks, reverse flow, delivery and force |
 
-No optimal timing or pressure margin is implied. The immediate next analytical
-step is opening-dependent hydraulic coefficients and closure behaviour. After
+No optimal timing or pressure margin is implied. The user has since deferred finite transition dynamics. The immediate next
+analytical step uses ideal valve switching and full-open hydraulic coefficients;
+partial-opening and closure behaviour remain later component-specific refinements. After
 that, numerical verification should check conservation, event order, missed
 openings, periodicity and sensitivity before physical calibration/validation.
 

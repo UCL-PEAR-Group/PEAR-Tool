@@ -1,5 +1,11 @@
 # Design 1: Piston Pump — living model
 
+**Current scope:** [shared-chamber duty allocation is adjustable](research/DUTY_ALLOCATION_AND_IDEAL_VALVES.md),
+with lambda_R = 0.5 initially. Ideal instantaneous valve transitions are the
+present modelling assumption; finite aperture/closure dynamics are deferred.
+This does not silently remove fluid inertia or establish a finite closure-pressure
+peak. Existing hydraulic code and results remain unchanged.
+
 [Derivation 05: phase and pressure valve sequence](research/DERIVATION_05_PHASE_AND_PRESSURE_VALVE_SEQUENCE.md)
 now gives a candidate command/event structure, finite aperture approximation,
 timing budgets and closed-gas opening positions. Phase-only and pressure-gated

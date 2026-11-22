@@ -1,5 +1,24 @@
 # Progress and next checks
 
+## Unequal duties and simplified valves — 22 November 2026
+
+- Added an adjustable right-duty fraction to the operating-budget generator;
+  equal allocation remains the saved default. The separate R/L budgets sum to
+  one heart period for 1A; both 1B chambers retain the whole period.
+- Distinguished mean event count 2h from the actual unequal slot durations.
+- Verified 40:60, 50:50 and 60:40 budget allocations, unchanged 1B budgets,
+  unchanged pulse/volume accounting and invalid-input rejection. Exercised the
+  60:40 CLI and restored the saved default matrix to 50:50.
+- Recorded the user's ideal-valve baseline and deferred component-specific
+  opening/closure dynamics. No hydraulic implementation or result is changed.
+- Explained closure-volume, pressure and force consequences, including why an
+  ideal zero-time stop cannot supply a finite inertial surge rating.
+- Reviewed primary-paper abstracts supporting unequal physiological systolic
+  timings; no physiological allocation ratio was inferred from them.
+
+Next: continue the bulk-cycle derivation with ideal valves and declared loss
+assumptions. Refine switching dynamics when valve data are available.
+
 ## Phase and pressure valve sequence derived — 22 November 2026
 
 - Added Derivation 05 with candidate phase windows, optional pressure guards,
