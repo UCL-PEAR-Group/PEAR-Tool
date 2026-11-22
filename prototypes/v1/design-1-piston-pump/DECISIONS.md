@@ -1,5 +1,17 @@
 # Decision record
 
+## Waveform and timing flexibility — 22 November 2026
+
+- User wants to compare different waveform shapes and different ejection/filling
+  ratios. Keep both configurable; no universal waveform has been selected.
+- User's 60:40 fallback is explicitly interpreted as filling:ejection, consistent
+  with the preceding 40% ejection example. This interpretation is stated to the
+  user and can be changed; r = ejection/filling therefore remains 2/3.
+- Use published analytical waveforms as candidates. Compare their shape at equal
+  phase volume and duration before changing timing or adding hydraulic dynamics.
+- Render mathematics in chat using mathematical environments, following the
+  user's latest explicit instruction.
+
 ## Literature and pressure starting point — 21 November 2026
 
 - User baseline: 5 L/min at 75 pulses/min per circuit (66.67 mL net delivery).

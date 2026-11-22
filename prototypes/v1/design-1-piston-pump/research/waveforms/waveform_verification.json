@@ -1,0 +1,47 @@
+{
+  "status": "Analytical command comparison; no hydraulic simulation or physical validation",
+  "mean_flow_L_min": 5.0,
+  "circuit_pulses_per_min": 75.0,
+  "architecture": "One dedicated ventricular chamber; not shared alternating R/L timing",
+  "fallback_interpretation": "60% filling : 40% ejection, no dwell",
+  "period_s": 0.8,
+  "ejection_s": 0.32000000000000006,
+  "filling_s": 0.48,
+  "delivery_mL": 66.66666666666667,
+  "source": "Franzetti et al. 2019, supplied article p. 5, Eqs 13\u201315; shapes independently volume-normalised here",
+  "quintic_status": "Engineering reference from existing exploratory motion; not measured physiology",
+  "continuity_warning": "Volume normalisation does not match acceleration at phase joins; inspect slope jumps before commanding hardware",
+  "normalisation_verification": "10001-point quadrature agrees with unit-area analytical integrals within 1e-7",
+  "metrics": [
+    {
+      "profile": "half_sine",
+      "ejection_peak_L_min": 19.634954084936204,
+      "ejection_peak_fraction": 0.5,
+      "filling_peak_L_min": 13.089969389957473,
+      "ejection_volume_mL": 66.66666611835532,
+      "filling_volume_mL": 66.66666611835532,
+      "eject_to_fill_flow_slope_jump_mL_s2": 1784.867694062744,
+      "fill_to_eject_flow_slope_jump_mL_s2": 1784.867694062744
+    },
+    {
+      "profile": "published_harmonics",
+      "ejection_peak_L_min": 20.5671277230343,
+      "ejection_peak_fraction": 0.32480000000000003,
+      "filling_peak_L_min": 19.400739324915808,
+      "ejection_volume_mL": 66.66666597744849,
+      "filling_volume_mL": 66.66666508788492,
+      "eject_to_fill_flow_slope_jump_mL_s2": -2700.920971234783,
+      "fill_to_eject_flow_slope_jump_mL_s2": 2554.875005108959
+    },
+    {
+      "profile": "quintic",
+      "ejection_peak_L_min": 23.437499999999996,
+      "ejection_peak_fraction": 0.5,
+      "filling_peak_L_min": 15.625000000000004,
+      "ejection_volume_mL": 66.66666666666667,
+      "filling_volume_mL": 66.66666666666667,
+      "eject_to_fill_flow_slope_jump_mL_s2": 0.0,
+      "fill_to_eject_flow_slope_jump_mL_s2": 0.0
+    }
+  ]
+}

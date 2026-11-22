@@ -1,5 +1,20 @@
 # Progress and next checks
 
+## Existing waveforms compared — 22 November 2026
+
+- Inspected Franzetti's published half-sine, Swanson–Clark and Talukder–Reul
+  expressions. Located primary implementation examples and alternative peak-time
+  and three-segment volume-waveform studies.
+- Added a reproducible shape comparison at 5 L/min and 75/min, interpreting the
+  60:40 fallback as filling:ejection. Included the existing quintic motion as an
+  explicitly non-physiological engineering reference.
+- Verified phase integrals, endpoint volumes, positive forward phase flow and
+  acceleration-join differences. Harmonic pairs need join matching before use as
+  motor commands. No hydraulic simulation or workbook change was performed.
+
+Next: compare ratio/shape changes separately, then check valve-state feasibility
+and pressure/force histories under the same specified load.
+
 ## Full-liquid analytical derivation — 21 November 2026
 
 - Derived moving-chamber continuity, the open-path pressure law, and separate

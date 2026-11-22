@@ -1,5 +1,7 @@
 # Design 1: Piston Pump
 
+Waveform options: [published candidates, adjustable timing and comparison plots](research/WAVEFORM_CANDIDATES.md).
+
 Continue the analytical development with
 [Derivation 01: full-liquid chamber, pressure and force](research/DERIVATION_01_FULL_LIQUID.md).
 
