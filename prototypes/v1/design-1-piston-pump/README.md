@@ -2,7 +2,13 @@
 
 Waveform options: [published candidates, adjustable timing and comparison plots](research/WAVEFORM_CANDIDATES.md).
 
-Latest step: [Derivation 03: pressure histories and the heart reference](research/DERIVATION_03_PRESSURE_AND_HEART_REFERENCE.md).
+Latest analytical step: [Derivation 04: retained-air storage and valve events](research/DERIVATION_04_RETAINED_AIR_AND_VALVE_EVENTS.md).
+This derives continuous chamber pressure and event-driven passive valve rules,
+coupled to the arterial load. It has not yet been implemented or simulated as a
+combined model. Complete and verify the derivation before developing the MATLAB
+interface.
+
+Latest pressure calculation: [Derivation 03: pressure histories and the heart reference](research/DERIVATION_03_PRESSURE_AND_HEART_REFERENCE.md).
 The **Pressure cycle** sheet now calculates a periodic three-element arterial
 load, conditional chamber pressures and hydraulic forces, with an unscaled
 published aortic/pulmonary reference. The reference is at 6.6 L/min and 75/min;

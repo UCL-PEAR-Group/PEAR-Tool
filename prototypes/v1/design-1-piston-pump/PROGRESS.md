@@ -1,5 +1,25 @@
 # Progress and next checks
 
+## Retained-air and valve-event derivation — 22 November 2026
+
+- Confirmed that the eventual MATLAB interface follows the coupled derivation.
+- Derived chamber continuity with a fixed-mass polytropic gas pocket, its
+  pressure-dependent compliance and continuous pressure through piston reversal.
+- Specified an ideal passive-valve event law consistent with fluid inertance;
+  pressure reversal alone does not instantly close an already flowing branch.
+- Combined the chamber and three-element arterial load into four hydraulic state
+  equations with discrete valve states, explicit inventory and periodicity checks.
+- Checked dimensions, signs, the closed-valve limit and a small analytical opening
+  budget. The earlier illustrative gas state gives about 0.791 mL compression
+  displacement before opening against a constant 90 mmHg gauge outlet. This is
+  not net stroke loss or a simulated cycle.
+- Existing solvers, spreadsheet results and waveform comparisons are unchanged.
+  No new coupled numerical result, MATLAB execution or maximum force is claimed.
+
+Next: review the gas/reference-state and valve assumptions, then implement and
+verify the coupled equations before interpreting new pressure/flow/force curves.
+
+
 ## Pressure histories and physiological reference — 22 November 2026
 
 - Reconstructed the ten-harmonic aortic and main pulmonary arterial signals in

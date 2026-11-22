@@ -17,6 +17,14 @@ remain the reproducible reference during development. The older MATLAB port is
 unexecuted and does not include all subsequent waveform and load work. It must
 be reviewed and checked before it is promoted to a maintained entry point.
 
+## Priority confirmed — 22 November 2026
+
+The user explicitly places the application after completion of the derivation.
+The current task is retained-air chamber compliance and valve opening/closure;
+see [Derivation 04](research/DERIVATION_04_RETAINED_AIR_AND_VALVE_EVENTS.md).
+Its coupled equations are derived for review but have not yet been numerically
+implemented and verified together. Application work must not displace that task.
+
 ## What the first interactive version should show
 
 | Element | Inputs or displayed outputs | Interpretation |

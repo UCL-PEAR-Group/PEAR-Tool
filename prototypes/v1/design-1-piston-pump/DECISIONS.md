@@ -97,3 +97,11 @@ all listed points must be achieved by one fixed-stroke configuration.
 | D029 | 2026-11-22 | Preserve executed Python results as the numerical reference during MATLAB development | Reproducibility and comparison during implementation change | Existing solver and results unchanged; earlier MATLAB port remains unexecuted |
 | D030 | 2026-11-22 | Propose fixed-geometry bpm exploration as the first interactive mode, with sizing and independent-flow control clearly distinguished | User's fixed-stroke pump assumption; flow-frequency-volume conservation | Proposed interface behaviour; no geometry or controller selected |
 | D031 | 2026-11-22 | Develop the numerical model independently of display and later hardware communication | Plot refresh must not determine integration accuracy; physical rig connection has additional requirements | Proposed architecture in LIVE_MODEL_TARGET.md; UI and hardware integration not implemented |
+
+
+## Derivation before the application — 22 November 2026
+
+| ID | Date | Decision | Basis | Status |
+| --- | --- | --- | --- | --- |
+| D032 | 2026-11-22 | Complete the required coupled derivation before developing the interactive MATLAB interface | User's explicit sequencing clarification | Active priority; application remains eventual deliverable |
+| D033 | 2026-11-22 | Derive a fixed-mass polytropic air pocket and pressure-opening/flow-closure passive-valve baseline coupled to the external load | User's retained-air direction; continuity and inertial branch laws | Analytical formulation documented; actual gas state, exponent and valve hardware remain unselected; combined solver not executed |

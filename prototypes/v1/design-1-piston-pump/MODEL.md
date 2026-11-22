@@ -1,5 +1,13 @@
 # Design 1: Piston Pump — living model
 
+[Derivation 04: retained-air storage and valve events](research/DERIVATION_04_RETAINED_AIR_AND_VALVE_EVENTS.md)
+now derives the combined four-state chamber/load formulation, with passive valve
+opening on forward pressure and closure at zero forward flow. This is analytical
+work for review; the two existing numerical implementations below remain separate.
+No new cycle waveform, completed MATLAB port or force rating is claimed. The
+interactive application follows completion and numerical verification of the
+necessary coupled derivation.
+
 [Derivation 03: pressure histories and the heart reference](research/DERIVATION_03_PRESSURE_AND_HEART_REFERENCE.md)
 adds a separate, prescribed-flow arterial-load study in Python and the spreadsheet.
 It compares systemic and pulmonary load pressures with published functional human
