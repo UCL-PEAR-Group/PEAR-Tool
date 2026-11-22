@@ -1,0 +1,25 @@
+{
+  "status": "Illustrative full-liquid phase calculations; not a valve-event or gas solver",
+  "qmean_l_min": 5.0,
+  "bpm": 75.0,
+  "ejection_fraction": 0.4,
+  "piston_diameter_mm": 50.0,
+  "rear_pressure_mmhg": 0.0,
+  "density_kg_m3": 1000.0,
+  "inlet": {"valve_diameter_mm": 16.0, "Cd": 0.7, "tube_diameter_mm": 20.0, "length_m": 0.2, "K": 1.0, "R_mmhg_s_ml": 0.0},
+  "outlet": {"valve_diameter_mm": 16.0, "Cd": 0.7, "tube_diameter_mm": 20.0, "length_m": 0.2, "K": 1.0, "R_mmhg_s_ml": 0.0},
+  "loads": {
+    "systemic": {"inlet_pressure_mmhg": 10.0, "return_pressure_mmhg": 5.0, "R1_mmhg_s_ml": 0.04, "R2_mmhg_s_ml": 0.98, "C_ml_mmhg": 1.5},
+    "pulmonary": {"inlet_pressure_mmhg": 5.0, "return_pressure_mmhg": 10.0, "R1_mmhg_s_ml": 0.015, "R2_mmhg_s_ml": 0.045, "C_ml_mmhg": 5.0}
+  },
+  "provenance": {
+    "qmean_l_min_bpm": "User-prescribed baseline",
+    "timing": "60:40 filling:ejection interpretation; no dwell",
+    "geometry_and_path_losses": "Previous illustrative 50 mm piston and outlet path; identical inlet path assumed here. No component calibration. Additional linear resistance is omitted, not proved negligible.",
+    "systemic_R1": "Illustrative 0.04 mmHg s/mL; close to 53 dyn s/cm^5 = 0.03975 mmHg s/mL in Nichols et al. 1977 group A. Not a fitted rig coefficient.",
+    "pulmonary_R1": "Illustrative 0.015 mmHg s/mL; informed by Qureshi et al. 2018 Table 2, Dataset 1. Not a fitted rig coefficient.",
+    "R2": "Chosen so periodic mean arterial pressures are 90 mmHg systemic and 15 mmHg pulmonary at 5 L/min with the stated return pressures. Mean agreement is imposed by this choice, not independent corroboration.",
+    "C_and_reservoir_pressures": "Free illustrative engineering inputs, not identified patient values. No pressure-waveform fitting performed.",
+    "heart_reference": "Qureshi et al. 2018 author manuscript Appendix A Table A1, Dataset 1; functional human arterial reference reproduced from Milnor 1989. 75 bpm, 6.6 L/min. Original acquisition/raw clinical recording not inspected. Reference waveforms remain unscaled."
+  }
+}

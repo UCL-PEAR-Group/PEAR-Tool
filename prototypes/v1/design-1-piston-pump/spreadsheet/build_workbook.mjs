@@ -4,6 +4,7 @@ import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
 import {Workbook, SpreadsheetFile} from '@oai/artifact-tool';
 import {addWaveformSheet} from './waveform_sheet.mjs';
+import {addPressureCycle} from './pressure_cycle_sheet.mjs';
 
 const design=process.env.PEAR_DESIGN_DIR || path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outputDir=process.env.PEAR_OUTPUT_DIR || path.join(design,'results','spreadsheet-review');
@@ -95,12 +96,15 @@ textrow(lit,23,'Screened out: Herwald et al. 2024, DOI 10.1016/j.ohx.2024.e00561
 
 const eq=base('Equation map',22,'F',[9,26,76,53,75,46]);
 textrow(eq,2,'PEAR | Coupling map — equations and assumptions');eq.getRange('A2:F2').format.font={size:18,bold:true};
-textrow(eq,3,'Pressure start evaluates a local hydraulic point; Waveform evaluates kinematics. Coupled dynamic equations remain proposed.');
+textrow(eq,3,'Pressure cycle now solves the assumed arterial load. Gas storage and chamber valve transitions remain unresolved.');
 textrow(eq,4,'Symbols and units are local to each row. Read the accompanying review before combining equations.');
 band(eq,6,'F',['ID','Block','Expression','Variables / units','Assumptions / limits','Status / provenance']);eq.getRange(`A7:F${6+equations.length}`).values=equations;eq.getRange(`A7:F${6+equations.length}`).format.wrapText=true;eq.getRange(`A7:F${6+equations.length}`).format.rowHeight=88;eq.getRange(`A7:F${6+equations.length}`).format.verticalAlignment='center';
 eq.tables.add(`A6:F${6+equations.length}`,true,'EquationRegister');
 
 const wave=addWaveformSheet(wb,base,band,textrow);
+const pressureCfg=JSON.parse(await fs.readFile(path.join(design,'research/pressure_cycle_inputs.json'),'utf8'));
+const heartCoefficients=(await fs.readFile(path.join(design,'research/heart_reference_harmonics.csv'),'utf8')).trim().split('\n').slice(1).map(line=>line.split(',').map(Number));
+const cycle=addPressureCycle(wb,base,band,textrow,heartCoefficients,pressureCfg);
 wb.recalculate();
 const value=a=>s.getRange(a).values[0][0];
 const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-9*Math.max(1,Math.abs(b)),`${a} != ${b}`);
@@ -126,12 +130,22 @@ wave.getRange('C8').values=[[.05]];wave.getRange('C7').values=[['Published harmo
 s.getRange('C8').values=[[150]];wb.recalculate();near(wv('C23'),peak);near(wv('C25'),2*maxacc);near(wv('C19'),required/2);checks.waveform.perturbations.push('At fixed mean flow and shape, doubled rate preserves flow peak, doubles acceleration and halves required stroke');s.getRange('C8').values=[[75]];
 s.getRange('C10').values=[[.5]];wb.recalculate();near(wv('C23'),peak*.4/.5);near(wv('C30'),0);checks.waveform.perturbations.push('Timing change rescales peak flow and preserves smooth reversal');s.getRange('C10').values=[[.4]];
 wb.recalculate();near(wv('C23'),peak);near(wv('C25'),maxacc);near(value('C41'),checks.baseline.local_force_N);
-for(const sheet of [s,lit,eq,wave]){const vals=sheet.getUsedRange().values;for(const row of vals)for(const v of row)assert.ok(!/^#(REF!|DIV\/0!|VALUE!|NAME\?|NUM!|N\/A|SPILL!|CALC!)/.test(String(v)),String(v));}
+const absMean=(x,y)=>Math.abs(x-y)<0.003; // Trapezoidal pressure-mean tolerance, mmHg.
+const pv=a=>cycle.getRange(a).values[0][0];
+const pressureRef=JSON.parse(await fs.readFile(path.join(design,'research/pressure_cycle/pressure_cycle_verification.json'),'utf8'));
+assert.ok(absMean(pv('C24'),90));relative(pv('C26'),pressureRef.baseline.systemic.arterial_max_mmhg,1e-4);relative(pv('C29'),pressureRef.baseline.systemic.phase_max_abs_hydraulic_force_n,1e-4);near(pv('C30'),0);
+checks.pressure_cycle={baseline:{arterial_mean_mmhg:pv('C24'),arterial_min_mmhg:pv('C25'),arterial_max_mmhg:pv('C26'),chamber_min_mmhg:pv('C27'),phase_force_n:pv('C29'),closed_valve_violation_mmhg:pv('C30')},perturbations:[]};
+cycle.getRange('C7').values=[['Pulmonary']];wb.recalculate();assert.ok(absMean(pv('C24'),15));relative(pv('C26'),pressureRef.baseline.pulmonary.arterial_max_mmhg,1e-4);relative(pv('C29'),pressureRef.baseline.pulmonary.phase_max_abs_hydraulic_force_n,.004);assert.ok(pv('C30')>19);checks.pressure_cycle.perturbations.push('Pulmonary preset gives 15 mmHg mean and exposes a closed-valve inconsistency');cycle.getRange('C7').values=[['Systemic']];
+cycle.getRange('M23').values=[[3]];wb.recalculate();assert.ok(absMean(pv('C24'),90));assert.ok(pv('C26')<102);checks.pressure_cycle.perturbations.push('Doubling load compliance narrows pressure pulse without changing mean');cycle.getRange('M23').values=[[1.5]];
+const phaseForce=checks.pressure_cycle.baseline.phase_force_n;s.getRange('C9').values=[[100]];wb.recalculate();near(pv('C29'),4*phaseForce);assert.ok(absMean(pv('C24'),90));checks.pressure_cycle.perturbations.push('Doubling piston bore quadruples hydraulic force at the same flow and load');s.getRange('C9').values=[[50]];
+wb.recalculate();near(pv('C29'),phaseForce);near(wv('C23'),peak);near(value('C41'),checks.baseline.local_force_N);
+for(const sheet of [s,lit,eq,wave,cycle]){const vals=sheet.getUsedRange().values;for(const row of vals)for(const v of row)assert.ok(!/^#(REF!|DIV\/0!|VALUE!|NAME\?|NUM!|N\/A|SPILL!|CALC!)/.test(String(v)),String(v));}
 checks.formula_errors=0;checks.native_excel_tested=false;checks.physical_validation=false;
 await fs.writeFile(path.join(outputDir,'spreadsheet_verification.json'),JSON.stringify(checks,null,2)+'\n');
 await fs.writeFile(path.join(outputDir,'formula_inspection.txt'),JSON.stringify(await wb.inspect({kind:'table',range:"'Pressure start'!A24:F46",include:'values,formulas',tableMaxRows:23,tableMaxCols:6}),null,2));
 await fs.writeFile(path.join(outputDir,'waveform_formula_inspection.txt'),JSON.stringify(await wb.inspect({kind:'table',range:"'Waveform'!A6:F31",include:'values,formulas',tableMaxRows:26,tableMaxCols:6}),null,2));
-for(const [sheetName,range,file,scale] of [['Waveform','A1:F34','waveform_inputs_preview.png',1],['Waveform','A35:F57','waveform_charts_preview.png',1],['Waveform','A59:R65','waveform_build_preview.png',.8],['Equation map','A1:F4','equations_heading_preview.png',.7]]){const png=await wb.render({sheetName,range,scale,format:'png'});await fs.writeFile(path.join(outputDir,file),new Uint8Array(await png.arrayBuffer()));}
+await fs.writeFile(path.join(outputDir,'pressure_cycle_formula_inspection.txt'),JSON.stringify(await wb.inspect({kind:'table',range:"'Pressure cycle'!A21:F38",include:'values,formulas',tableMaxRows:18,tableMaxCols:6}),null,2));
+for(const [sheetName,range,file,scale] of [['Pressure cycle','A1:F41','pressure_cycle_inputs_preview.png',1],['Pressure cycle','A43:F66','pressure_cycle_charts_preview.png',1],['Pressure cycle','H6:P29','pressure_cycle_sources_preview.png',1],['Pressure cycle','A69:U74','pressure_cycle_build_preview.png',.8],['Equation map','A1:F4','equations_heading_preview.png',.7]]){const png=await wb.render({sheetName,range,scale,format:'png'});await fs.writeFile(path.join(outputDir,file),new Uint8Array(await png.arrayBuffer()));}
 const xlsx=await SpreadsheetFile.exportXlsx(wb);await xlsx.save(path.join(outputDir,'Pump_pressure_literature_starter.xlsx'));
 console.log(JSON.stringify(checks,null,2));
 console.log('Saved '+path.join(outputDir,'Pump_pressure_literature_starter.xlsx'));

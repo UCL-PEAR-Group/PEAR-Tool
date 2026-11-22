@@ -76,3 +76,14 @@ all listed points must be achieved by one fixed-stroke configuration.
 | D020 | 2026-11-22 | Interpret fallback 60:40 as filling:ejection, gamma = 0.4 | Stated interpretation of user fallback | Adjustable assumption |
 | D021 | 2026-11-22 | Compare a normalised quintic endpoint window, trial width 5% of each phase at each end | Engineering means of removing acceleration jumps | Comparison only; peak acceleration penalty prevents treating smoothness as automatic improvement |
 | D022 | 2026-11-22 | Add the waveform build to the existing spreadsheet without coupling it to the local pressure example | Staged transparent derivation | Volume, joins, derivatives, quadrature and input responses checked; hydraulic feasibility pending |
+
+
+## Pressure comparison and evidence boundaries — 22 November 2026
+
+| ID | Date | Decision | Basis | Status |
+| --- | --- | --- | --- | --- |
+| D023 | 2026-11-22 | Compare chamber, arterial and phantom measurements with their corresponding physiological locations | User requests heart waveform comparison; pressures differ across valves and circuit segments | Applied; quantitative reference currently arterial only |
+| D024 | 2026-11-22 | Preserve Qureshi/Milnor reference at 75/min and 6.6 L/min | Published ten-harmonic functional reference; no raw clinical acquisition inspected | Reconstructed; different flow prevents a validation-error claim |
+| D025 | 2026-11-22 | Add periodic three-element load as an external interface | Pressure must respond to flow and load; Windkessel hardware is outside pump scope | Implemented for prescribed flow; load parameters provisional |
+| D026 | 2026-11-22 | Report phase-only forces and closed-valve conflicts explicitly | Pulmonary phase assumption fails; both sides have unresolved pressure joins | No force rating selected; gas/storage and valve events are next |
+| D027 | 2026-11-22 | Treat mean-pressure agreement from chosen resistance as imposed, not independent corroboration | Periodic balance fixes mean pressure from mean flow and total resistance | No fitting or physical validation claimed |

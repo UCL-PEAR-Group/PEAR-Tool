@@ -1,5 +1,18 @@
 # Design 1: Piston Pump — living model
 
+[Derivation 03: pressure histories and the heart reference](research/DERIVATION_03_PRESSURE_AND_HEART_REFERENCE.md)
+adds a separate, prescribed-flow arterial-load study in Python and the spreadsheet.
+It compares systemic and pulmonary load pressures with published functional human
+arterial waveforms, preserving their original 6.6 L/min condition. The pump trial
+remains at 5 L/min and 75/min. Chamber pressure and force are conditional phase
+calculations; pressure transitions and passive-valve feasibility remain unresolved.
+The systemic phase-only peak is 32.6 N at the illustrative 50 mm bore; the pulmonary
+15.5 N result belongs to an inconsistent valve schedule. Neither is a force rating.
+
+The exploratory gas solver documented in sections 1–7 below is unchanged. Its
+imposed pressure boundaries and archived force values must not be mixed with the
+new periodic-load inputs or interpreted as a verification of the new cycle.
+
 [Derivation 02: waveform joining](research/DERIVATION_02_WAVEFORM_JOINING.md)
 now adds selectable, volume-normalised kinematic commands and endpoint smoothing.
 The formula workbook evaluates those commands independently of its earlier local
@@ -31,9 +44,10 @@ current hydraulic solver to either complete architecture.
 
 Estimate geometric displacement, delivered liquid volume, pressure history
 and peak hydraulic force for a plunger piston with no wetted rod. The actuator
-and rotary-to-linear converter are outside this stage. The current dynamic
-model represents one ventricular pump chamber and imposed pressure loads.
-It does not simulate both circulation loops or an actual Windkessel circuit.
+and rotary-to-linear converter are outside this stage. The exploratory dynamic
+model below represents one ventricular pump chamber and imposed pressure loads.
+The separate Derivation 03 implements a periodic Windkessel load driven by
+prescribed flow; neither implementation solves both recirculating loops.
 
 The archived Python sweep contains 118 attempted dynamic cases: 117 periodic
 solutions and one stopped by a low-pressure guard. Python is the active implementation. The earlier MATLAB translation is

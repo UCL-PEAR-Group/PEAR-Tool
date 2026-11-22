@@ -29,7 +29,7 @@
     "pc - po = R Qo + B Qo abs(Qo) + I dQo/dt",
     "p: Pa; R: Pa s/m³; B: Pa s²/m⁶; I: Pa s²/m³",
     "Specified open valve; coefficients and geometry must match; avoid double counting line inertia",
-    "Workbook local point; T20-based synthesis"
+    "Workbook local point and conditional phases; T20-based synthesis"
   ],
   [
     "E5",
@@ -53,7 +53,7 @@
     "Fh(t) = Ap [pc(t) - prear(t)]",
     "Fh: N; pressures share a reference",
     "Chamber pressure, not merely outlet gauge pressure",
-    "Workbook local point; F19/T20"
+    "Workbook local point and phase history; F19/T20"
   ],
   [
     "E8",
@@ -61,7 +61,7 @@
     "Fh,max = max(abs(Fh(t))); Fdrive = Fh + meq x'' + Fseal",
     "N; meq: kg; x'': m/s²",
     "Maximise over complete periodic cycle. Fluid inertia already in pc must not be added again.",
-    "Deferred time history; F19/T20"
+    "Phase extrema only; complete cycle and actuator load deferred; F19/T20"
   ],
   [
     "E9",
@@ -85,7 +85,7 @@
     "Cw dpw/dt = Qout - (pw - pret)/R2; po = pw + R1 Qout",
     "Consistent SI units; pret: return reference",
     "Interface to supplied Windkessel; do not independently impose po and Qout on the same passive load",
-    "Future coupled sheet; equivalent to F19 Eq 6 for constant pret"
+    "Pressure cycle load implemented; chamber events pending; F19 Eq 6"
   ],
   [
     "E12",

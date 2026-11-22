@@ -38,6 +38,21 @@
       "Timing change rescales peak flow and preserves smooth reversal"
     ]
   },
+  "pressure_cycle": {
+    "baseline": {
+      "arterial_mean_mmhg": 90.00000148221766,
+      "arterial_min_mmhg": 72.6052491542613,
+      "arterial_max_mmhg": 106.00970974530544,
+      "chamber_min_mmhg": -34.39917260252117,
+      "phase_force_n": 32.57944450085212,
+      "closed_valve_violation_mmhg": 0
+    },
+    "perturbations": [
+      "Pulmonary preset gives 15 mmHg mean and exposes a closed-valve inconsistency",
+      "Doubling load compliance narrows pressure pulse without changing mean",
+      "Doubling piston bore quadruples hydraulic force at the same flow and load"
+    ]
+  },
   "formula_errors": 0,
   "native_excel_tested": false,
   "physical_validation": false

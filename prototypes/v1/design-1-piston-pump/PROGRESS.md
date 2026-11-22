@@ -1,5 +1,30 @@
 # Progress and next checks
 
+## Pressure histories and physiological reference — 22 November 2026
+
+- Reconstructed the ten-harmonic aortic and main pulmonary arterial signals in
+  Qureshi et al. (2018), Appendix A Table A1, reproduced from Milnor (1989).
+  Kept their original 75/min and 6.6 L/min conditions; no fitted waveform error
+  or independent physiological corroboration is claimed for our 5 L/min trial.
+- Added a periodic three-element load interface, conditional inlet/outlet phase
+  pressures and hydraulic forces, and checks on assumed-closed passive valves.
+- Added editable systemic/pulmonary presets, linked formulas and two native
+  comparison charts in the new Pressure cycle workbook sheet.
+- With the stated trial loads, arterial ranges are 72.6–106.0 mmHg systemic and
+  10.8–21.0 mmHg pulmonary. Means of 90 and 15 mmHg follow from chosen resistances.
+- Chamber minima of −34.5 and −39.5 mmHg gauge, a pulmonary closed-valve conflict
+  over about 13.4% of the cycle, and unresolved pressure joins limit interpretation.
+  Phase-only force maxima of 32.6 and 15.5 N are not complete-cycle force ratings.
+- Checked cycle volumes, periodicity, constant-flow limit, load energy balance,
+  grid refinement, parameter responses and workbook formulas. Reference data,
+  trial inputs and numerical reports are retained for reproduction.
+- Excel/LibreOffice execution, component calibration and independent physical
+  validation remain unperformed. The earlier gas solver is unchanged.
+
+Next: resolve chamber storage and valve transitions with the proposed retained
+sealed gas pocket, then reassess filling pressures and complete-cycle force.
+Ventricular pressure rise/relaxation and arterial pressure are separate targets.
+
 ## Waveform joining and editable spreadsheet — 22 November 2026
 
 - Added a volume-preserving endpoint window to the published harmonic and

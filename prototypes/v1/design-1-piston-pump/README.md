@@ -2,7 +2,15 @@
 
 Waveform options: [published candidates, adjustable timing and comparison plots](research/WAVEFORM_CANDIDATES.md).
 
-Latest step: [Derivation 02: volume-preserving waveform joining](research/DERIVATION_02_WAVEFORM_JOINING.md).
+Latest step: [Derivation 03: pressure histories and the heart reference](research/DERIVATION_03_PRESSURE_AND_HEART_REFERENCE.md).
+The **Pressure cycle** sheet now calculates a periodic three-element arterial
+load, conditional chamber pressures and hydraulic forces, with an unscaled
+published aortic/pulmonary reference. The reference is at 6.6 L/min and 75/min;
+our trial remains at 5 L/min and 75/min. Valve feasibility and unresolved pressure
+transitions prevent treating the phase force extrema as design ratings.
+Run `python research/build_pressure_cycle.py` to reproduce this study.
+
+Previous step: [Derivation 02: volume-preserving waveform joining](research/DERIVATION_02_WAVEFORM_JOINING.md).
 The workbook now includes a **Waveform** sheet with selectable shapes, endpoint
 smoothing, flow, velocity, acceleration and position. The 5% smoothing trial
 removes acceleration jumps but increases peak acceleration; it is not a selected
@@ -15,7 +23,8 @@ Continue the analytical development with
 Supporting sources: [cardiovascular piston-pump literature review](research/PISTON_PUMP_LITERATURE_REVIEW.md)
 and [formula-driven pressure starter workbook](spreadsheet/Pump_pressure_literature_starter.xlsx).
 The baseline is 5 L/min at 75 pulses/min per circuit. The workbook contains a
-local open-valve calculation, not a completed dynamic model or maximum-force estimate.
+local open-valve calculation and a periodic arterial-load study. Neither is a
+completed chamber/valve cycle or a verified maximum-force rating.
 See [spreadsheet scope and verification](spreadsheet/README.md).
 
 Start with the [goal and concept comparison](GOAL_AND_CONCEPT_MATRIX.md) and

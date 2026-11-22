@@ -1,95 +1,58 @@
 {
-  "changed_existing_cells": {
+  "sheets": [
+    "Pressure start",
+    "Literature",
+    "Equation map",
+    "Waveform",
+    "Pressure cycle"
+  ],
+  "native_charts": {
+    "xl/drawings/charts/chart1.xml": [
+      "'Pressure start'!$A$50:$A$57",
+      "'Pressure start'!$B$50:$B$57"
+    ],
+    "xl/drawings/charts/chart2.xml": [
+      "'Pressure start'!$D$50:$D$57",
+      "'Pressure start'!$E$50:$E$57"
+    ],
+    "xl/drawings/charts/chart3.xml": [
+      "'Waveform'!$C$60:$C$861",
+      "'Waveform'!$Q$60:$Q$861",
+      "'Waveform'!$C$60:$C$861",
+      "'Waveform'!$R$60:$R$861"
+    ],
+    "xl/drawings/charts/chart4.xml": [
+      "'Waveform'!$C$60:$C$861",
+      "'Waveform'!$P$60:$P$861"
+    ],
+    "xl/drawings/charts/chart5.xml": [
+      "'Pressure cycle'!$R$70:$R$871",
+      "'Pressure cycle'!$L$70:$L$871",
+      "'Pressure cycle'!$R$70:$R$871",
+      "'Pressure cycle'!$S$70:$S$871"
+    ],
+    "xl/drawings/charts/chart6.xml": [
+      "'Pressure cycle'!$R$70:$R$871",
+      "'Pressure cycle'!$U$70:$U$871",
+      "'Pressure cycle'!$R$70:$R$871",
+      "'Pressure cycle'!$T$70:$T$871"
+    ]
+  },
+  "existing_sheet_cell_changes": {
     "1": [],
     "2": [],
     "3": [
-      "A3"
-    ]
+      "A3",
+      "F10",
+      "F13",
+      "F14",
+      "F17"
+    ],
+    "4": []
   },
-  "charts": [
-    {
-      "file": "xl/drawings/charts/chart1.xml",
-      "bindings": [
-        "'Pressure start'!$A$50:$A$57",
-        "'Pressure start'!$B$50:$B$57"
-      ],
-      "colours": [
-        {
-          "val": "CCCCCC"
-        },
-        {
-          "val": "CCCCCC"
-        },
-        {
-          "val": "D9D9D9"
-        }
-      ]
-    },
-    {
-      "file": "xl/drawings/charts/chart2.xml",
-      "bindings": [
-        "'Pressure start'!$D$50:$D$57",
-        "'Pressure start'!$E$50:$E$57"
-      ],
-      "colours": [
-        {
-          "val": "CCCCCC"
-        },
-        {
-          "val": "CCCCCC"
-        },
-        {
-          "val": "D9D9D9"
-        }
-      ]
-    },
-    {
-      "file": "xl/drawings/charts/chart3.xml",
-      "bindings": [
-        "'Waveform'!$C$60:$C$861",
-        "'Waveform'!$Q$60:$Q$861",
-        "'Waveform'!$C$60:$C$861",
-        "'Waveform'!$R$60:$R$861"
-      ],
-      "colours": [
-        {
-          "val": "176B72"
-        },
-        {
-          "val": "B9622E"
-        },
-        {
-          "val": "CCCCCC"
-        },
-        {
-          "val": "CCCCCC"
-        },
-        {
-          "val": "D9D9D9"
-        }
-      ]
-    },
-    {
-      "file": "xl/drawings/charts/chart4.xml",
-      "bindings": [
-        "'Waveform'!$C$60:$C$861",
-        "'Waveform'!$P$60:$P$861"
-      ],
-      "colours": [
-        {
-          "val": "176B72"
-        },
-        {
-          "val": "CCCCCC"
-        },
-        {
-          "val": "CCCCCC"
-        },
-        {
-          "val": "D9D9D9"
-        }
-      ]
-    }
-  ],
-  "sheet_count": 4
+  "formula_count": 31367,
+  "error_cells": [],
+  "formulas_without_cached_value": 0,
+  "visual_review": "Pressure inputs, sources, both comparison charts and numerical build inspected. Existing views unchanged apart from equation-map status cells.",
+  "desktop_excel_libreoffice_tested": false
 }

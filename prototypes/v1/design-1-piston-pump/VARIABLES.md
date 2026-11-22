@@ -6,7 +6,7 @@ This register covers the current one-chamber pump model, its performance targets
 
 A free design parameter can be varied between candidate designs and still remain fixed throughout a test. A constitutive coefficient is not a control knob simply because the code lets us change it: it must represent a real component or material. Entries marked **not implemented** are a planning inventory, not additional equations already present.
 
-The current model has **three independent continuous physical states**: chamber pressure, inlet flow and outlet flow. The two integrated-volume states are accounting accumulators. Gas volume, liquid inventory and force are dependent quantities. This state count is not a count of mechanical degrees of freedom.
+The exploratory gas solver has **three independent continuous physical states**: chamber pressure, inlet flow and outlet flow. The two integrated-volume states are accounting accumulators. Gas volume, liquid inventory and force are dependent quantities. This state count is not a count of mechanical degrees of freedom. The separate full-liquid pressure-cycle study in section 18 has one dynamic load state, pw; prescribed flow drives it, and conditional chamber pressure is algebraic. These are distinct implementations, not a combined four-state solution.
 
 The inlet and outlet of each chamber have their own entries; a future two-ventricle model should suffix them `_R` and `_L`. The current code simulates one chamber, not the four-valve whole-heart system. The operating matrix separately distinguishes per-circuit pulse rate h from physical chamber rate f: f=2h for the shared chamber (1A), and f=h per chamber for two dedicated chambers (1B). Architecture budget entries do not implement the coupled hydraulics.
 
@@ -135,14 +135,14 @@ The tables use the units actually present in the code. Internal flow is mL/s; ex
 | Ftotal / `total_actuator_force_N` | Total actuator force | Future calculated response | float | N | Not calculated; Out of current scope | Would add seal friction and moving-solid inertia with consistent signs; mechanism loads remain deferred. |
 | Fseal, meff / `seal_force_N / moving_mass_kg` | Seal friction and moving mass | Future constitutive / mechanical parameters | float | N; kg | Not specified; Out of current scope | Not included in current peak hydraulic force. |
 
-## 7. Circuit interfaces, control and measurements — planned
+## 7. Circuit interfaces, control and measurements
 
 | Symbol / code | Meaning | Physical role | Python type | Units | Current value / status | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| Rwk / `windkessel_resistance` | Equivalent circuit resistance(s) | External subsystem parameter | float / ndarray[float64] | Pa·s/m³ or mmHg·min/L | Not specified; Not implemented | Not the valve coefficient B. A selected Windkessel may have several resistances. |
-| Cwk / `windkessel_compliance` | Equivalent circuit compliance(s) | External subsystem parameter | float / ndarray[float64] | m³/Pa or mL/mmHg | Not specified; Not implemented | Distinct from chamber gas compliance Cg. |
+| Rwk / `windkessel_resistance` | Equivalent circuit resistance(s) | External subsystem parameter | float / ndarray[float64] | Pa·s/m³ or mmHg·min/L | See section 18 and pressure_cycle_inputs.json; Separate full-liquid load study implemented; gas-solver coupling pending | Not the valve coefficient B. A selected Windkessel may have several resistances. The earlier gas solver still uses constant pressure boundaries. |
+| Cwk / `windkessel_compliance` | Equivalent circuit compliance(s) | External subsystem parameter | float / ndarray[float64] | m³/Pa or mL/mmHg | See section 18 and pressure_cycle_inputs.json; Separate full-liquid load study implemented; gas-solver coupling pending | Distinct from chamber gas compliance Cg. The earlier gas solver still uses constant pressure boundaries. |
 | Vres, hres / `reservoir_volume / reservoir_head` | Atrial / lung reservoir inventories and heads | External subsystem state | float / ndarray[float64] | mL; m | Not specified; Not implemented | Constant-boundary tests do not model depletion or recirculation delay. |
-| pcirc(t) / `circuit_pressure_history` | Supplied upstream/downstream pressure histories | External boundary signals | float / ndarray[float64] | mmHg gauge | Not specified; Not implemented | Future coupled Windkessel interface; use one per ventricular loop. |
+| pcirc(t) / `circuit_pressure_history` | Supplied upstream/downstream pressure histories | External boundary signals | float / ndarray[float64] | mmHg gauge | See section 18 and pressure_cycle_inputs.json; Separate full-liquid load study implemented; gas-solver coupling pending | Future coupled Windkessel interface; use one per ventricular loop. The earlier gas solver still uses constant pressure boundaries. |
 | β(t) / `bypass_command` | Commanded diversion fraction / valve setting | Candidate manipulated variable | float / ndarray[float64] | 1 | Not specified; Not implemented | Not selected or implemented; an actuator setting need not equal actual diverted fraction. |
 | Qbypass(t) / `bypass_flow` | Actual diverted flow | Future hydraulic state / response | float / ndarray[float64] | mL/s | Not specified; Not implemented | Requires bypass geometry, valve law and reservoir boundary. |
 | topen, tclose / `active_valve_timing` | Actively commanded valve times | Candidate manipulated inputs | float / ndarray[float64] | s or cycle fraction | Not specified; Not implemented | Current valves are passive pressure-driven events. |
@@ -196,10 +196,7 @@ The tables use the units actually present in the code. Internal flow is mL/s; ex
 | pPAmean / `pulmonary_mean_pressure_target` | Mean pulmonary arterial load | Prescribed target | float | mmHg gauge | 15 / 25 / 35; Requirement only | Current PDS p.1; pulmonary peak and right-atrial inlet boundary remain open. |
 | Qphantom / `phantom_inlet_flow_target` | Flow target at the declared phantom anatomical plane | Prescribed signal | float / ndarray[float64] | L/min | Trace and branch split not selected; Not implemented | Do not automatically equate local abdominal flow to total pump output. |
 
-
 ## 17. Waveform kinematics
-
-These entries describe the separate full-liquid command study, not new hydraulic states.
 
 | Symbol / code | Meaning | Physical role | Python type | Units | Current value / status | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -209,3 +206,21 @@ These entries describe the separate full-liquid command study, not new hydraulic
 | Ge / Gf / `shape_integral` | Integral of the windowed phase shape | Derived normalisation | float | 1 | Calculated per phase; Implemented in waveform study | Quadrature; sets unit-area shape. |
 | Qp / `signed_piston_flow` | Signed geometric piston displacement flow | Prescribed command history | ndarray[float64] | mL/s | Positive ejection; negative filling; Implemented in waveform study | Equals signed liquid flow only under full-liquid no-storage assumptions. |
 | amax / `max_abs_acceleration_m_s2` | Maximum absolute commanded piston acceleration | Derived output | float | m/s² | 5.026 harmonic trial at D=50 mm; Kinematic comparison only | Fine-grid maximum; does not include solid mass or hydraulic pressure. |
+
+## 18. Periodic load and heart comparison
+
+| Symbol / code | Meaning | Physical role | Python type | Units | Current value / status | Notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| side / `side` | Systemic or pulmonary load selection | Selectable scenario | str | 1 | systemic / pulmonary; Implemented in separate pressure-cycle study | Separate trial cases, not a solved two-loop circulation. |
+| R1 / `R1_mmhg_s_ml` | Proximal load resistance | External subsystem parameter | float | mmHg s/mL | 0.040 systemic; 0.015 pulmonary; Implemented in separate pressure-cycle study | Reference-informed illustrative values; uncalibrated. |
+| R2 / `R2_mmhg_s_ml` | Distal load resistance | External subsystem parameter | float | mmHg s/mL | 0.980 systemic; 0.045 pulmonary; Implemented in separate pressure-cycle study | Chosen for 90 / 15 mmHg mean at 5 L/min; not independent corroboration. |
+| Cw / `C_ml_mmhg` | Arterial-load compliance | External subsystem parameter | float | mL/mmHg | 1.5 systemic; 5.0 pulmonary; Implemented in separate pressure-cycle study | Free trial values; distinct from chamber gas compliance. |
+| pr / `return_pressure_mmhg` | Pressure beyond distal load resistance | Boundary input | float | mmHg gauge | 5 systemic; 10 pulmonary; Implemented in separate pressure-cycle study | Constant boundary; distinct from inlet and rear-face pressure. |
+| pi / `inlet_pressure_mmhg` | Atrial reservoir pressure | Boundary input | float | mmHg gauge | 10 systemic; 5 pulmonary; Implemented in separate pressure-cycle study | Constant reservoir; no depletion or return-delay model. |
+| pw(t) / `compliance_pressure_mmhg` | Pressure at load compliance node | Dynamic load state | ndarray[float64] | mmHg gauge | Periodic history; Implemented in separate pressure-cycle study | One continuous state in this separate prescribed-flow study. |
+| pa(t) / `arterial_pressure_mmhg` | Pressure at arterial load inlet | Calculated output | ndarray[float64] | mmHg gauge | pw + R1 Qo; Implemented in separate pressure-cycle study | Compare with arterial reference; not ventricular pressure. |
+| pc(t) / `chamber_pressure_mmhg` | Conditional chamber phase pressure | Calculated phase output | ndarray[float64] | mmHg gauge | Derived during each imposed phase; Implemented in separate pressure-cycle study | Pressure transitions unresolved; passive valve assumptions must be checked. |
+| Fh,phase / `phase_max_abs_hydraulic_force_n` | Largest absolute phase hydraulic force | Calculated phase diagnostic | float | N | 32.6 systemic; 15.5 pulmonary; Implemented in separate pressure-cycle study | 50 mm illustrative bore; not complete-cycle rating; pulmonary valve schedule inconsistent. |
+| vclosed / `closed_valve_violation_mmhg` | Wrong-way pressure across an assumed-closed branch | Feasibility diagnostic | ndarray[float64] | mmHg | 0 systemic; peak 19.2 pulmonary; Implemented in separate pressure-cycle study | Positive means assumed-closed zero-cracking passive valve would open. |
+| Δpjoin / `ejection_to_filling_pressure_jump_mmhg / cycle_wrap_pressure_jump_mmhg` | Unresolved one-sided pressure joins | Model limitation diagnostic | float | mmHg | −88.9 / +62.7 systemic; Implemented in separate pressure-cycle study | A smooth piston acceleration does not resolve chamber pressure switching. |
+| S_k, φ_k / `heart_reference_harmonics.csv` | Published Fourier amplitudes and phases | Reference data | ndarray[float64] | mL/s or mmHg; radians | 10 harmonics plus mean; Implemented in separate pressure-cycle study | Qureshi 2018 Appendix A Table A1 from Milnor 1989; 75/min and 6.6 L/min; unscaled. |
