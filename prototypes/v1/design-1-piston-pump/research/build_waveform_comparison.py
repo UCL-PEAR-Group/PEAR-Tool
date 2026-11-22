@@ -71,7 +71,7 @@ for name,p in profiles.items():
             csv_rows.append([name,phase,float(u[j]*duration),float(SV_ML/duration*f[j]),float(SV_ML/duration**2*df[j]),float(cumulative[j] if phase=='ejection' else 1-cumulative[j])])
 
 with (OUT/'waveform_samples.csv').open('w',newline='') as f:
-    w=csv.writer(f);w.writerow(['profile','phase','phase_time_s','forward_flow_mL_s','forward_flow_derivative_mL_s2','piston_x_over_stroke']);w.writerows(csv_rows)
+    w=csv.writer(f,lineterminator='\n');w.writerow(['profile','phase','phase_time_s','forward_flow_mL_s','forward_flow_derivative_mL_s2','piston_x_over_stroke']);w.writerows(csv_rows)
 metadata={'status':'Analytical command comparison; no hydraulic simulation or physical validation',
           'mean_flow_L_min':Q_MEAN_L_MIN,'circuit_pulses_per_min':RATE_PER_MIN,
           'architecture':'One dedicated ventricular chamber; not shared alternating R/L timing',
