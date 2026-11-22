@@ -1,5 +1,13 @@
 # Design 1: Piston Pump — living model
 
+[Derivation 02: waveform joining](research/DERIVATION_02_WAVEFORM_JOINING.md)
+now adds selectable, volume-normalised kinematic commands and endpoint smoothing.
+The formula workbook evaluates those commands independently of its earlier local
+pressure example. A 5% endpoint-window trial preserves volume and removes
+acceleration jumps, but raises the finite peak acceleration by about 77–78%.
+No smoothing width, actuator trajectory or new maximum force has been selected.
+These commands have not been connected to the exploratory hydraulic solver below.
+
 The staged, literature-led derivation now starts with
 [Derivation 01: full-liquid chamber and pressure force](research/DERIVATION_01_FULL_LIQUID.md).
 It establishes sign conventions, phase-specific pressure/force expressions and

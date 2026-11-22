@@ -3,6 +3,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
 import {Workbook, SpreadsheetFile} from '@oai/artifact-tool';
+import {addWaveformSheet} from './waveform_sheet.mjs';
 
 const design=process.env.PEAR_DESIGN_DIR || path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outputDir=process.env.PEAR_OUTPUT_DIR || path.join(design,'results','spreadsheet-review');
@@ -94,11 +95,12 @@ textrow(lit,23,'Screened out: Herwald et al. 2024, DOI 10.1016/j.ohx.2024.e00561
 
 const eq=base('Equation map',22,'F',[9,26,76,53,75,46]);
 textrow(eq,2,'PEAR | Coupling map — equations and assumptions');eq.getRange('A2:F2').format.font={size:18,bold:true};
-textrow(eq,3,'Expressions are readable text; only the Pressure start sheet evaluates formulas. Dynamic equations remain proposed.');
+textrow(eq,3,'Pressure start evaluates a local hydraulic point; Waveform evaluates kinematics. Coupled dynamic equations remain proposed.');
 textrow(eq,4,'Symbols and units are local to each row. Read the accompanying review before combining equations.');
 band(eq,6,'F',['ID','Block','Expression','Variables / units','Assumptions / limits','Status / provenance']);eq.getRange(`A7:F${6+equations.length}`).values=equations;eq.getRange(`A7:F${6+equations.length}`).format.wrapText=true;eq.getRange(`A7:F${6+equations.length}`).format.rowHeight=88;eq.getRange(`A7:F${6+equations.length}`).format.verticalAlignment='center';
 eq.tables.add(`A6:F${6+equations.length}`,true,'EquationRegister');
 
+const wave=addWaveformSheet(wb,base,band,textrow);
 wb.recalculate();
 const value=a=>s.getRange(a).values[0][0];
 const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-9*Math.max(1,Math.abs(b)),`${a} != ${b}`);
@@ -110,11 +112,26 @@ const travel=value('C28'),force=value('C41');s.getRange('C9').values=[[100]];wb.
 s.getRange('C15').values=[[8]];wb.recalculate();near(value('C36'),16*dpv);checks.perturbations.push('Halving valve bore multiplies constant-Cd loss by 16');s.getRange('C15').values=[[16]];
 s.getRange('C8').values=[[150]];wb.recalculate();near(value('C25'),5000/150);near(value('C30'),12.5);checks.perturbations.push('Doubling bpm at fixed mean flow halves required delivery; ejection-average flow stays constant at fixed fraction');s.getRange('C8').values=[[75]];
 wb.recalculate();near(value('C41'),checks.baseline.local_force_N);
-for(const sheet of [s,lit,eq]){const vals=sheet.getUsedRange().values;for(const row of vals)for(const v of row)assert.ok(!/^#(REF!|DIV\/0!|VALUE!|NAME\?|NUM!|N\/A|SPILL!|CALC!)/.test(String(v)),String(v));}
+const wv=a=>wave.getRange(a).values[0][0];
+const refs=JSON.parse(await fs.readFile(path.join(design,'research/waveforms/smooth_waveform_verification.json'),'utf8'));
+const wm=refs.metrics.find(m=>m.profile==='published_harmonics'&&m.epsilon===.05);
+const relative=(actual,expected,tolerance)=>assert.ok(Math.abs(actual/expected-1)<tolerance,`${actual} != ${expected}`);
+relative(wv('C23'),wm.ejection_peak_L_min,1e-4);relative(wv('C24'),wm.filling_peak_L_min,1e-4);relative(wv('C25'),wm.max_abs_acceleration_m_s2,.004);
+near(wv('C15'),5000/75);near(wv('C26'),0);near(wv('C30'),0);near(wv('C31'),0);
+checks.waveform={peak_ejection_L_min:wv('C23'),peak_filling_L_min:wv('C24'),sampled_max_acceleration_m_s2:wv('C25'),return_position:wv('C26'),eject_fill_jump:wv('C30'),wrap_jump:wv('C31'),independent_python_reference:wm,perturbations:[]};
+const peak=wv('C23'),maxacc=wv('C25'),required=wv('C19');
+wave.getRange('C8').values=[[0]];wb.recalculate();assert.ok(Math.abs(wv('C30'))>1);checks.waveform.perturbations.push('Zero smoothing restores nonzero harmonic acceleration jumps');
+wave.getRange('C7').values=[['Half-sine']];wb.recalculate();relative(wv('C23'),Math.PI/2*12.5,1e-5);checks.waveform.perturbations.push('Half-sine selector reproduces analytic peak');
+wave.getRange('C8').values=[[.05]];wave.getRange('C7').values=[['Published harmonics']];
+s.getRange('C8').values=[[150]];wb.recalculate();near(wv('C23'),peak);near(wv('C25'),2*maxacc);near(wv('C19'),required/2);checks.waveform.perturbations.push('At fixed mean flow and shape, doubled rate preserves flow peak, doubles acceleration and halves required stroke');s.getRange('C8').values=[[75]];
+s.getRange('C10').values=[[.5]];wb.recalculate();near(wv('C23'),peak*.4/.5);near(wv('C30'),0);checks.waveform.perturbations.push('Timing change rescales peak flow and preserves smooth reversal');s.getRange('C10').values=[[.4]];
+wb.recalculate();near(wv('C23'),peak);near(wv('C25'),maxacc);near(value('C41'),checks.baseline.local_force_N);
+for(const sheet of [s,lit,eq,wave]){const vals=sheet.getUsedRange().values;for(const row of vals)for(const v of row)assert.ok(!/^#(REF!|DIV\/0!|VALUE!|NAME\?|NUM!|N\/A|SPILL!|CALC!)/.test(String(v)),String(v));}
 checks.formula_errors=0;checks.native_excel_tested=false;checks.physical_validation=false;
 await fs.writeFile(path.join(outputDir,'spreadsheet_verification.json'),JSON.stringify(checks,null,2)+'\n');
 await fs.writeFile(path.join(outputDir,'formula_inspection.txt'),JSON.stringify(await wb.inspect({kind:'table',range:"'Pressure start'!A24:F46",include:'values,formulas',tableMaxRows:23,tableMaxCols:6}),null,2));
-for(const [sheetName,range,file,scale] of [['Pressure start','A1:F46','pressure_preview.png',1],['Pressure start','A48:F80','sensitivity_preview.png',1],['Literature','A1:I20','literature_preview.png',.7],['Equation map','A1:F18','equations_preview.png',.7]]){const png=await wb.render({sheetName,range,scale,format:'png'});await fs.writeFile(path.join(outputDir,file),new Uint8Array(await png.arrayBuffer()));}
+await fs.writeFile(path.join(outputDir,'waveform_formula_inspection.txt'),JSON.stringify(await wb.inspect({kind:'table',range:"'Waveform'!A6:F31",include:'values,formulas',tableMaxRows:26,tableMaxCols:6}),null,2));
+for(const [sheetName,range,file,scale] of [['Waveform','A1:F34','waveform_inputs_preview.png',1],['Waveform','A35:F57','waveform_charts_preview.png',1],['Waveform','A59:R65','waveform_build_preview.png',.8],['Equation map','A1:F4','equations_heading_preview.png',.7]]){const png=await wb.render({sheetName,range,scale,format:'png'});await fs.writeFile(path.join(outputDir,file),new Uint8Array(await png.arrayBuffer()));}
 const xlsx=await SpreadsheetFile.exportXlsx(wb);await xlsx.save(path.join(outputDir,'Pump_pressure_literature_starter.xlsx'));
 console.log(JSON.stringify(checks,null,2));
 console.log('Saved '+path.join(outputDir,'Pump_pressure_literature_starter.xlsx'));

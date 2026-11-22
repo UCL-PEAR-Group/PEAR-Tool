@@ -1,5 +1,26 @@
 # Progress and next checks
 
+## Waveform joining and editable spreadsheet — 22 November 2026
+
+- Added a volume-preserving endpoint window to the published harmonic and
+  half-sine candidates, with configurable width, rate, flow, timing and diameter.
+- Checked phase volumes, return position, both acceleration joins, analytic
+  derivatives and integration refinement. Recorded width sensitivity and
+  preserved the earlier unsmoothed comparison.
+- The 5% trial changes harmonic flow peaks by about 0.4% and 1.0%, but raises
+  peak piston acceleration from 2.845 to 5.026 m/s² at the illustrative 50 mm
+  diameter. No width or final waveform is selected.
+- Extended the workbook with formula-driven shape selection, endpoint smoothing,
+  kinematics and two native scatter charts against physical cycle time.
+- Compared baseline outputs to Python, changed shape/width/rate/timing inputs,
+  restored the baseline and found no formula errors. The sampled spreadsheet
+  acceleration maximum is 5.018 m/s², 0.15% below the fine-grid reference.
+- Pressure/gas coupling, actual valve feasibility and a new maximum-force result
+  remain pending. Native Excel/LibreOffice and physical validation are unperformed.
+
+Next: derive the pressure history for a chosen full-liquid waveform and check
+the assumed valve states before interpreting the maximum hydraulic force.
+
 ## Existing waveforms compared — 22 November 2026
 
 - Inspected Franzetti's published half-sine, Swanson–Clark and Talukder–Reul

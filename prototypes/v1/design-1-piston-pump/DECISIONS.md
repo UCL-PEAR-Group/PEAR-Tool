@@ -67,3 +67,12 @@ The existing fixed-stroke and independent-flow options remain open. No new
 stroke, valve arrangement, phase offset, gas amount or cylinder has been
 selected. The matrix gives proposed cases for review, not an assertion that
 all listed points must be achieved by one fixed-stroke configuration.
+
+## Waveform joining — 22 November 2026
+
+| ID | Date | Decision | Basis | Status |
+| --- | --- | --- | --- | --- |
+| D019 | 2026-11-22 | Retain published harmonic and half-sine pairs with independent shape/timing controls | User accepted continuation of waveform study | Implemented as kinematic candidates |
+| D020 | 2026-11-22 | Interpret fallback 60:40 as filling:ejection, gamma = 0.4 | Stated interpretation of user fallback | Adjustable assumption |
+| D021 | 2026-11-22 | Compare a normalised quintic endpoint window, trial width 5% of each phase at each end | Engineering means of removing acceleration jumps | Comparison only; peak acceleration penalty prevents treating smoothness as automatic improvement |
+| D022 | 2026-11-22 | Add the waveform build to the existing spreadsheet without coupling it to the local pressure example | Staged transparent derivation | Volume, joins, derivatives, quadrature and input responses checked; hydraulic feasibility pending |

@@ -1,0 +1,613 @@
+{
+  "status": "Numerically checked kinematic commands; no hydraulic or physical validation",
+  "inputs": {
+    "epsilon": 0.05,
+    "flow": 5.0,
+    "bpm": 75.0,
+    "ejection_fraction": 0.4,
+    "diameter_mm": 50.0,
+    "output": "/workspace/scratch/0beb9396d556/pear_pump_work/prototypes/v1/design-1-piston-pump/research/waveforms"
+  },
+  "source": "Franzetti 2019, supplied PDF p. 5 Eqs 14\u201315; endpoint window is our extension",
+  "metrics": [
+    {
+      "profile": "half_sine",
+      "epsilon": 0.0,
+      "ejection_peak_L_min": 19.634954084936204,
+      "filling_peak_L_min": 13.089969389957473,
+      "max_abs_acceleration_m_s2": 1.636246173744683,
+      "ejection_volume_mL": 66.66666663239721,
+      "filling_volume_mL": 66.66666663239721,
+      "eject_fill_acceleration_jump_m_s2": 0.9090256520803789,
+      "wrap_acceleration_jump_m_s2": 0.9090256520803789,
+      "return_position_over_stroke": 5.140403658288051e-10
+    },
+    {
+      "profile": "half_sine",
+      "epsilon": 0.05,
+      "ejection_peak_L_min": 19.704349653764407,
+      "filling_peak_L_min": 13.136233102509609,
+      "max_abs_acceleration_m_s2": 2.9091094354833986,
+      "ejection_volume_mL": 66.66666666666663,
+      "filling_volume_mL": 66.66666666666666,
+      "eject_fill_acceleration_jump_m_s2": 0.0,
+      "wrap_acceleration_jump_m_s2": 0.0,
+      "return_position_over_stroke": -2.220446049250313e-16
+    },
+    {
+      "profile": "published_harmonics",
+      "epsilon": 0.0,
+      "ejection_peak_L_min": 20.56712785056313,
+      "filling_peak_L_min": 19.400739704330782,
+      "max_abs_acceleration_m_s2": 2.845148723899624,
+      "ejection_volume_mL": 66.66666662359054,
+      "filling_volume_mL": 66.66666656799282,
+      "eject_fill_acceleration_jump_m_s2": -1.3755677551122507,
+      "wrap_acceleration_jump_m_s2": 1.301187155344071,
+      "return_position_over_stroke": 1.4801074810222303e-09
+    },
+    {
+      "profile": "published_harmonics",
+      "epsilon": 0.05,
+      "ejection_peak_L_min": 20.65843687408721,
+      "filling_peak_L_min": 19.598483586996423,
+      "max_abs_acceleration_m_s2": 5.025605965842991,
+      "ejection_volume_mL": 66.66666666666667,
+      "filling_volume_mL": 66.66666666666666,
+      "eject_fill_acceleration_jump_m_s2": 0.0,
+      "wrap_acceleration_jump_m_s2": 0.0,
+      "return_position_over_stroke": 1.7763568394002505e-15
+    }
+  ],
+  "epsilon_sensitivity": [
+    {
+      "profile": "half_sine",
+      "epsilon": 0.0,
+      "ejection_peak_L_min": 19.634954084936204,
+      "filling_peak_L_min": 13.089969389957473,
+      "max_abs_acceleration_m_s2": 1.636246173744683,
+      "ejection_volume_mL": 66.66666663239721,
+      "filling_volume_mL": 66.66666663239721,
+      "eject_fill_acceleration_jump_m_s2": 0.9090256520803789,
+      "wrap_acceleration_jump_m_s2": 0.9090256520803789,
+      "return_position_over_stroke": 5.140403658288051e-10
+    },
+    {
+      "profile": "half_sine",
+      "epsilon": 0.02,
+      "ejection_peak_L_min": 19.646032484436553,
+      "filling_peak_L_min": 13.097354989624371,
+      "max_abs_acceleration_m_s2": 2.9089146545849274,
+      "ejection_volume_mL": 66.6666666666666,
+      "filling_volume_mL": 66.6666666666666,
+      "eject_fill_acceleration_jump_m_s2": 0.0,
+      "wrap_acceleration_jump_m_s2": 0.0,
+      "return_position_over_stroke": -2.886579864025407e-15
+    },
+    {
+      "profile": "half_sine",
+      "epsilon": 0.05,
+      "ejection_peak_L_min": 19.704349653764407,
+      "filling_peak_L_min": 13.136233102509609,
+      "max_abs_acceleration_m_s2": 2.9091094354833986,
+      "ejection_volume_mL": 66.66666666666663,
+      "filling_volume_mL": 66.66666666666666,
+      "eject_fill_acceleration_jump_m_s2": 0.0,
+      "wrap_acceleration_jump_m_s2": 0.0,
+      "return_position_over_stroke": -2.220446049250313e-16
+    },
+    {
+      "profile": "half_sine",
+      "epsilon": 0.1,
+      "ejection_peak_L_min": 19.914780604359866,
+      "filling_peak_L_min": 13.276520402906582,
+      "max_abs_acceleration_m_s2": 2.9100061754645794,
+      "ejection_volume_mL": 66.66666666666669,
+      "filling_volume_mL": 66.66666666666669,
+      "eject_fill_acceleration_jump_m_s2": 0.0,
+      "wrap_acceleration_jump_m_s2": 0.0,
+      "return_position_over_stroke": 3.1086244689504383e-15
+    },
+    {
+      "profile": "half_sine",
+      "epsilon": 0.15,
+      "ejection_peak_L_min": 20.27315373971316,
+      "filling_peak_L_min": 13.515435826475443,
+      "max_abs_acceleration_m_s2": 2.9122063349114398,
+      "ejection_volume_mL": 66.66666666666667,
+      "filling_volume_mL": 66.66666666666667,
+      "eject_fill_acceleration_jump_m_s2": 0.0,
+      "wrap_acceleration_jump_m_s2": 0.0,
+      "return_position_over_stroke": 3.219646771412954e-15
+    },
+    {
+      "profile": "published_harmonics",
+      "epsilon": 0.0,
+      "ejection_peak_L_min": 20.56712785056313,
+      "filling_peak_L_min": 19.400739704330782,
+      "max_abs_acceleration_m_s2": 2.845148723899624,
+      "ejection_volume_mL": 66.66666662359054,
+      "filling_volume_mL": 66.66666656799282,
+      "eject_fill_acceleration_jump_m_s2": -1.3755677551122507,
+      "wrap_acceleration_jump_m_s2": 1.301187155344071,
+      "return_position_over_stroke": 1.4801074810222303e-09
+    },
+    {
+      "profile": "published_harmonics",
+      "epsilon": 0.02,
+      "ejection_peak_L_min": 20.58171275775091,
+      "filling_peak_L_min": 19.432265844220638,
+      "max_abs_acceleration_m_s2": 5.052804255614201,
+      "ejection_volume_mL": 66.66666666666663,
+      "filling_volume_mL": 66.66666666666652,
+      "eject_fill_acceleration_jump_m_s2": 0.0,
+      "wrap_acceleration_jump_m_s2": 0.0,
+      "return_position_over_stroke": -4.440892098500626e-16
+    },
+    {
+      "profile": "published_harmonics",
+      "epsilon": 0.05,
+      "ejection_peak_L_min": 20.65843687408721,
+      "filling_peak_L_min": 19.598483586996423,
+      "max_abs_acceleration_m_s2": 5.025605965842991,
+      "ejection_volume_mL": 66.66666666666667,
+      "filling_volume_mL": 66.66666666666666,
+      "eject_fill_acceleration_jump_m_s2": 0.0,
+      "wrap_acceleration_jump_m_s2": 0.0,
+      "return_position_over_stroke": 1.7763568394002505e-15
+    },
+    {
+      "profile": "published_harmonics",
+      "epsilon": 0.1,
+      "ejection_peak_L_min": 20.934576183975828,
+      "filling_peak_L_min": 20.201836581095574,
+      "max_abs_acceleration_m_s2": 4.932443201172669,
+      "ejection_volume_mL": 66.66666666666667,
+      "filling_volume_mL": 66.66666666666667,
+      "eject_fill_acceleration_jump_m_s2": 0.0,
+      "wrap_acceleration_jump_m_s2": 0.0,
+      "return_position_over_stroke": 2.4424906541753444e-15
+    },
+    {
+      "profile": "published_harmonics",
+      "epsilon": 0.15,
+      "ejection_peak_L_min": 21.40235511244774,
+      "filling_peak_L_min": 21.24147187897521,
+      "max_abs_acceleration_m_s2": 4.789844028711157,
+      "ejection_volume_mL": 66.66666666666669,
+      "filling_volume_mL": 66.66666666666669,
+      "eject_fill_acceleration_jump_m_s2": 0.0,
+      "wrap_acceleration_jump_m_s2": 0.0,
+      "return_position_over_stroke": 4.3298697960381105e-15
+    }
+  ],
+  "quadrature_convergence": [
+    {
+      "profile": "half_sine",
+      "phase": 0,
+      "epsilon": 0.0,
+      "intervals": 200,
+      "relative_integral_error": 2.056176039255675e-05
+    },
+    {
+      "profile": "half_sine",
+      "phase": 0,
+      "epsilon": 0.0,
+      "intervals": 400,
+      "relative_integral_error": 5.140424243599284e-06
+    },
+    {
+      "profile": "half_sine",
+      "phase": 0,
+      "epsilon": 0.0,
+      "intervals": 800,
+      "relative_integral_error": 1.2851050701367939e-06
+    },
+    {
+      "profile": "half_sine",
+      "phase": 1,
+      "epsilon": 0.0,
+      "intervals": 200,
+      "relative_integral_error": 2.056176039255675e-05
+    },
+    {
+      "profile": "half_sine",
+      "phase": 1,
+      "epsilon": 0.0,
+      "intervals": 400,
+      "relative_integral_error": 5.140424243599284e-06
+    },
+    {
+      "profile": "half_sine",
+      "phase": 1,
+      "epsilon": 0.0,
+      "intervals": 800,
+      "relative_integral_error": 1.2851050701367939e-06
+    },
+    {
+      "profile": "half_sine",
+      "phase": 0,
+      "epsilon": 0.02,
+      "intervals": 200,
+      "relative_integral_error": 1.1474124068655556e-06
+    },
+    {
+      "profile": "half_sine",
+      "phase": 0,
+      "epsilon": 0.02,
+      "intervals": 400,
+      "relative_integral_error": 7.816203428934188e-08
+    },
+    {
+      "profile": "half_sine",
+      "phase": 0,
+      "epsilon": 0.02,
+      "intervals": 800,
+      "relative_integral_error": 4.985883705899141e-09
+    },
+    {
+      "profile": "half_sine",
+      "phase": 1,
+      "epsilon": 0.02,
+      "intervals": 200,
+      "relative_integral_error": 1.1474124068655556e-06
+    },
+    {
+      "profile": "half_sine",
+      "phase": 1,
+      "epsilon": 0.02,
+      "intervals": 400,
+      "relative_integral_error": 7.816203428934188e-08
+    },
+    {
+      "profile": "half_sine",
+      "phase": 1,
+      "epsilon": 0.02,
+      "intervals": 800,
+      "relative_integral_error": 4.985883705899141e-09
+    },
+    {
+      "profile": "half_sine",
+      "phase": 0,
+      "epsilon": 0.05,
+      "intervals": 200,
+      "relative_integral_error": 2.0199108086149664e-07
+    },
+    {
+      "profile": "half_sine",
+      "phase": 0,
+      "epsilon": 0.05,
+      "intervals": 400,
+      "relative_integral_error": 1.2788736292179692e-08
+    },
+    {
+      "profile": "half_sine",
+      "phase": 0,
+      "epsilon": 0.05,
+      "intervals": 800,
+      "relative_integral_error": 8.018633534945252e-10
+    },
+    {
+      "profile": "half_sine",
+      "phase": 1,
+      "epsilon": 0.05,
+      "intervals": 200,
+      "relative_integral_error": 2.0199108086149664e-07
+    },
+    {
+      "profile": "half_sine",
+      "phase": 1,
+      "epsilon": 0.05,
+      "intervals": 400,
+      "relative_integral_error": 1.2788736292179692e-08
+    },
+    {
+      "profile": "half_sine",
+      "phase": 1,
+      "epsilon": 0.05,
+      "intervals": 800,
+      "relative_integral_error": 8.018633534945252e-10
+    },
+    {
+      "profile": "half_sine",
+      "phase": 0,
+      "epsilon": 0.1,
+      "intervals": 200,
+      "relative_integral_error": 5.1068103301687984e-08
+    },
+    {
+      "profile": "half_sine",
+      "phase": 0,
+      "epsilon": 0.1,
+      "intervals": 400,
+      "relative_integral_error": 3.201847564859861e-09
+    },
+    {
+      "profile": "half_sine",
+      "phase": 0,
+      "epsilon": 0.1,
+      "intervals": 800,
+      "relative_integral_error": 2.0027290936752706e-10
+    },
+    {
+      "profile": "half_sine",
+      "phase": 1,
+      "epsilon": 0.1,
+      "intervals": 200,
+      "relative_integral_error": 5.1068103301687984e-08
+    },
+    {
+      "profile": "half_sine",
+      "phase": 1,
+      "epsilon": 0.1,
+      "intervals": 400,
+      "relative_integral_error": 3.201847564859861e-09
+    },
+    {
+      "profile": "half_sine",
+      "phase": 1,
+      "epsilon": 0.1,
+      "intervals": 800,
+      "relative_integral_error": 2.0027290936752706e-10
+    },
+    {
+      "profile": "half_sine",
+      "phase": 0,
+      "epsilon": 0.15,
+      "intervals": 200,
+      "relative_integral_error": 2.268419552198253e-08
+    },
+    {
+      "profile": "half_sine",
+      "phase": 0,
+      "epsilon": 0.15,
+      "intervals": 400,
+      "relative_integral_error": 1.419697470694814e-09
+    },
+    {
+      "profile": "half_sine",
+      "phase": 0,
+      "epsilon": 0.15,
+      "intervals": 800,
+      "relative_integral_error": 8.876144264036157e-11
+    },
+    {
+      "profile": "half_sine",
+      "phase": 1,
+      "epsilon": 0.15,
+      "intervals": 200,
+      "relative_integral_error": 2.268419552198253e-08
+    },
+    {
+      "profile": "half_sine",
+      "phase": 1,
+      "epsilon": 0.15,
+      "intervals": 400,
+      "relative_integral_error": 1.419697470694814e-09
+    },
+    {
+      "profile": "half_sine",
+      "phase": 1,
+      "epsilon": 0.15,
+      "intervals": 800,
+      "relative_integral_error": 8.876144264036157e-11
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 0,
+      "epsilon": 0.0,
+      "intervals": 200,
+      "relative_integral_error": 2.5845983780969917e-05
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 0,
+      "epsilon": 0.0,
+      "intervals": 400,
+      "relative_integral_error": 6.461439345128994e-06
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 0,
+      "epsilon": 0.0,
+      "intervals": 800,
+      "relative_integral_error": 1.6153562989451586e-06
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 1,
+      "epsilon": 0.0,
+      "intervals": 200,
+      "relative_integral_error": 5.920598902464658e-05
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 1,
+      "epsilon": 0.0,
+      "intervals": 400,
+      "relative_integral_error": 1.4801183423007735e-05
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 1,
+      "epsilon": 0.0,
+      "intervals": 800,
+      "relative_integral_error": 3.7002762421911584e-06
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 0,
+      "epsilon": 0.02,
+      "intervals": 200,
+      "relative_integral_error": 1.4409854223185192e-06
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 0,
+      "epsilon": 0.02,
+      "intervals": 400,
+      "relative_integral_error": 9.814779045047572e-08
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 0,
+      "epsilon": 0.02,
+      "intervals": 800,
+      "relative_integral_error": 6.260564289206627e-09
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 1,
+      "epsilon": 0.02,
+      "intervals": 200,
+      "relative_integral_error": 3.2963158308474405e-06
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 1,
+      "epsilon": 0.02,
+      "intervals": 400,
+      "relative_integral_error": 2.2445429703754627e-07
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 1,
+      "epsilon": 0.02,
+      "intervals": 800,
+      "relative_integral_error": 1.4316326457652906e-08
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 0,
+      "epsilon": 0.05,
+      "intervals": 200,
+      "relative_integral_error": 2.5226145827783597e-07
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 0,
+      "epsilon": 0.05,
+      "intervals": 400,
+      "relative_integral_error": 1.596961296534971e-08
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 0,
+      "epsilon": 0.05,
+      "intervals": 800,
+      "relative_integral_error": 1.00127639512948e-09
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 1,
+      "epsilon": 0.05,
+      "intervals": 200,
+      "relative_integral_error": 5.717307030028707e-07
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 1,
+      "epsilon": 0.05,
+      "intervals": 400,
+      "relative_integral_error": 3.618414790018676e-08
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 1,
+      "epsilon": 0.05,
+      "intervals": 800,
+      "relative_integral_error": 2.2685531231303457e-09
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 0,
+      "epsilon": 0.1,
+      "intervals": 200,
+      "relative_integral_error": 6.254319062648506e-08
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 0,
+      "epsilon": 0.1,
+      "intervals": 400,
+      "relative_integral_error": 3.9208762903086836e-09
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 0,
+      "epsilon": 0.1,
+      "intervals": 800,
+      "relative_integral_error": 2.4524127173464194e-10
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 1,
+      "epsilon": 0.1,
+      "intervals": 200,
+      "relative_integral_error": 1.3691834088724875e-07
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 1,
+      "epsilon": 0.1,
+      "intervals": 400,
+      "relative_integral_error": 8.581220067860329e-09
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 1,
+      "epsilon": 0.1,
+      "intervals": 800,
+      "relative_integral_error": 5.3669846344917e-10
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 0,
+      "epsilon": 0.15,
+      "intervals": 200,
+      "relative_integral_error": 2.6924559248797664e-08
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 0,
+      "epsilon": 0.15,
+      "intervals": 400,
+      "relative_integral_error": 1.684920869493567e-09
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 0,
+      "epsilon": 0.15,
+      "intervals": 800,
+      "relative_integral_error": 1.0534062511169395e-10
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 1,
+      "epsilon": 0.15,
+      "intervals": 200,
+      "relative_integral_error": 5.531178626227984e-08
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 1,
+      "epsilon": 0.15,
+      "intervals": 400,
+      "relative_integral_error": 3.4604678011973533e-09
+    },
+    {
+      "profile": "published_harmonics",
+      "phase": 1,
+      "epsilon": 0.15,
+      "intervals": 800,
+      "relative_integral_error": 2.1633372870866197e-10
+    }
+  ],
+  "derivative_max_errors": [
+    1.597217558213515e-08,
+    1.597217558213515e-08,
+    2.7557728543570192e-08,
+    5.7286033694481375e-08
+  ],
+  "scope": "One dedicated chamber, full liquid, no leakage, no dwell, feasible ideal valves assumed"
+}

@@ -2,10 +2,17 @@
 
 Waveform options: [published candidates, adjustable timing and comparison plots](research/WAVEFORM_CANDIDATES.md).
 
+Latest step: [Derivation 02: volume-preserving waveform joining](research/DERIVATION_02_WAVEFORM_JOINING.md).
+The workbook now includes a **Waveform** sheet with selectable shapes, endpoint
+smoothing, flow, velocity, acceleration and position. The 5% smoothing trial
+removes acceleration jumps but increases peak acceleration; it is not a selected
+motor command. Run `python research/build_smooth_waveforms.py` to reproduce the
+comparison and width sensitivity.
+
 Continue the analytical development with
 [Derivation 01: full-liquid chamber, pressure and force](research/DERIVATION_01_FULL_LIQUID.md).
 
-Latest step: [cardiovascular piston-pump literature review](research/PISTON_PUMP_LITERATURE_REVIEW.md)
+Supporting sources: [cardiovascular piston-pump literature review](research/PISTON_PUMP_LITERATURE_REVIEW.md)
 and [formula-driven pressure starter workbook](spreadsheet/Pump_pressure_literature_starter.xlsx).
 The baseline is 5 L/min at 75 pulses/min per circuit. The workbook contains a
 local open-valve calculation, not a completed dynamic model or maximum-force estimate.

@@ -12,6 +12,32 @@
     "Halving valve bore multiplies constant-Cd loss by 16",
     "Doubling bpm at fixed mean flow halves required delivery; ejection-average flow stays constant at fixed fraction"
   ],
+  "waveform": {
+    "peak_ejection_L_min": 20.65842837249246,
+    "peak_filling_L_min": 19.598317627311996,
+    "sampled_max_acceleration_m_s2": 5.018293140609378,
+    "return_position": 0,
+    "eject_fill_jump": 0,
+    "wrap_jump": 0,
+    "independent_python_reference": {
+      "profile": "published_harmonics",
+      "epsilon": 0.05,
+      "ejection_peak_L_min": 20.65843687408721,
+      "filling_peak_L_min": 19.598483586996423,
+      "max_abs_acceleration_m_s2": 5.025605965842991,
+      "ejection_volume_mL": 66.66666666666667,
+      "filling_volume_mL": 66.66666666666666,
+      "eject_fill_acceleration_jump_m_s2": 0,
+      "wrap_acceleration_jump_m_s2": 0,
+      "return_position_over_stroke": 1.7763568394002505e-15
+    },
+    "perturbations": [
+      "Zero smoothing restores nonzero harmonic acceleration jumps",
+      "Half-sine selector reproduces analytic peak",
+      "At fixed mean flow and shape, doubled rate preserves flow peak, doubles acceleration and halves required stroke",
+      "Timing change rescales peak flow and preserves smooth reversal"
+    ]
+  },
   "formula_errors": 0,
   "native_excel_tested": false,
   "physical_validation": false

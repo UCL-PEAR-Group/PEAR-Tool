@@ -9,6 +9,15 @@ inputs; calculations and chart source ranges are ordinary cell formulas.
 - **Literature:** purpose, architecture, model contribution, numerical conditions,
   access limits, reading locations and URLs for fourteen records.
 - **Equation map:** proposed coupled model blocks, units, assumptions and status.
+- **Waveform:** choose the published harmonic pair or half-sine, adjust endpoint
+  smoothing, and inspect full-liquid flow, displacement, velocity and acceleration.
+  Shared operating inputs link to Pressure start; its local force remains separate.
+
+The Waveform sheet starts at a trial smoothing width of 5% at each endpoint.
+Use zero for the raw reference or 0.02–0.50 with the current 400-interval phase
+grid. A smaller nonzero width needs finer sampling in Python. Positive width
+removes acceleration jumps but can increase peak acceleration. See
+`../research/DERIVATION_02_WAVEFORM_JOINING.md` for the derivation and comparison.
 
 Read `../research/PISTON_PUMP_LITERATURE_REVIEW.md` first. The local force is not
 the maximum. Gas dynamics, valve events, filling and the Windkessel time history
@@ -29,7 +38,10 @@ overrides this design directory and `PEAR_OUTPUT_DIR` selects the output folder.
 Without overrides, the script writes to `../results/spreadsheet-review/`.
 
 `spreadsheet_verification.json` records independent baseline calculations,
-three input perturbations and zero detected formula errors. Exported XML was
-checked for 43 formulas and two linked charts. Every worksheet and chart area
-was rendered and visually inspected. Desktop Excel/LibreOffice execution,
+pressure and waveform input perturbations and zero detected formula errors.
+The updated workbook contains four sheets and four linked native charts.
+Waveform results were compared to an independent Python quadrature and fine grid;
+the default sampled acceleration peak is 0.15% below the fine-grid result.
+Changed views were rendered and visually inspected; the earlier views retain
+their previous checks. Desktop Excel/LibreOffice execution,
 component calibration and independent physical validation remain unperformed.

@@ -1,5 +1,9 @@
 # Published waveform candidates and adjustable timing
 
+Continuation: [volume-preserving waveform joining](DERIVATION_02_WAVEFORM_JOINING.md)
+adds an adjustable endpoint window and a formula-driven spreadsheet. The raw
+comparison below is preserved as the initial reference.
+
 22 November 2026 · MECH0073 · waveform selection study, not a hydraulic simulation
 
 **Closest starting point:** the Swanson–Clark ejection waveform and Talukder–Reul filling waveform reproduced in the supplied Franzetti article. Retain a half-sine option for a simple reference and the existing quintic motion as a smooth engineering comparison. No waveform is selected as a universal physiological target.

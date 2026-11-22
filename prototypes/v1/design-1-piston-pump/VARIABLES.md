@@ -195,3 +195,17 @@ The tables use the units actually present in the code. Internal flow is mL/s; ex
 | deltaRL / `ventricular_phase_offset` | Right/left chamber motion offset | Selectable timing input | float | fraction of heart period | Not selected; Not implemented | Concurrent or offset motion possible in 1B; valve openings still depend on pressure loads. |
 | pPAmean / `pulmonary_mean_pressure_target` | Mean pulmonary arterial load | Prescribed target | float | mmHg gauge | 15 / 25 / 35; Requirement only | Current PDS p.1; pulmonary peak and right-atrial inlet boundary remain open. |
 | Qphantom / `phantom_inlet_flow_target` | Flow target at the declared phantom anatomical plane | Prescribed signal | float / ndarray[float64] | L/min | Trace and branch split not selected; Not implemented | Do not automatically equate local abdominal flow to total pump output. |
+
+
+## 17. Waveform kinematics
+
+These entries describe the separate full-liquid command study, not new hydraulic states.
+
+| Symbol / code | Meaning | Physical role | Python type | Units | Current value / status | Notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| shape / `waveform_shape` | Candidate ejection and filling shape pair | Selectable command parameter | str | category | published_harmonics / half_sine; Kinematic comparison only | Not a switch in the hydraulic solver. |
+| epsilon / `epsilon` | Transition width at each endpoint as a fraction of phase duration | Free smoothing parameter | float | 1 | 0.05 trial; 0 restores raw; Kinematic comparison only | No optimum selected; smoothing can increase peak acceleration. |
+| u / `u` | Normalised phase time | Independent coordinate | float / ndarray[float64] | 1 | 0 to 1; Implemented in waveform study | Each phase is normalised separately. |
+| Ge / Gf / `shape_integral` | Integral of the windowed phase shape | Derived normalisation | float | 1 | Calculated per phase; Implemented in waveform study | Quadrature; sets unit-area shape. |
+| Qp / `signed_piston_flow` | Signed geometric piston displacement flow | Prescribed command history | ndarray[float64] | mL/s | Positive ejection; negative filling; Implemented in waveform study | Equals signed liquid flow only under full-liquid no-storage assumptions. |
+| amax / `max_abs_acceleration_m_s2` | Maximum absolute commanded piston acceleration | Derived output | float | m/s² | 5.026 harmonic trial at D=50 mm; Kinematic comparison only | Fine-grid maximum; does not include solid mass or hydraulic pressure. |

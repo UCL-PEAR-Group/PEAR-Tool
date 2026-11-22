@@ -1,0 +1,95 @@
+{
+  "changed_existing_cells": {
+    "1": [],
+    "2": [],
+    "3": [
+      "A3"
+    ]
+  },
+  "charts": [
+    {
+      "file": "xl/drawings/charts/chart1.xml",
+      "bindings": [
+        "'Pressure start'!$A$50:$A$57",
+        "'Pressure start'!$B$50:$B$57"
+      ],
+      "colours": [
+        {
+          "val": "CCCCCC"
+        },
+        {
+          "val": "CCCCCC"
+        },
+        {
+          "val": "D9D9D9"
+        }
+      ]
+    },
+    {
+      "file": "xl/drawings/charts/chart2.xml",
+      "bindings": [
+        "'Pressure start'!$D$50:$D$57",
+        "'Pressure start'!$E$50:$E$57"
+      ],
+      "colours": [
+        {
+          "val": "CCCCCC"
+        },
+        {
+          "val": "CCCCCC"
+        },
+        {
+          "val": "D9D9D9"
+        }
+      ]
+    },
+    {
+      "file": "xl/drawings/charts/chart3.xml",
+      "bindings": [
+        "'Waveform'!$C$60:$C$861",
+        "'Waveform'!$Q$60:$Q$861",
+        "'Waveform'!$C$60:$C$861",
+        "'Waveform'!$R$60:$R$861"
+      ],
+      "colours": [
+        {
+          "val": "176B72"
+        },
+        {
+          "val": "B9622E"
+        },
+        {
+          "val": "CCCCCC"
+        },
+        {
+          "val": "CCCCCC"
+        },
+        {
+          "val": "D9D9D9"
+        }
+      ]
+    },
+    {
+      "file": "xl/drawings/charts/chart4.xml",
+      "bindings": [
+        "'Waveform'!$C$60:$C$861",
+        "'Waveform'!$P$60:$P$861"
+      ],
+      "colours": [
+        {
+          "val": "176B72"
+        },
+        {
+          "val": "CCCCCC"
+        },
+        {
+          "val": "CCCCCC"
+        },
+        {
+          "val": "D9D9D9"
+        }
+      ]
+    }
+  ],
+  "sheet_count": 4
+}
