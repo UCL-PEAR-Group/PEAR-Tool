@@ -1,9 +1,15 @@
 # Design 1: Piston Pump — living model
 
+**Current design direction: enforced valve states in both architectures.**
+[Valve control and routing](research/VALVE_CONTROL_AND_ROUTING.md) records the
+user-confirmed port assignments and separates commands, effective opening and
+hydraulic flow.
+
 [Derivation 04: retained-air storage and valve events](research/DERIVATION_04_RETAINED_AIR_AND_VALVE_EVENTS.md)
-now derives the combined four-state chamber/load formulation, with passive valve
-opening on forward pressure and closure at zero forward flow. This is analytical
-work for review; the two existing numerical implementations below remain separate.
+derives reusable chamber/gas/load balances. Its passive switch law is superseded
+for the design and retained as a comparator. The enforced command and closure
+transient law remain to be derived; the two numerical implementations below
+remain separate and unchanged.
 No new cycle waveform, completed MATLAB port or force rating is claimed. The
 interactive application follows completion and numerical verification of the
 necessary coupled derivation.
@@ -13,11 +19,13 @@ adds a separate, prescribed-flow arterial-load study in Python and the spreadshe
 It compares systemic and pulmonary load pressures with published functional human
 arterial waveforms, preserving their original 6.6 L/min condition. The pump trial
 remains at 5 L/min and 75/min. Chamber pressure and force are conditional phase
-calculations; pressure transitions and passive-valve feasibility remain unresolved.
-The systemic phase-only peak is 32.6 N at the illustrative 50 mm bore; the pulmonary
-15.5 N result belongs to an inconsistent valve schedule. Neither is a force rating.
+calculations; pressure transitions remain unresolved. The systemic phase-only
+peak is 32.6 N at the illustrative 50 mm bore; the pulmonary 15.5 N result fails
+the previous passive closed-valve test. That test does not establish an
+inconsistency for enforced closure. Neither result is a force rating.
 
-The exploratory gas solver documented in sections 1–7 below is unchanged. Its
+The exploratory gas solver documented in sections 1–7 below uses passive checks
+and is unchanged. It is not an enforced-valve simulation. Its
 imposed pressure boundaries and archived force values must not be mixed with the
 new periodic-load inputs or interpreted as a verification of the new cycle.
 
@@ -304,6 +312,10 @@ open. Systemic constant-load sensitivities must not be reused as pulmonary
 requirements or treated as reproduced physiological waveforms.
 
 ## 10. Next staged decisions
+
+First complete the commanded valve schedule, routing transition and effective
+opening law in [the valve decision note](research/VALVE_CONTROL_AND_ROUTING.md).
+The following wider parameter decisions remain open.
 
 1. Review the operating-case matrix for both architectures, then the variable
    register, and agree which remaining inputs become measured

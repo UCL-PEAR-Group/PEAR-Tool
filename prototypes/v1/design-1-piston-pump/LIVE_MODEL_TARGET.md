@@ -20,10 +20,12 @@ be reviewed and checked before it is promoted to a maintained entry point.
 ## Priority confirmed — 22 November 2026
 
 The user explicitly places the application after completion of the derivation.
-The current task is retained-air chamber compliance and valve opening/closure;
-see [Derivation 04](research/DERIVATION_04_RETAINED_AIR_AND_VALVE_EVENTS.md).
-Its coupled equations are derived for review but have not yet been numerically
-implemented and verified together. Application work must not displace that task.
+The current task is retained-air chamber compliance and enforced valve
+opening/closure. [Derivation 04](research/DERIVATION_04_RETAINED_AIR_AND_VALVE_EVENTS.md)
+provides the storage balance; [valve control and routing](research/VALVE_CONTROL_AND_ROUTING.md)
+supersedes its passive switching assumption. The command/transition law remains
+to be derived and the combined model has not been implemented or verified.
+Application work must not displace that task.
 
 ## What the first interactive version should show
 
@@ -33,7 +35,7 @@ implemented and verified together. Application work must not displace that task.
 | Timing controls | Per-circuit bpm, ejection/filling allocation, waveform and smoothing | Explicit timing assumptions; distinguish motion allocation from actual valve-open durations |
 | Pressure plots | Chamber, inlet reservoir and arterial/load-inlet pressure | Label measurement locations and gauge/absolute reference; compare with corresponding physiology |
 | Flow plots | Inlet and outlet instantaneous flow, cycle mean and net delivery | Actual outputs of continuity and valve dynamics in the coupled model |
-| Valve indication | Open/closed state and opening/closing times | Driven by modelled pressure/flow events; not painted solely from piston direction |
+| Valve indication | Commands, effective opening and routing state; opening/closing times | Enforced sequence and modelled physical response; calculate actual flow from the hydraulics |
 | Load summary | Hydraulic force history and peak positive/negative load | Seals, moving-solid inertia and converter distribution remain outside current scope |
 | Reference overlay | Published aortic/pulmonary signals, source conditions, optional normalised phase | Preserve reference flow/rate and label any transformation; no automatic claim of validation |
 | Case record | Inputs, assumptions, units, initial state, solver settings and outputs | Save reproducible cases; distinguish transient from periodic results |
@@ -99,9 +101,10 @@ therefore remain distinct.
 
 ## Work in reviewable increments
 
-1. Resolve chamber storage and valve transitions while retaining the current
-   periodic-load assumptions. Reassess the negative filling pressures and
-   pulmonary valve-state conflicts found in Derivation 03.
+1. Resolve chamber storage and commanded valve/routing transitions while
+   retaining the current periodic-load assumptions. Reassess negative filling
+   pressures; Derivation 03's closed-valve conflicts apply to passive checks and
+   are not automatically inconsistencies for enforced closure.
 2. Implement a MATLAB numerical baseline and compare like-for-like cases with
    the executed Python reference. Confirm units, event timing, cycle volumes,
    periodicity, energy balance where applicable and tolerance/time-step sensitivity.

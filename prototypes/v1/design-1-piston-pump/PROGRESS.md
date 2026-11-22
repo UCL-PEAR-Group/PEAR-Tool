@@ -1,5 +1,20 @@
 # Progress and next checks
 
+## Enforced valve correction — 22 November 2026
+
+- Recorded the user's correction: valve states are enforced in both concepts.
+- Mapped the single chamber's sequential circuit assignments and the two
+  chambers' dedicated tricuspid/mitral inlets and pulmonic/aortic outlets.
+- Retained gas/storage conservation while superseding the passive design law.
+- Distinguished requested state, effective opening and signed hydraulic flow;
+  exact command timing, selectors and finite closure law remain unresolved.
+- Marked earlier passive simulations and spreadsheet diagnostics as comparison
+  cases. Numerical outputs and executable model code are unchanged.
+
+Next: derive the commanded phase sequence and transition response before any
+new coupled simulation or maximum-force claim. See
+[valve control and routing](research/VALVE_CONTROL_AND_ROUTING.md).
+
 ## Retained-air and valve-event derivation — 22 November 2026
 
 - Confirmed that the eventual MATLAB interface follows the coupled derivation.

@@ -1,6 +1,10 @@
 # Pump goal and concept comparison
 
-Working record · 21 November 2026 · both concepts remain under consideration.
+Working record · updated 22 November 2026 · both concepts remain under consideration.
+
+Both concepts use **enforced valve states**, as clarified by the user. See
+[valve control and routing](research/VALVE_CONTROL_AND_ROUTING.md) for the port
+assignments, command/state distinction and unresolved transition timing.
 
 ## Goal and scope
 
@@ -100,8 +104,8 @@ per-circuit pulse rate, flow target and load, not the same physical piston rate.
 | Available time | R and L duties share each heart period | Each chamber has the whole heart period | Feasible motion and valve schedule under load |
 | Right/left ejection phase | Direct chamber ejections cannot overlap; outlet buffering could modify observed pulse timing | Concurrent or offset motion possible, subject to mechanism/control | Required outlet-waveform phase and achievable flow histories |
 | Unequal pulmonary/systemic loads | Same chamber experiences successive different boundaries; gas and residual liquid carry state between duties | Separate chamber states and pressure demands | Full-cycle pressure, volume and force histories |
-| Valve routing | Requires state-selecting connections as well as one-way/isolation behaviour; exact valve count unresolved | Dedicated inlet/outlet paths; four functional one-way valves before any bypass | Explicit port map and transition sequence; leakage and cross-connection evidence |
-| Valve linking | R/L duties are sequential | Motions may be synchronised, but differing pressure loads do not guarantee identical valve opening times | Compare passive check response with proposed active/mechanical linking |
+| Valve routing | Enforced common inlet/outlet with sequential right/left circuit assignment; selectors and physical valve count unresolved | Enforced dedicated inlets: tricuspid/mitral; outlets: pulmonic/aortic | Port map and transition sequence; leakage, reverse flow and cross-connection behaviour |
+| Valve linking | R/L duties are sequential; route selection is separate from inlet/outlet commands | Proposed paired inlet commands and paired outlet commands; precise inter-chamber timing remains open | Command sequence, effective opening/closure duration and loads; linked state does not imply equal flow |
 | Filling and recirculation | Shorter allocated filling time per duty; shared residual inventory | More scheduling freedom; reservoir balance still necessary | Finite reservoir, inlet-loss and gas-state histories |
 | Fixed-stroke mean-flow control | Routing between circuits does not itself set independently selectable mean flow | Two chambers do not themselves decouple flow from pulse rate | Chosen net-delivery method and calibrated volume per event |
 | Hydraulic force | Determine maximum across R, L and switching transitions; cannot reuse a 180/min result for 360/min operation | Determine maximum for each chamber; a common drive can experience combined loads | Admissible-case simulations and measured pressure; converter mapping deferred |
@@ -123,7 +127,7 @@ within 60/h seconds. Each duty must still deliver its required volume.
 | --- | --- | --- | --- |
 | Face diameter D | Geometric swept volume Vs and pressure difference | Larger D shortens travel but raises pressure force because area increases | Chamber dimensions, force capacity and flow-path layout |
 | Travel S | Vs | Longer travel permits smaller face area and lower pressure force at the same pressure | Motion speed/acceleration, sealing and available length |
-| Inlet/outlet effective bore | Flow history and discharge coefficient | Larger area reduces the modelled valve loss; inlet and outlet should be varied separately | Real valve geometry, cracking pressure, dynamics, availability and dead volume |
+| Inlet/outlet effective bore | Flow history and discharge coefficient | Larger area reduces the modelled valve loss; inlet and outlet should be varied separately | Real valve geometry, opening law, actuation/holding load, availability and dead volume |
 | Frequency h | Net volume per circuit pulse | Mean flow increases in proportion to h | Filling time, pressure/force demand and selected PDS operating range |
 | Net delivered volume | Mean flow Q | Required volume decreases as h increases | Fixed mechanical stroke needs an additional means of altering net delivery |
 | Ejection-time allocation | Delivered volume per event | Shorter delivery time increases average flow during ejection | Valve loss, fluid acceleration, filling time and target waveform |

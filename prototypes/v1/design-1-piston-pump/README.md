@@ -3,17 +3,19 @@
 Waveform options: [published candidates, adjustable timing and comparison plots](research/WAVEFORM_CANDIDATES.md).
 
 Latest analytical step: [Derivation 04: retained-air storage and valve events](research/DERIVATION_04_RETAINED_AIR_AND_VALVE_EVENTS.md).
-This derives continuous chamber pressure and event-driven passive valve rules,
-coupled to the arterial load. It has not yet been implemented or simulated as a
-combined model. Complete and verify the derivation before developing the MATLAB
-interface.
+The retained-air storage derivation remains applicable. The user has now confirmed
+**enforced valve states** for both concepts; see [valve control and routing](research/VALVE_CONTROL_AND_ROUTING.md).
+The passive switch rules are retained as a comparison model, not the selected
+design. The combined enforced-valve model has not been implemented or simulated.
+Complete and verify its derivation before developing the MATLAB interface.
 
 Latest pressure calculation: [Derivation 03: pressure histories and the heart reference](research/DERIVATION_03_PRESSURE_AND_HEART_REFERENCE.md).
 The **Pressure cycle** sheet now calculates a periodic three-element arterial
 load, conditional chamber pressures and hydraulic forces, with an unscaled
 published aortic/pulmonary reference. The reference is at 6.6 L/min and 75/min;
-our trial remains at 5 L/min and 75/min. Valve feasibility and unresolved pressure
-transitions prevent treating the phase force extrema as design ratings.
+our trial remains at 5 L/min and 75/min. Its closed-valve diagnostics concern
+passive checks only; the enforced-valve transitions remain unresolved, preventing
+the phase force extrema from being treated as design ratings.
 Run `python research/build_pressure_cycle.py` to reproduce this study.
 
 Previous step: [Derivation 02: volume-preserving waveform joining](research/DERIVATION_02_WAVEFORM_JOINING.md).
@@ -98,6 +100,8 @@ This does not run hydraulic simulations or modify the archived results.
 
 ## Files and model status
 
+- `research/VALVE_CONTROL_AND_ROUTING.md`: confirmed enforced states, port assignments
+  and next command/transition decisions.
 - `GOAL_AND_CONCEPT_MATRIX.md`: project goal, concept comparison and evidence gates.
 - `OPERATING_MATRIX.md`, `OPERATING_MATRIX.csv`: 11 operating points × two
   architectures, with explicit per-circuit and physical-chamber frequencies.

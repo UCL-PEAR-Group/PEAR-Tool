@@ -1,5 +1,12 @@
 # Pressure histories, force and the heart reference
 
+**Subsequent design clarification — 22 November 2026:** valves are enforced.
+The closed-valve pressure-conflict diagnostics below test passive checks only;
+a pressure difference favouring opening does not itself invalidate an enforced
+closed state. These historical calculations are unchanged. Pressure joins and
+closure transients remain unresolved, so phase forces are not full-cycle ratings.
+See [valve control and routing](VALVE_CONTROL_AND_ROUTING.md).
+
 22 November 2026. First periodic arterial-load calculation, with conditional
 open-valve pump phases. No gas or valve-event solution is claimed.
 

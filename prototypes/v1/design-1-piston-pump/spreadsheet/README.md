@@ -1,5 +1,12 @@
 # Pressure and literature starter workbook
 
+**Design scope update — 22 November 2026:** the user has confirmed enforced valve
+states. Existing formulas and results are unchanged. The workbook's closed-valve
+pressure-conflict checks concern passive valves only and do not establish a
+conflict for an enforced closed valve. Commanded transitions and retained-air
+dynamics have not been implemented in the workbook. See
+[valve control and routing](../research/VALVE_CONTROL_AND_ROUTING.md).
+
 Open `Pump_pressure_literature_starter.xlsx` in a spreadsheet application.
 It needs no Python or special spreadsheet add-in to use. Amber cells are editable
 inputs; calculations and chart source ranges are ordinary cell formulas.

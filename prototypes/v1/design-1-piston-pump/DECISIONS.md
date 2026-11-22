@@ -104,4 +104,14 @@ all listed points must be achieved by one fixed-stroke configuration.
 | ID | Date | Decision | Basis | Status |
 | --- | --- | --- | --- | --- |
 | D032 | 2026-11-22 | Complete the required coupled derivation before developing the interactive MATLAB interface | User's explicit sequencing clarification | Active priority; application remains eventual deliverable |
-| D033 | 2026-11-22 | Derive a fixed-mass polytropic air pocket and pressure-opening/flow-closure passive-valve baseline coupled to the external load | User's retained-air direction; continuity and inertial branch laws | Analytical formulation documented; actual gas state, exponent and valve hardware remain unselected; combined solver not executed |
+| D033 | 2026-11-22 | Derive a fixed-mass polytropic air pocket and pressure-opening/flow-closure passive-valve baseline coupled to the external load | User's retained-air direction; continuity and inertial branch laws; passive switching was an assistant assumption | Gas/storage derivation retained; passive design assumption superseded by D034; combined solver not executed |
+
+## Enforced valve states and assignments — 22 November 2026
+
+| ID | Date | Decision | Basis | Status |
+| --- | --- | --- | --- | --- |
+| D034 | 2026-11-22 | Valve states are enforced in both architectures; pressure-triggered passive switching is not the design law | Explicit user correction | Confirmed; command timing, actual opening response and closure transient remain to be derived |
+| D035 | 2026-11-22 | In 1A the common inlet/outlet serve right or left duty sequentially; in 1B tricuspid/mitral are dedicated ventricular inlets and pulmonic/aortic are dedicated outlets | User's assignment clarification and earlier sketch | Confirmed functional map; physical selectors, valve count and transition connections remain open |
+| D036 | 2026-11-22 | Retain earlier passive simulations and diagnostics with explicit scope; do not treat inlet/outlet naming as a one-way flow constraint | Preserve provenance and distinguish commands from hydraulics | Documentation corrected; no enforced-valve numerical result or full-cycle force rating claimed |
+
+Details: [enforced valve control and routing](research/VALVE_CONTROL_AND_ROUTING.md).

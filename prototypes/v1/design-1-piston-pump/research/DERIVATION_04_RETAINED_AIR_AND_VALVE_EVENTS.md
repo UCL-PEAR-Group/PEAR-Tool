@@ -1,5 +1,13 @@
 # Derivation 04 — retained-air storage and passive valve events
 
+**Scope correction — 22 November 2026:** the user has confirmed enforced valve
+states for both designs. The chamber conservation, retained-air compliance and
+external-load balances below remain reusable. The passive switch rules in
+section 4 and their constrained-flow use in section 5 are retained as a comparison
+case, not the selected pump law. See [valve control and routing](VALVE_CONTROL_AND_ROUTING.md)
+for the confirmed assignments and next command/transition derivation. A pressure
+threshold in the illustrative opening budget does not command an enforced valve.
+
 22 November 2026. Analytical development for review. No new coupled simulation,
 MATLAB execution, waveform result or force rating is claimed by this document.
 The interactive application follows completion and numerical verification of the
@@ -327,8 +335,8 @@ Established analytically in this step:
 
 Still required before interpreting a new complete-cycle force:
 
-- Review the passive-check approximation against the eventual linked/active valve
-  arrangement; keep actual gas reference state and n as declared inputs.
+- Replace the passive design assumption with the confirmed enforced command and
+  transition law; keep actual gas reference state and n as declared inputs.
 - Implement the coupled model, locate events accurately and check conservation,
   periodicity and solver/event sensitivity across the relevant operating cases.
 - Reassess negative filling pressures and net delivery rather than assume that
