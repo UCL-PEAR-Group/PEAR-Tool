@@ -32,7 +32,11 @@ Start with the [goal and concept comparison](GOAL_AND_CONCEPT_MATRIX.md) and
 Both the single chamber with alternating duties (1A) and two dedicated
 ventricular chambers (1B) remain under consideration.
 
-Python is the primary model language. Continue with [MODEL.md](MODEL.md) and the
+MATLAB is now the preferred likely platform for the planned
+[interactive piston, pressure and flow model](LIVE_MODEL_TARGET.md), following
+the user's local Ubuntu installation. Python remains the executed numerical
+reference while the coupled model and MATLAB implementation are developed.
+Continue with [MODEL.md](MODEL.md) and the
 [variable register](VARIABLES.md) ([CSV](VARIABLES.csv)). Editable calculations
 and plots are in [Pump_Model.ipynb](python/Pump_Model.ipynb). The notebook is
 optional: every simulation can run through the command line.
@@ -100,8 +104,10 @@ This does not run hydraulic simulations or modify the archived results.
 - `python/verification_status.json`: executed regression and notebook checks.
 - `archive/`: unchanged earlier source, data, figures and LaTeX reports.
 - `MANIFEST.sha256`: original archive hashes.
-- `matlab/`: superseded experimental port, not the active implementation; it was
-  never executed in MATLAB. It is retained as a record of the earlier choice.
+- `LIVE_MODEL_TARGET.md`: interactive-model goal, fixed-geometry bpm behaviour
+  and staged MATLAB/App Designer development plan.
+- `matlab/`: earlier unexecuted port; review and numerical comparison are needed
+  before it becomes the maintained implementation for the new interactive goal.
 
 The Python hydraulic equations and baseline parameters are unchanged from the
 executed reference. Regression checks cover three representative cases,

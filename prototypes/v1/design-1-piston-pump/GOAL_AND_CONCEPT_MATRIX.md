@@ -24,6 +24,20 @@ boundary conditions and pump capability. It does not yet predict graft sealing,
 deployment geometry or clinical outcomes. Bench agreement must not be presented
 as clinical predictive validity.
 
+## Interactive model destination — 22 November 2026
+
+The user now aims for a live model showing piston motion and pressure/flow
+waveforms at different bpm, most likely in MATLAB following local installation
+on Ubuntu. [LIVE_MODEL_TARGET.md](LIVE_MODEL_TARGET.md) defines the proposed
+outputs, operating modes and development sequence. The fixed-pump mode holds
+diameter and stroke constant while calculating the resulting flow and pressure.
+A separate sizing mode can vary travel to meet a flow target.
+
+This is a software destination alongside the pump design goal above. MATLAB
+execution, a complete coupled pressure cycle and the interactive interface have
+not yet been demonstrated. The earlier Python work remains the numerical
+reference. Both physical architectures remain open.
+
 ## Interpretation of the supplied sketch
 
 - **1A — single chamber, alternating ventricular duties:** one flat-face

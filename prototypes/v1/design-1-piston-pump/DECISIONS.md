@@ -87,3 +87,13 @@ all listed points must be achieved by one fixed-stroke configuration.
 | D025 | 2026-11-22 | Add periodic three-element load as an external interface | Pressure must respond to flow and load; Windkessel hardware is outside pump scope | Implemented for prescribed flow; load parameters provisional |
 | D026 | 2026-11-22 | Report phase-only forces and closed-valve conflicts explicitly | Pulmonary phase assumption fails; both sides have unresolved pressure joins | No force rating selected; gas/storage and valve events are next |
 | D027 | 2026-11-22 | Treat mean-pressure agreement from chosen resistance as imposed, not independent corroboration | Periodic balance fixes mean pressure from mean flow and total resistance | No fitting or physical validation claimed |
+
+
+## Interactive MATLAB model destination — 22 November 2026
+
+| ID | Date | Decision | Basis | Status |
+| --- | --- | --- | --- | --- |
+| D028 | 2026-11-22 | Aim for synchronised piston motion, pressure and flow waveforms with adjustable bpm; MATLAB is the preferred likely platform | User reports MATLAB installed locally on Ubuntu | Goal recorded; installed release/toolboxes and execution unverified; qualifies D011's earlier platform direction |
+| D029 | 2026-11-22 | Preserve executed Python results as the numerical reference during MATLAB development | Reproducibility and comparison during implementation change | Existing solver and results unchanged; earlier MATLAB port remains unexecuted |
+| D030 | 2026-11-22 | Propose fixed-geometry bpm exploration as the first interactive mode, with sizing and independent-flow control clearly distinguished | User's fixed-stroke pump assumption; flow-frequency-volume conservation | Proposed interface behaviour; no geometry or controller selected |
+| D031 | 2026-11-22 | Develop the numerical model independently of display and later hardware communication | Plot refresh must not determine integration accuracy; physical rig connection has additional requirements | Proposed architecture in LIVE_MODEL_TARGET.md; UI and hardware integration not implemented |
