@@ -1,5 +1,11 @@
 # Design 1: Piston Pump — living model
 
+[Derivation 05: phase and pressure valve sequence](research/DERIVATION_05_PHASE_AND_PRESSURE_VALVE_SEQUENCE.md)
+now gives a candidate command/event structure, finite aperture approximation,
+timing budgets and closed-gas opening positions. Phase-only and pressure-gated
+opening remain selectable proposals. The valve loss/closure hydraulics are still
+incomplete, so no new full-cycle numerical result or force maximum is claimed.
+
 **Current design direction: enforced valve states coordinated with piston
 position/phase in both architectures. Pressure may also govern commands.**
 [Valve control and routing](research/VALVE_CONTROL_AND_ROUTING.md) records the

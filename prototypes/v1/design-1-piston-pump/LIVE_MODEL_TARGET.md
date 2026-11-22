@@ -26,6 +26,9 @@ provides the storage balance; [valve control and routing](research/VALVE_CONTROL
 supersedes its passive switching assumption. The command/transition law remains
 to be derived and the combined model has not been implemented or verified.
 Application work must not displace that task.
+[Derivation 05](research/DERIVATION_05_PHASE_AND_PRESSURE_VALVE_SEQUENCE.md) now
+specifies candidate phase/pressure guards and finite aperture timing; actual
+opening-dependent losses and near-closure hydraulics remain to be resolved.
 
 ## What the first interactive version should show
 

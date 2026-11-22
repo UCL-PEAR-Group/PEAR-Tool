@@ -2,7 +2,13 @@
 
 Waveform options: [published candidates, adjustable timing and comparison plots](research/WAVEFORM_CANDIDATES.md).
 
-Latest analytical step: [Derivation 04: retained-air storage and valve events](research/DERIVATION_04_RETAINED_AIR_AND_VALVE_EVENTS.md).
+Latest analytical step: [Derivation 05: phase and pressure valve sequence](research/DERIVATION_05_PHASE_AND_PRESSURE_VALVE_SEQUENCE.md).
+This defines candidate phase windows, optional pressure conditions, latched
+commands, finite opening/closure timing and the position needed for gas-pressure
+build-up. Parameters remain free; near-closure hydraulics and a combined
+simulation are still pending.
+
+Previous analytical step: [Derivation 04: retained-air storage and valve events](research/DERIVATION_04_RETAINED_AIR_AND_VALVE_EVENTS.md).
 The retained-air storage derivation remains applicable. The user has now confirmed
 **enforced valve states** coordinated with piston phase for both concepts; pressure
 may also enter the command rule. See [valve control and routing](research/VALVE_CONTROL_AND_ROUTING.md).

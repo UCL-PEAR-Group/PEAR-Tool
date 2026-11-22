@@ -126,3 +126,10 @@ The earlier wording excluding pressure thresholds from commands was too
 restrictive. The revised [valve note](research/VALVE_CONTROL_AND_ROUTING.md)
 provides a general dependency and a proposed four-phase sequence for discussion.
 No numerical model or controller has been implemented in this update.
+
+## Candidate valve sequence derivation — 22 November 2026
+
+| ID | Date | Decision / proposal | Basis | Status |
+| --- | --- | --- | --- | --- |
+| D038 | 2026-11-22 | Derive selectable phase-only and phase-plus-pressure opening with latched commands and scheduled finite closure | User directs continuation of the piston/valve derivation | Candidate for review in Derivation 05; no numerical thresholds, timing values or hardware selected |
+| D039 | 2026-11-22 | Preserve paired commands in 1B and separate duty routing in 1A; propose both-ready pressure guards for the pair | Earlier linked-state intent and circuit assignments | Common guard is proposed, not confirmed; opening-dependent losses and near-closure hydraulics still required before a force result |

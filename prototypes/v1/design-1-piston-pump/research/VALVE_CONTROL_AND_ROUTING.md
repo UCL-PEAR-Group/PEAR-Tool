@@ -1,5 +1,10 @@
 # Enforced valve control and circuit routing
 
+The next analytical step is now in [Derivation 05](DERIVATION_05_PHASE_AND_PRESSURE_VALVE_SEQUENCE.md):
+explicit candidate phase windows, pressure guards, finite aperture timing and
+closed-gas opening positions. That proposal does not select numerical timings,
+change the confirmed assignments below or implement a new hydraulic solver.
+
 22 November 2026. User-confirmed design direction; the command-to-opening law,
 transition timing and hardware are still to be derived and selected. No new
 simulation, waveform, MATLAB execution or maximum-force result is claimed.

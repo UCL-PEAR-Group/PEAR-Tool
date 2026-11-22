@@ -1,5 +1,24 @@
 # Progress and next checks
 
+## Phase and pressure valve sequence derived — 22 November 2026
+
+- Added Derivation 05 with candidate phase windows, optional pressure guards,
+  latched commands and finite aperture transitions. Parameters remain free.
+- Derived closure-time constraints as fractions of the physical chamber period,
+  including separate 1A/1B time budgets at 75 and 180 per-circuit pulses/min.
+- Derived closed-gas displacement for pressure eligibility on advance and return.
+  Re-evaluated the illustrative outlet case: 0.7907 mL compression and 0.4027 mm
+  advance, with inverse substitution returning 90 mmHg gauge. This is not a
+  complete cycle or a measured result.
+- Preserved paired commands and documented a proposed simultaneous both-ready
+  rule; shared-chamber routing remains an explicit separate transition.
+- Extended the variable register with proposed command/timing quantities.
+- Existing hydraulic code and simulation results are unchanged; no MATLAB run
+  or maximum-force rating is claimed.
+
+Next: review the proposed command policies and derive opening-dependent losses
+and near-closure hydraulics before implementing the coupled case.
+
 ## Piston-phase and pressure coordination — 22 November 2026
 
 - Corrected an overly restrictive interpretation: enforced valves can use
