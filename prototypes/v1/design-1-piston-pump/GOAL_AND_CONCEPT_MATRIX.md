@@ -2,7 +2,8 @@
 
 Working record · updated 22 November 2026 · both concepts remain under consideration.
 
-Both concepts use **enforced valve states**, as clarified by the user. See
+Both concepts use **enforced valve states coordinated with piston position/phase**.
+Pressure may also participate in the command rule; that choice remains open. See
 [valve control and routing](research/VALVE_CONTROL_AND_ROUTING.md) for the port
 assignments, command/state distinction and unresolved transition timing.
 

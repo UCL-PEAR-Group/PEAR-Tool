@@ -1,6 +1,7 @@
 # Design 1: Piston Pump — living model
 
-**Current design direction: enforced valve states in both architectures.**
+**Current design direction: enforced valve states coordinated with piston
+position/phase in both architectures. Pressure may also govern commands.**
 [Valve control and routing](research/VALVE_CONTROL_AND_ROUTING.md) records the
 user-confirmed port assignments and separates commands, effective opening and
 hydraulic flow.

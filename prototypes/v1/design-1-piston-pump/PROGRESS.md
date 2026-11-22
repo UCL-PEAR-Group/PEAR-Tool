@@ -1,5 +1,20 @@
 # Progress and next checks
 
+## Piston-phase and pressure coordination — 22 November 2026
+
+- Corrected an overly restrictive interpretation: enforced valves can use
+  pressure feedback, while piston position/phase participates in coordination.
+- Preserved the cardiac functional assignments and both pump architectures.
+- Added a general command-law dependency and proposed four-phase sequence for
+  review. No timing, pressure threshold or controller has been selected.
+- Distinguished position from cycle phase, commanded timing from physical
+  transition duration, and prescribed piston motion from actual valve flow.
+- Reviewed the Paeme et al. physiological valve model for context; it does not
+  validate the proposed controller. Existing code and results are unchanged.
+
+Next: agree how phase and optional pressure conditions govern transitions before
+completing the control law and coupled derivation.
+
 ## Enforced valve correction — 22 November 2026
 
 - Recorded the user's correction: valve states are enforced in both concepts.

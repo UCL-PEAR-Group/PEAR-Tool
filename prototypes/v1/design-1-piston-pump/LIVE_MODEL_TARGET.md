@@ -35,7 +35,7 @@ Application work must not displace that task.
 | Timing controls | Per-circuit bpm, ejection/filling allocation, waveform and smoothing | Explicit timing assumptions; distinguish motion allocation from actual valve-open durations |
 | Pressure plots | Chamber, inlet reservoir and arterial/load-inlet pressure | Label measurement locations and gauge/absolute reference; compare with corresponding physiology |
 | Flow plots | Inlet and outlet instantaneous flow, cycle mean and net delivery | Actual outputs of continuity and valve dynamics in the coupled model |
-| Valve indication | Commands, effective opening and routing state; opening/closing times | Enforced sequence and modelled physical response; calculate actual flow from the hydraulics |
+| Valve indication | Commands, effective opening, routing and cycle state; opening/closing times | Piston phase/position participates in commands; optional pressure conditions remain to be selected; calculate actual flow from hydraulics |
 | Load summary | Hydraulic force history and peak positive/negative load | Seals, moving-solid inertia and converter distribution remain outside current scope |
 | Reference overlay | Published aortic/pulmonary signals, source conditions, optional normalised phase | Preserve reference flow/rate and label any transformation; no automatic claim of validation |
 | Case record | Inputs, assumptions, units, initial state, solver settings and outputs | Save reproducible cases; distinguish transient from periodic results |

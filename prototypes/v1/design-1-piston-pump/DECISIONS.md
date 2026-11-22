@@ -110,8 +110,19 @@ all listed points must be achieved by one fixed-stroke configuration.
 
 | ID | Date | Decision | Basis | Status |
 | --- | --- | --- | --- | --- |
-| D034 | 2026-11-22 | Valve states are enforced in both architectures; pressure-triggered passive switching is not the design law | Explicit user correction | Confirmed; command timing, actual opening response and closure transient remain to be derived |
+| D034 | 2026-11-22 | Valve states are enforced in both architectures; a purely passive switch law does not capture the intended coordination | Explicit user correction, subsequently clarified in D037 | Confirmed; piston position/phase participates and pressure may enter the command rule; timing and closure dynamics remain open |
 | D035 | 2026-11-22 | In 1A the common inlet/outlet serve right or left duty sequentially; in 1B tricuspid/mitral are dedicated ventricular inlets and pulmonic/aortic are dedicated outlets | User's assignment clarification and earlier sketch | Confirmed functional map; physical selectors, valve count and transition connections remain open |
 | D036 | 2026-11-22 | Retain earlier passive simulations and diagnostics with explicit scope; do not treat inlet/outlet naming as a one-way flow constraint | Preserve provenance and distinguish commands from hydraulics | Documentation corrected; no enforced-valve numerical result or full-cycle force rating claimed |
 
 Details: [enforced valve control and routing](research/VALVE_CONTROL_AND_ROUTING.md).
+
+## Piston phase and pressure coordination — 22 November 2026
+
+| ID | Date | Decision | Basis | Status |
+| --- | --- | --- | --- | --- |
+| D037 | 2026-11-22 | Piston position/phase participates in cardiac valve coordination; pressure may also govern enforced commands | User clarifies that cardiac valve names express intended behaviour and that pressure linkage remains possible | Confirmed intent; phase-only versus phase-plus-pressure law, thresholds and paired-command rule remain unselected |
+
+The earlier wording excluding pressure thresholds from commands was too
+restrictive. The revised [valve note](research/VALVE_CONTROL_AND_ROUTING.md)
+provides a general dependency and a proposed four-phase sequence for discussion.
+No numerical model or controller has been implemented in this update.

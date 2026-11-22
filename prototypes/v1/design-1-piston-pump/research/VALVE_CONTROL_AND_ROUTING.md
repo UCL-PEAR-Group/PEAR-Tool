@@ -6,9 +6,11 @@ simulation, waveform, MATLAB execution or maximum-force result is claimed.
 
 ## Confirmed assignments
 
-Both concepts use enforced valve states. Pressure-triggered passive opening and
-closure are not the selected design law. The labels below describe functional
-paths; they do not select a valve mechanism, physical valve count or actuator.
+Both concepts use enforced valve states coordinated with piston motion. Pressure
+may also enter the command rule; it is not excluded by enforcement. A purely
+passive valve law is not a complete description of the intended coordination.
+The labels below describe cardiac functions to emulate and their flow paths;
+they do not select a valve mechanism, physical valve count or actuator.
 
 | Concept and duty | Inlet path: into the ventricular chamber | Outlet path: out towards the circulation |
 | --- | --- | --- |
@@ -28,8 +30,8 @@ Exact inter-chamber timing and any deliberately introduced delay remain open.
 
 ## Change to the analytical model
 
-Use prescribed or controller-generated commands, rather than pressure thresholds,
-to determine requested valve states:
+Use prescribed or controller-generated commands to determine requested valve
+states. These commands may depend on piston phase and pressure thresholds:
 
 \[
 u_i(t),u_o(t)\in\{0,1\},\qquad
@@ -94,6 +96,84 @@ unselected. A stationary piston with both valves closed does not equalise
 pressure in the current constant-exponent gas model: all three terms on the
 right-hand side of the storage balance are zero.
 
+## Piston phase and pressure may jointly determine commands
+
+The user's subsequent clarification is that the cardiac names express the
+behaviour to be emulated. Piston position participates in valve coordination,
+and pressure may also participate. Enforced state does not imply a pressure-blind
+schedule. A purely passive model is a comparator; a controller using measured
+pressure is compatible with the intended enforced valves.
+
+A general control-law placeholder is
+
+\[
+u_j(t)=\mathcal K_j\!\left(\phi(t),x(t),\dot x(t),
+\Delta p_j(t),q(t),\sigma(t)\right),\qquad j\in\{i,o\}.
+\]
+
+Here phi is cycle phase (dimensionless, 0 to 1), x piston advance (m), x-dot
+piston velocity (m/s), delta-p the forward pressure difference (Pa), q the
+remembered discrete cycle/control state, and sigma the circuit assignment.
+K_j is a rule returning the dimensionless open/closed command. q is not flow Q.
+This is a declaration of possible dependencies, not a completed control law or
+an instruction to use every input. Flow feedback could later be included if the
+closure strategy requires it. A physical controller would use measured or
+estimated states, with sensor/actuator dynamics accounted for when specified.
+
+Position alone is ambiguous: an intermediate position occurs during both
+advance and return. Use the commanded cycle phase or direction plus state
+memory, including at reversal where velocity is zero. Piston motion changes
+chamber volume and pressure; valve commands change the flow paths; the resulting
+flows feed back into chamber pressure through the storage equation below.
+
+Both of these implementations remain available:
+
+| Candidate | Role of piston phase/position | Role of pressure |
+| --- | --- | --- |
+| Phase-scheduled commands | Sets the valve sequence and timing | Calculated hydraulic response, loading and performance measurement |
+| Phase-scheduled commands with pressure conditions | Defines the permitted part of the cycle | May trigger, delay or otherwise modify a permitted transition |
+
+For discussion, a four-phase sequence can express the intended cardiac roles:
+
+| Proposed phase | Piston behaviour | Inlet target state | Outlet target state |
+| --- | --- | --- | --- |
+| Filling | Return while chamber volume increases | Open | Closed |
+| Pressure build-up | Early advance compresses retained gas | Closed | Closed |
+| Ejection | Advance with delivery to the assigned artery | Closed | Open |
+| Pressure release | Early return expands retained gas | Closed | Closed |
+
+This table is a proposed sequence, not a selected timing law. Finite closure may
+begin before the nominal boundary. Actual opening durations and piston advance
+or return durations need not coincide. Both-closed piston motion keeps liquid
+inventory constant under the stated assumptions, but changes total chamber and
+gas volume; it is not literally constant chamber volume. If a valve is closed
+while the piston is stationary, the existing ideal gas model does not produce
+pressure relaxation by itself.
+
+An example opening condition for review is: allow outlet opening in the ejection
+window only when chamber pressure exceeds its connected arterial pressure by a
+chosen margin. An inlet condition would use reservoir minus chamber pressure.
+No thresholds, hysteresis, waiting periods or closure rule have been selected.
+If a pressure condition is not reached before its phase window ends, the model
+must report that outcome rather than silently assuming successful delivery.
+For fixed prescribed motion, adding a waiting dwell would change the waveform
+and must be explicitly chosen; valve gating alone does not stop the piston.
+
+For two chambers with strictly linked valve commands, separate right/left
+pressure conditions require an explicit group rule. Independent threshold
+crossings cannot be assumed to give simultaneous switching. For the shared
+chamber, pressure comparisons use the currently assigned circuit and the
+selector transition remains a separate event.
+
+Physiological reference: Paeme et al. model ventricular driving together with
+pressure/flow-dependent valves, and extend the mitral model to finite aperture
+dynamics driven by transvalvular pressure. This supports retaining pressure and
+valve dynamics in the comparison; it does not establish a piston-position
+controller or validate the proposed four-phase rig sequence. Publisher full
+text, Methods (CVS model; Mitral valve model; Dynamics of the mitral valve),
+consulted 22 November 2026. DOI:
+[10.1186/1475-925X-10-86](https://doi.org/10.1186/1475-925X-10-86).
+
 ## Consequences for pressure, flow and force
 
 The waveform prescribes piston displacement, not independently the actual inlet
@@ -131,8 +211,10 @@ integrating the resulting net delivered volume.
 
 ## Next collaborative decisions
 
-1. Define commanded inlet/outlet timings relative to piston phase, including any
-   both-closed interval or overlap. Keep the right/left duty selector separate.
+1. Define the desired phase sequence and how piston phase/position participates.
+   Decide whether pressure modifies transitions; if so, specify thresholds,
+   hysteresis and behaviour when a condition is not reached within its window.
+   Keep both-closed intervals, any overlap and the duty selector explicit.
 2. For 1A, define the routing transition and carry-over states. For 1B, define
    simultaneous paired commands or the intended inter-chamber delay.
 3. Select the initial effective-opening law, including transition duration, and
@@ -140,6 +222,7 @@ integrating the resulting net delivered volume.
    confirmed enforced-state choice; it does not reopen passive versus enforced.
 4. Complete the coupled derivation before implementing the next numerical case.
 
-This note records the user's topology/control choice and consequences derived
-from the existing conservation and momentum equations. It adds no experimental
-or physiological evidence and does not select numerical timing values.
+This note records the user's topology/control intent and consequences derived
+from the existing conservation and momentum equations. The cited physiological
+model supplies reference context; no experimental result, selected control law
+or numerical timing values are added.
