@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-22",
+  "scope": "Document build and layout verification only; no new hydraulic simulation or MATLAB execution.",
+  "build_engine": "pdfTeX-1.40.26",
+  "offline_build": true,
+  "shell_escape": false,
+  "pages": 7,
+  "latex_overfull_boxes": false,
+  "latex_underfull_boxes": false,
+  "replacement_characters_in_extracted_text": 0,
+  "visual_review": "All seven pages inspected as montage; equations, evidence table and next-step table additionally inspected in enlarged page renders. No clipping or overlapping text observed.",
+  "rear_boundary_checks_file": "rear_boundary_algebra_checks.json",
+  "pdf_sha256": "fec906eb75e9ef08ec8550529eccb36d17ee101ad2ba8e0c7373921f215c9e8b"
+}

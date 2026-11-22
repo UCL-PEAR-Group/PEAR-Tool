@@ -1,5 +1,20 @@
 # Progress and next checks
 
+## Consolidated model checkpoint — 22 November 2026
+
+- Audited the current source and stored Python, pressure-cycle, spreadsheet and
+  MATLAB verification records. The current-design coupled solver is incomplete.
+- Added a LaTeX checkpoint report and a concise model index with confirmed
+  decisions, free inputs, equations, evidence limits and completion gates.
+- Corrected the rear boundary: pressure may vary in a sealed chamber, and its
+  effective pressure area can differ from the wetted area. Existing numerical
+  results retain their original atmospheric-rear assumption.
+- Added rear boundary/geometry/reference-state variables as planned quantities;
+  no sealed-rear solver or new hydraulic simulation has been implemented.
+
+Next: define one-chamber front/rear and load boundary cases, then declare a
+consistent ideal-switching/inertance treatment before solving the coupled model.
+
 ## Unequal duties and simplified valves — 22 November 2026
 
 - Added an adjustable right-duty fraction to the operating-budget generator;

@@ -1,5 +1,11 @@
 # Design 1: Piston Pump
 
+**Start with the [model checkpoint](MODEL_CHECKPOINT.md)**
+([PDF](reports/checkpoint/Pump_Model_Checkpoint.pdf), [LaTeX source](reports/checkpoint/Pump_Model_Checkpoint.tex)).
+It consolidates the current equations, decisions, implementation limits and next
+steps. Rear pressure is now an explicit boundary: atmospheric is only one case.
+The force balance must use the actual wetted and rear pressure areas.
+
 Current scope: [adjustable right/left duties and ideal valve transitions](research/DUTY_ALLOCATION_AND_IDEAL_VALVES.md).
 The shared-chamber allocation defaults to 50:50 and is adjustable with
 `python python/build_operating_matrix.py --right-duty-fraction 0.6`. This changes

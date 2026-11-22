@@ -143,3 +143,10 @@ No numerical model or controller has been implemented in this update.
 | D041 | 2026-11-22 | Idealise opening/closing transitions for now and refine once a valve is selected | Explicit user staging instruction | Ideal switch a=u with zero transition duration is the documented baseline; no division by zero in the finite-ramp formula, no silent removal of fluid inertia, and no switching-surge force rating |
 
 See [duty allocation and ideal valves](research/DUTY_ALLOCATION_AND_IDEAL_VALVES.md).
+
+## Consolidated checkpoint and rear boundary — 22 November 2026
+
+| ID | Date | Decision | Basis | Status |
+| --- | --- | --- | --- | --- |
+| D042 | 2026-11-22 | Treat rear pressure and effective rear area explicitly; atmospheric rear is only one boundary case | User identifies a potentially closed cylinder; pressure-force balance depends on pressure exposure | Sealed gas candidate documented; rear mode, area, volume, charge and exponent remain unselected; solver unchanged |
+| D043 | 2026-11-22 | Consolidate model status and proceed through boundary definition, equation closure, one-chamber verification, architecture coupling and design comparison before the live interface | User requests a documented checkpoint to maintain scope | MODEL_CHECKPOINT.md and LaTeX PDF added; no new hydraulic simulation, component selection or force rating |

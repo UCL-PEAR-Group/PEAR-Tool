@@ -3,6 +3,13 @@
 Recorded 22 November 2026. Goal and proposed implementation plan; no new MATLAB
 simulation or application has been executed in this update.
 
+## Current checkpoint
+
+[MODEL_CHECKPOINT.md](MODEL_CHECKPOINT.md) now consolidates the remaining gates.
+Rear pressure may be non-atmospheric and must be an explicit boundary case.
+The future force display must use actual front/rear effective areas and expose
+the distinction between bulk hydraulic load and unresolved switching transients.
+
 ## User's intended outcome
 
 An interactive model of the plunger pump, showing synchronised piston motion,
@@ -39,7 +46,7 @@ from any reported force-rating claim.
 | --- | --- | --- |
 | Piston view | Position, selected bore/travel, chamber and retained-gas volumes | Schematic driven by the same numerical solution as the plots; no converter design required |
 | Timing controls | Per-circuit bpm, shared right-duty fraction lambda_R (default 0.5), within-duty advance fractions, waveform and smoothing | Separate R/L duty budgets from advance/return allocation and actual valve-open durations |
-| Pressure plots | Chamber, inlet reservoir and arterial/load-inlet pressure | Label measurement locations and gauge/absolute reference; compare with corresponding physiology |
+| Pressure plots | Chamber, rear chamber, inlet reservoir and arterial/load-inlet pressure | Rear pressure may be prescribed or state-dependent; label measurement locations and gauge/absolute reference |
 | Flow plots | Inlet and outlet instantaneous flow, cycle mean and net delivery | Actual outputs of continuity and valve dynamics in the coupled model |
 | Valve indication | Commands, effective opening, routing and cycle state; opening/closing times | Piston phase/position participates in commands; optional pressure conditions remain to be selected; calculate actual flow from hydraulics |
 | Load summary | Hydraulic force history and peak positive/negative load | Seals, moving-solid inertia and converter distribution remain outside current scope |

@@ -17,7 +17,7 @@ The inlet and outlet of each chamber have their own entries; a future two-ventri
 - Period T = 60/f; advance time = γT; return time = (1−γ)T.
 - Gas amount/reference condition is fixed for a closed pocket, while its instantaneous pressure, volume and compliance vary. Gas-law pressure is absolute.
 - Actual mean flow, net-delivery ratio and maximum force are responses of the coupled system, not independent inputs to be freely prescribed together.
-- The current atmospheric-rear force is chamber gauge pressure × face area. It is not generally outlet pressure minus inlet pressure multiplied by area.
+- Existing numerical force results assume atmospheric rear pressure. Current design force requires front and rear effective pressure areas and rear boundary choice: Fh = Ap pc,gauge - Ab pb,gauge under the declared ambient external-rod reference. Inlet pressure is not rear pressure.
 
 The tables use the units actually present in the code. Internal flow is mL/s; exported trace flow is L/min. `VARIABLES.csv` is the machine-readable version with separate physical-nature and Python-type columns.
 
@@ -101,7 +101,7 @@ The tables use the units actually present in the code. Internal flow is mL/s; ex
 | --- | --- | --- | --- | --- | --- | --- |
 | pi / `pin_mmhg` | Upstream pressure at model leg entrance | Boundary condition | float | mmHg gauge | 10 constant; Implemented | Represents upstream reservoir/load. Time-dependent boundary not yet wired into Case. |
 | po / `pout_mmhg` | Downstream pressure at model leg exit | Boundary condition | float | mmHg gauge | 90; sensitivities 120 / 200 constant; Implemented | Distinct from chamber pressure and from a specified pressure waveform. |
-| pb / `rear_pressure_gauge` | Pressure on rear face of plunger | Boundary condition | float | mmHg gauge | 0 fixed; Implicit constant | Current force function assumes atmospheric rear; pb is not inlet pressure. |
+| pb / `rear_pressure_gauge` | Pressure acting on the effective rear face | Boundary input or derived gas state | float / ndarray[float64] | mmHg gauge | 0 in existing calculations; current design unselected; Atmospheric reference implemented; alternative boundary planned | Not inlet pressure. May follow sealed-gas or vent/control law; force also needs effective rear area Ab. Gas law uses absolute pressure. |
 | pc(t) / `y[0] / pc_gauge_mmhg` | Chamber pressure | Independent continuous ODE state | float / ndarray[float64] | mmHg gauge | Initial pc = pi; Implemented | Varies over the cycle. |
 | pc,abs(t) / `atmosphere_mmhg+pc` | Absolute chamber pressure | Derived pressure | float / ndarray[float64] | mmHg absolute | Variable; Derived expression | Used for gas law and pressure guard. |
 | Qi(t) / `y[1] / qin_Lmin` | Inlet flow | Independent continuous ODE state | float / ndarray[float64] | mL/s internally; L/min in trace | Initially zero; Implemented | Forward check-valve flow; multiplied by 0.06 for the saved trace. |
@@ -116,7 +116,7 @@ The tables use the units actually present in the code. Internal flow is mL/s; ex
 | Symbol / code | Meaning | Physical role | Python type | Units | Current value / status | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
 | Fp(t) / `pressure_force_N` | Signed hydraulic balancing force | Calculated response | ndarray[float64] | N | Calculated per case; Implemented | Ap(pc−pb); excludes seals and solid inertia. |
-| Fp,max / `force_absmax_N` | Largest absolute hydraulic force in final cycle | Calculated response | float | N | Calculated per case; Implemented | Maximum over sampled final periodic cycle; not a component rating. |
+| Fp,max / `force_absmax_N` | Largest absolute hydraulic force in final cycle | Calculated response | float | N | Calculated per case; Implemented | Existing sampled periodic-case maximum uses the archived atmospheric-rear assumption; not a rating for sealed rear, enforced switching or the complete mechanism. |
 | Fpush / `force_peak_N` | Largest positive signed pressure force | Calculated response | float | N | Calculated per case; Implemented | May be interpreted as peak advancing-axis balancing demand. |
 | Fmin / `force_min_N` | Most negative signed pressure force | Calculated response | float | N | Calculated per case; Implemented | Signed value; retraction-demand magnitude is max(0,−Fmin). |
 | pc,max / `pc_peak_mmhg` | Maximum chamber pressure | Calculated response | float | mmHg gauge | Calculated per case; Implemented | Not maximum outlet-boundary pressure. |
@@ -250,3 +250,16 @@ The tables use the units actually present in the code. Internal flow is mL/s; ex
 | TR; TL / `right_duty_budget_s / left_duty_budget_s` | Available time for right and left ventricular duties | Derived architecture budgets | float | s | 1A: lambda_R TH and (1-lambda_R) TH; 1B: TH each; Implemented in operating-budget generator | Includes filling, ejection and any within-slot routing/dwell reservation. |
 | gamma_R; gamma_L / `right_advance_fraction / left_advance_fraction` | Advance fraction within each ventricular duty | Selectable motion inputs | float | 1 | 0.4 each for the current illustrative comparison; Declared architecture parameters; separate motion implementation pending | Independent of lambda_R; actual valve-open/ejection durations follow commands and hydraulics. |
 | valve_transition_model / `valve_transition_model` | Ideal or finite-time valve transition representation | Modelling assumption | str | category | ideal for current stage; Documented; coupled solver pending | Ideal switching omits a resolved closure-flow interval and does not establish a finite switching-pressure peak. |
+
+## 21. Rear boundary and general pressure force
+
+| Symbol / code | Meaning | Physical role | Python type | Units | Current value / status | Notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| rear_mode / `rear_boundary_mode` | Rear pressure boundary type | Selectable boundary model | str | category | Vented / sealed gas / restricted vent or controlled; unselected; Documented choice; not implemented in current solver | Closed housing alone does not establish hermetic rear gas confinement. |
+| Ab / `rear_effective_area_m2` | Effective rear pressure and swept-volume area for simple constant-area geometry | Geometry input | float | m2 | Unselected; Analytical parameter; solver pending | May equal Ap or Ap-Ar for a dry rod; verify actual pressure exposure before applying the gauge force balance. |
+| Ar / `dry_rod_area_m2` | Dry-side rod cross-sectional area if applicable | Optional geometry input | float | m2 | Unselected; zero only if geometry warrants; Geometry pending | No wetted rod does not rule out a dry-side rod. Outside rod-end pressure is assumed ambient in the reported gauge-force expression. |
+| Vb,r; xr / `rear_reference_volume_m3 / rear_reference_position_m` | Rear gas reference volume and associated piston position | Reference state / geometry inputs | float | m3; m | Unselected; Sealed-gas candidate only | Vb=Vb,r+Ab(x-xr) when advance increases rear volume; distinct from front retained gas. |
+| Pb,r / `rear_reference_pressure_abs_pa` | Rear absolute gas pressure at its reference state | Reference-state input | float | Pa absolute | Unselected; Sealed-gas candidate only | Use a consistent ambient reference to derive gauge rear pressure. |
+| nb / `rear_polytropic_exponent` | Rear gas constant polytropic exponent | Provisional constitutive parameter | float | 1 | Unselected; Sealed-gas candidate only | Do not automatically equate to the front exponent; thermal response needs assessment. |
+| Vb(x); Pb(x) / `rear_volume_m3 / rear_pressure_abs_pa` | Rear volume and absolute pressure under prescribed motion | Derived quantities | float / ndarray[float64] | m3; Pa absolute | Variable; unselected reference values; Analytically specified; not simulated | Fixed-mass constant-exponent candidate: Pb Vb^nb = constant. These are not independent states under that algebraic closure. |
+| Fh / `hydraulic_force_with_rear_n` | Hydraulic balancing force using both effective pressure areas | Calculated output | float / ndarray[float64] | N | Ap pc,gauge - Ab pb,gauge; General expression documented; current code uses earlier special case | Requires the stated ambient rod-end reference and actual geometry. Excludes seal/solid/converter loads and unresolved switching surges. |

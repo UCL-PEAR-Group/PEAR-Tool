@@ -1,0 +1,273 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=21mm,headheight=15pt,headsep=8mm,footskip=11mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,booktabs,tabularx,array,xcolor,enumitem,fancyhdr,microtype}
+\usepackage{hyperref,xurl}
+\hypersetup{colorlinks=true,linkcolor=teal,urlcolor=teal,pdftitle={Piston pump model checkpoint},pdfauthor={MECH0073 PEAR project}}
+\definecolor{ink}{HTML}{173445}
+\definecolor{teal}{HTML}{146A73}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlist[itemize]{leftmargin=5mm,itemsep=3pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=6mm,itemsep=4pt,topsep=3pt}
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{5pt}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\sffamily\color{ink}\leftmark}
+\fancyhead[R]{\small\sffamily MECH0073 / PEAR}
+\fancyfoot[L]{\small Analytical model checkpoint}
+\fancyfoot[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\newcommand{\pageheading}[2]{\markboth{#1}{} {\Large\sffamily\bfseries\color{ink}#1}\par {\small\color{teal}#2}\par\vspace{2mm}}
+\newcommand{\sub}[1]{\vspace{2mm}{\large\sffamily\bfseries\color{ink}#1}\par}
+\newcommand{\status}[1]{\textbf{\color{teal}#1}}
+\begin{document}
+\pageheading{1. Purpose and current position}{Piston pump modelling checkpoint / 22 November 2026}
+
+\textbf{Goal.} Develop a controllable ventricular pump for the EVAR mock circulatory rig. Determine how geometry, piston motion, retained air, valves and external circuit loading produce net delivery, pressure waveforms and hydraulic piston force. Use the results to support design decisions, then build the interactive MATLAB model.
+
+\textbf{Current assessment.} We have analytical building blocks and separately executed reference calculations. We do \emph{not yet have one verified coupled simulation} of the current enforced-valve design, its right/left routing and a potentially sealed rear chamber.
+
+\sub{Confirmed direction}
+\par
+{\small
+\begin{tabularx}{\linewidth}{@{}P{.28\linewidth}Y@{}}
+\toprule
+Item & Current position \\
+\midrule
+Operating reference & Mean circuit flow 5 L/min; 75 pulses/min at each arterial outlet. These are prescribed targets, not guaranteed outputs. \\
+Architectures & Keep both 1A (shared chamber with sequential ventricular duties) and 1B (two dedicated ventricular chambers). \\
+Piston contact & Flat wetted face; no wetted-rod area subtraction. Diameter and travel remain design variables, fixed within each operating case. \\
+Valve behaviour & Enforced states coordinated with piston phase; pressure can also enter the command rule. Cardiac names identify intended functions. \\
+Timing & Shared right-duty fraction is adjustable, initially 0.5. Within-duty advance/return allocation is a separate parameter. \\
+Valve transitions & Idealised at this stage. Real opening and closure durations follow component selection. \\
+Front retained air & Deliberately retained, sealed gas pocket. Its actual reference volume/pressure and thermal law remain to be specified. \\
+Rear boundary & Atmospheric pressure is only one possible case. Sealed or otherwise controlled rear pressure remains open. \\
+Software sequence & Complete the necessary derivation and numerical checks before the MATLAB interface. Preserve existing Python references. \\
+\bottomrule
+\end{tabularx}}\par
+
+\sub{Scope control}
+The pump model includes the chamber, valve/path hydraulic effects, pressure on both piston sides and the interfaces to reservoirs and Windkessels. Windkessel hardware design remains outside this workstream, although its parameters are required boundary/load inputs.
+
+Converter design, motor sizing, seal friction, moving-solid inertia, FEA, detailed valve closure surges and hardware feedback implementation remain later tasks. They must not replace the present task of obtaining a transparent hydraulic model.
+
+\textbf{Immediate priority:} define the rear-side boundary and resolve the mathematical treatment of ideal valve switching, then assemble one chamber with its load. No current result establishes a final maximum-force rating or clinical predictive validity.
+
+\newpage
+\pageheading{2. Architecture, timing and inputs}{Separate requirements, provisional inputs and calculated outputs}
+
+Let $h$ be pulse rate at each circuit outlet in min$^{-1}$. The heartbeat period is $T_H=60/h$ seconds. For the shared chamber,
+\[
+T_R=\lambda_R T_H,\qquad T_L=(1-\lambda_R)T_H,\qquad 0<\lambda_R<1.
+\]
+The default is $\lambda_R=0.5$. At 75/min, this gives 0.4 s per duty; $\lambda_R=0.6$ gives 0.48 s right and 0.32 s left. Each slot contains a complete fill/eject duty and any routing allowance. Its mean delivery-event count is still $2h$, but unequal slots are not a uniform cycle at $2h$.
+
+For 1B, \textbf{each chamber has the full $T_H$}; the cycles can overlap. Right/left motion offsets and strictly linked valve states must remain mutually compatible. Independent pressure crossings do not automatically produce a linked opening event.
+
+\[
+V_{\mathrm{net,target}}[\mathrm{mL}]=\frac{1000\,\overline Q_{\mathrm{target}}[\mathrm{L/min}]}{h[\mathrm{min}^{-1}]}
+=66.667\ \mathrm{mL}\quad\text{at 5 L/min and 75/min}.
+\]
+\[
+A_p=\frac{\pi D_p^2}{4},\qquad V_s=A_pS,\qquad
+\overline Q_o=\frac{1}{T}\int_0^T Q_o(t)\,dt.
+\]
+The target net volume and geometric swept volume $V_s$ are distinct once gas storage, restricted filling and valve behaviour are present. A fixed stroke does not independently prescribe both mean flow and frequency. Both strategies remain open: let flow rise with rate, or add an explicitly modelled means of changing net delivery.
+
+\sub{Input provenance}
+\par
+{\small
+\begin{tabularx}{\linewidth}{@{}P{.28\linewidth}P{.25\linewidth}Y@{}}
+\toprule
+Quantity & Current illustrative value & Status \\
+\midrule
+Wetted diameter / travel & 50 mm / 33.953 mm & Sizing illustration for 66.667 mL; no cylinder selected. \\
+Advance fraction & 0.4 & Previous 60:40 return:advance interpretation; distinct from actual valve-open durations. \\
+Front gas reference & 10 mL at 10 mmHg gauge; $n_g=1.2$ & Provisional reference only; atmospheric pressure 760 mmHg used in that calculation. \\
+Valve bore / $C_d$ & 16 mm / 0.7 & Full-open trial values, not measured hardware coefficients. \\
+Connecting line & 20 mm bore; 0.2 m effective length & Lumped reference geometry; not a selected assembly. \\
+Liquid density & 1000 kg/m$^3$ & Water-like trial. Actual BMF properties and temperature dependence remain inputs. \\
+Rear pressure/area & Previously atmospheric; area equality implicit & Must now be explicit. Sealed rear volume and charge are unselected. \\
+Arterial load means & 90 mmHg systemic; 15 mmHg pulmonary & Earlier resistances were chosen to give these means at imposed 5 L/min. Not independent physiological corroboration. \\
+\bottomrule
+\end{tabularx}}\par
+
+\textbf{Dependencies to preserve:} choose two of diameter, stroke and swept volume; calculate the third. Keep geometry fixed in a rate sweep. At fixed normalised motion shape, speed scales as $S/T_d$ and acceleration as $S/T_d^2$ for duty duration $T_d$.
+
+\newpage
+\pageheading{3. Analytical blocks already established}{SI units inside equations; gauge versus absolute pressure stated explicitly}
+
+\textbf{Geometry and liquid conservation.} Take piston advance $x$ as positive into the liquid chamber. All volumes are in m$^3$ and flows in m$^3$/s:
+\[
+V_c=V_{c0}-A_px=V_\ell+V_g,\qquad
+\dot V_\ell=Q_i-Q_o,\qquad Q_p=A_p\dot x.
+\]
+\textbf{Front retained gas.} For fixed gas mass and a provisional constant polytropic exponent $n_g$, use absolute gas pressure $P_g=p_{\rm atm}+p_c$:
+\[
+P_gV_g^{n_g}=P_{g,r}V_{g,r}^{n_g},\qquad
+C_g=\frac{V_g}{n_gP_g},\qquad
+\boxed{C_g\dot p_c=Q_i-Q_o+A_p\dot x.}
+\]
+This assumes incompressible liquid, rigid chamber walls, negligible leakage and approximately equal gas/liquid pressure. A membrane pressure difference or additional compliance requires another law. The gas relation is a constitutive approximation [2], not a thermodynamic pressure law for the liquid. The gas-free limit is a separate algebraic/storage model; do not divide by $C_g=0$.
+
+\textbf{Open hydraulic paths.} Resistance and fluid inertia are established elements of lumped cardiovascular models [1]. Our proposed full-open branch form is
+\[
+\Delta p_j=I_j\dot Q_j+R_jQ_j+B_jQ_j|Q_j|,\qquad
+\Delta p_i=p_i-p_c,\quad\Delta p_o=p_c-p_a.
+\]
+$j=i,o$ identifies inlet/outlet. $R_j$, $B_j$, $I_j$ have units Pa s/m$^3$, Pa s$^2$/m$^6$ and Pa s$^2$/m$^3$. They represent different physical effects; do not double-count an already fitted loss. Flows are signed unless one-way hardware is independently specified.
+
+\textbf{External load interface.} For the existing three-element Windkessel,
+\[
+p_a=p_w+R_1Q_o,\qquad
+C_w\dot p_w=Q_o-\frac{p_w-p_r}{R_2}.
+\]
+Here $p_w$ is the compliance-node pressure, $p_r$ the return pressure, $R_1,R_2$ load resistances and $C_w$ arterial compliance. Actual outlet flow must drive this equation; $Q_o$ is not generally equal to $A_p\dot x$.
+
+\textbf{Valve coordination.} The candidate rule uses phase, position/direction, optional pressure eligibility, previous state and routing. Current transition idealisation is $a_j=u_j\in\{0,1\}$, with $a_j$ effective area fraction and $u_j$ the command. A pressure build-up interval can exist even with zero valve transition duration.
+
+\sub{The remaining mathematical gap}
+An ideal commanded closure with nonzero inertial flow cannot be represented by an unexplained reset of $Q$ and then used to claim a finite physical pressure peak. We must choose and declare a consistent reduced baseline or closed-boundary dynamics before calling the combined model solved. Detailed hardware closure transients can remain deferred; this numerical/model closure decision cannot be hidden.
+
+\newpage
+\pageheading{4. Rear pressure and piston force}{Correction: the dry-side boundary is not assumed atmospheric}
+
+\textbf{Pressure-force balance.} Let $A_b$ be the effective rear pressure area. With all gauge pressures referenced to the same ambient pressure, and any exposed external rod end at that ambient pressure,
+\[
+\boxed{F_h(t)=A_p p_c(t)-A_b p_b(t).}
+\]
+$F_h$ is the hydraulic balancing force along the advance direction; the fluid reaction is opposite. The earlier $A_p(p_c-p_b)$ expression requires $A_b=A_p$. Atmospheric rear pressure, $p_b=0$ gauge, is one special case.
+
+A flat wetted face means no rod-area subtraction on $A_p$. It does \emph{not} prove equal areas on the dry side. For a rod passing through the rear chamber, an ordinary geometry would give $A_b=A_p-A_r$, where $A_r$ is rod cross-sectional area. A different pressure exposure requires its actual force balance. Rear geometry has not been selected.
+
+\sub{Candidate rear boundary models}
+\par
+{\small
+\begin{tabularx}{\linewidth}{@{}P{.23\linewidth}YP{.26\linewidth}@{}}
+\toprule
+Case & Representation & Additional information \\
+\midrule
+Freely vented & $p_b\simeq0$ gauge only if vent losses are negligible & Vent path and expected airflow \\
+Sealed gas & Pressure varies with rear volume; equations below & Reference charge, volume, area and thermal approximation \\
+Restricted vent / regulated & Pressure follows mass flow, pressure-control and possibly energy balances & Connection, restriction/control law and initial state \\
+\bottomrule
+\end{tabularx}}\par
+
+\textbf{Sealed-gas candidate.} If advance increases rear gas volume and the geometry has constant swept area $A_b$,
+\[
+V_b(x)=V_{b,r}+A_b(x-x_r),\qquad
+P_b(x)=P_{b,r}\left(\frac{V_{b,r}}{V_b(x)}\right)^{n_b},\qquad
+p_b=P_b-p_{\rm atm}.
+\]
+$P_b,P_{b,r}$ are absolute pressures in Pa; $V_b,V_{b,r}$ are m$^3$; $x_r$ is the reference position in m; $n_b$ is a provisional dimensionless exponent. Fixed gas mass and $V_b>0$ are required. $V_{b,r}$ is not the front retained-air volume.
+
+For this geometry, advance expands the rear gas and lowers its pressure. Its contribution can increase or reduce the force requirement depending on its pressure relative to ambient. The rear pressure is derived algebraically from prescribed $x$ under this approximation; a heat-transfer or vent model would change that description.
+
+\textbf{Meaning of bulk load.} Use the term \emph{cycle-resolved hydraulic load} for $F_h(t)$ from the stated chamber/line/load model. It includes modelled pressure losses, fluid acceleration and gas storage. It excludes unresolved switching surges, seal friction, moving-solid inertia and converter forces. Front and rear gas effects are already in the pressures; do not add separate gas forces again.
+
+\textbf{Consequence:} previous atmospheric-rear force results remain historical reference cases. They do not establish the force required by a closed rear-cylinder design.
+
+\newpage
+\pageheading{5. Evidence and implementation audit}{Verified files and archived checks are distinct from a current-design simulation}
+
+\par
+{\small
+\begin{tabularx}{\linewidth}{@{}P{.24\linewidth}P{.24\linewidth}Y@{}}
+\toprule
+Block & What exists & What it does not establish \\
+\midrule
+Exploratory Python & Executed gas/passive-check model; constant boundaries; archived numerical checks & Current enforced commands, sealed rear or whole circulation \\
+Waveform study & Normalised half-sine/harmonic candidates; smoothing and derivative checks & Actual valve flow or coupled gas pressure \\
+Pressure/load study & Prescribed-flow Windkessel; conditional chamber pressure/force & Continuous reversal, gas/event coupling or full-cycle force \\
+Formula workbook & Editable formulas; stored formula checks & Complete coupled solve; native Excel execution remains unverified \\
+Operating matrix & 22 case/architecture rows; adjustable $\lambda_R$ and checked unequal budgets & Shared-chamber hydraulics or achieved delivery \\
+Current derivation & Storage, branch/load laws, command proposals and rear-force correction & Fully closed, verified numerical implementation \\
+MATLAB & Earlier files passed static parsing; user reports local installation & Numerical execution, current-model equivalence or live application \\
+\bottomrule
+\end{tabularx}}\par
+
+\sub{Examples of results we can retain, with their scope}
+At imposed 5 L/min and 75/min, the published-harmonic pressure study with 5\% endpoint smoothing produced the following \emph{illustrative} results:
+\par
+{\small
+\begin{tabularx}{\linewidth}{@{}Yrr@{}}
+\toprule
+Quantity & Systemic & Pulmonary \\
+\midrule
+Arterial pressure range (mmHg gauge) & 72.6--106.0 & 10.8--21.0 \\
+Conditional phase peak $|F_h|$ (N), 50 mm piston & 32.6 & 15.5 \\
+Resolved full-cycle force? & No & No \\
+\bottomrule
+\end{tabularx}}\par
+These assumed atmospheric rear pressure. The study has unresolved chamber-pressure joins. Its pulmonary closed-valve diagnostic tests a passive-check assumption and is not automatically a failure of an enforced closed valve. Chosen load resistance fixes the mean-pressure target; that agreement is not independent validation.
+
+The arterial reference reconstructed from Qureshi et al. [3] retains its published 75/min and 6.6 L/min conditions. Our 5 L/min trial is not a matched-condition validation. A corresponding ventricular-pressure reference remains necessary before claiming ventricular-waveform fidelity.
+
+\textbf{Audit scope:} stored verification records were inspected. No new hydraulic simulation or MATLAB execution was performed. Rear-boundary algebra was checked; implementation, physical calibration and independent validation remain pending.
+
+\newpage
+\pageheading{6. Route forward and completion gates}{Complete the next stage before expanding the design or interface}
+
+\par
+{\small
+\begin{tabularx}{\linewidth}{@{}P{.06\linewidth}P{.26\linewidth}Y@{}}
+\toprule
+Step & Work & Reviewable completion criterion \\
+\midrule
+1 & Define one-chamber boundary cases & Front geometry and gas state; rear boundary/area/volume; inlet/load parameters and measurement locations are explicit. Unknown values remain named inputs with declared trial ranges. \\
+2 & Close the ideal-valve equations & One declared switching treatment compatible with the retained/omitted inertance. Phase-only and pressure-conditioned commands remain distinguishable; missed openings and invalid inventories are reported. \\
+3 & Solve one chamber with its load & One input set produces $x,Q_i,Q_o,p_c,p_a,p_b,V_g,V_\ell,F_h$. Check units, signs, conservation, limiting cases, periodicity and tolerance/time-resolution sensitivity. \\
+4 & Add architecture coupling & 1B preserves intended valve linkage and separate loads. 1A preserves gas/liquid/load states through routing and uses adjustable unequal duty slots. Reservoir balances are explicit. \\
+5 & Compare feasible designs & Sweep selected bore/stroke, gas, valve/line geometry, timing and load cases. Report achieved flow, waveform, filling limits and bulk force. Use these results in the design matrix before selecting components. \\
+6 & Build the MATLAB interface & After the necessary derivation and numerical verification, animate the same computed piston/pressure/flow solution. Preserve fixed-geometry mode, input provenance and saved cases. \\
+7 & Calibrate, then validate & Use selected-component and rig measurements, measurement uncertainty and independent cases. Revisit finite valve transitions and peak loads where they matter. Bench agreement does not establish clinical prediction. \\
+\bottomrule
+\end{tabularx}}\par
+
+\sub{Decisions that materially affect the next calculation}
+\begin{enumerate}
+\item \textbf{Rear boundary:} which candidate cases should be compared first; what rear area and reference volume does the intended geometry permit? A closed housing alone does not establish a sealed gas volume.
+\item \textbf{Ideal switching treatment:} define a consistent reduced baseline, or retain fluid inertance with an explicit closed-boundary treatment. Do not silently delete inertia or interpret an arbitrary flow reset as a physical peak.
+\item \textbf{Initial case inputs:} identify trial values versus measured quantities. Keep the agreed 5 L/min, 75/min and equal duty allocation as the first target; the actual delivered flow remains a result.
+\end{enumerate}
+
+\textbf{Deferred deliberately:} a detailed valve-leaflet model, valve actuation hardware, converter/motor optimisation, FEA, full feedback implementation and an application UI. The next deliverable should be a reviewable closed equation set and one verified chamber/load case, not another standalone plotting layer.
+
+\newpage
+\pageheading{7. Traceability and evidence limits}{Where the current model and its checks are recorded}
+
+\sub{Repository record}
+Repository: \href{https://github.com/UCL-PEAR-Group/PEAR-Tool}{UCL-PEAR-Group/PEAR-Tool}. Branch: \texttt{v1-prototype-design-1-piston-pump}. Reviewed starting commit: \texttt{a6d59dbe68bf4d3c038b642ddb1f298365d6f4f9}. This checkpoint and the rear-boundary correction are subsequent additions; old numerical snapshots are preserved.
+
+All paths below are relative to \path{prototypes/v1/design-1-piston-pump/}.
+\par
+{\small
+\begin{tabularx}{\linewidth}{@{}P{.33\linewidth}Y@{}}
+\toprule
+Record & Purpose \\
+\midrule
+\path{MODEL.md}; \path{DECISIONS.md} & Living explanation and decision provenance; this checkpoint consolidates the current interpretation. \\
+\path{VARIABLES.csv}; \path{VARIABLES.md} & Machine-readable and readable variable register, including physical role, units and implementation status. \\
+\path{OPERATING_MATRIX.csv/.md} & Volume and adjustable timing budgets; generated by \path{python/build_operating_matrix.py}. \\
+\path{research/DERIVATION_01...05...} & Full-liquid force, waveform joining, pressure reference, gas storage and valve-command derivations. Passive rules are historical comparators where superseded. \\
+\path{research/DUTY_ALLOCATION_AND_IDEAL_VALVES.md} & Unequal duty allocation and current ideal-transition scope. \\
+\path{python/verification_status.json} & Archived executed Python regression/notebook status; physical validation is false. \\
+\path{research/pressure_cycle/} & Pressure/reference data, comparison figures and numerical verification record. \\
+\path{spreadsheet/} & Formula workbook and verification records; native Excel testing is false. \\
+\path{matlab/verification_status.json} & Static parser results; numerical MATLAB execution is false. \\
+\bottomrule
+\end{tabularx}}\par
+
+\sub{External evidence supporting the modelling approach}
+\begin{enumerate}[label={[\arabic*]},leftmargin=7mm,itemsep=5pt]
+\item Paeme S, Moorhead KT, Chase JG, et al. Mathematical multi-scale model of the cardiovascular system including mitral valve dynamics. Application to ischemic mitral insufficiency. \emph{BioMedical Engineering OnLine}. 2011;10:86. \href{https://doi.org/10.1186/1475-925X-10-86}{doi:10.1186/1475-925X-10-86}. Full text inspected. Supports lumped pressure/flow/inertance and valve modelling; it does not validate our commanded piston design.
+\item Zhao D, Ge W, Mo X, Liu B, Dong D. Design of A New Hydraulic Accumulator for Transient Large Flow Compensation. \emph{Energies}. 2019;12(16):3104. \href{https://doi.org/10.3390/en12163104}{doi:10.3390/en12163104}. Prior PDF inspection covered the gas law. Its nitrogen charge, pressure range and selected exponent are not transferred to the rig.
+\item Qureshi MU, et al. Characteristic impedance: frequency or time domain approach? \emph{Physiological Measurement}. 2018;39:014004. \href{https://doi.org/10.1088/1361-6579/aa9d60}{doi:10.1088/1361-6579/aa9d60}. Prior Appendix A reference reconstruction is documented in Derivation 03. Original raw clinical acquisition was not inspected; reference conditions differ from our trial.
+\end{enumerate}
+
+\textbf{Verification, calibration and validation remain separate.} Algebra and code checks support numerical correctness within stated assumptions. Calibration identifies coefficients from measurements. Independent validation evaluates predictions outside the calibration set. None of these labels should be replaced by visual agreement alone.
+\end{document}

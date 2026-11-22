@@ -1,5 +1,13 @@
 # Design 1: Piston Pump — living model
 
+**Consolidated current status:** [MODEL_CHECKPOINT.md](MODEL_CHECKPOINT.md)
+and its PDF distinguish the current design from the historical calculations
+below. Rear pressure is not fixed by the design: vented, sealed-gas and other
+boundaries remain open. With a common ambient gauge reference and external rod
+end at ambient, hydraulic balancing force is Fh = Ap pc - Ab pb. The earlier
+Ap(pc-pb) form assumes equal effective areas; no wetted rod does not imply no
+dry-side rod. Sealed rear gas is a new analytical candidate, not implemented.
+
 **Current scope:** [shared-chamber duty allocation is adjustable](research/DUTY_ALLOCATION_AND_IDEAL_VALVES.md),
 with lambda_R = 0.5 initially. Ideal instantaneous valve transitions are the
 present modelling assumption; finite aperture/closure dynamics are deferred.
