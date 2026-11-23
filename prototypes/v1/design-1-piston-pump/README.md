@@ -1,5 +1,7 @@
 # Design 1: Piston Pump
 
+**[Team report: sketches, derivations and roadmap](reports/team_review/Piston_Pump_Team_Report.pdf)** ([source and assets](reports/team_review/README.md)). Consolidated 23 November 2026; qualitative mechanism trade-offs, all three supplied concept images and current modelling limits.
+
 **Start with the [model checkpoint](MODEL_CHECKPOINT.md)**
 ([PDF](reports/checkpoint/Pump_Model_Checkpoint.pdf), [LaTeX source](reports/checkpoint/Pump_Model_Checkpoint.tex)).
 It consolidates the current equations, decisions, implementation limits and next

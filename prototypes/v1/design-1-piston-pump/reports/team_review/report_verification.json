@@ -1,0 +1,82 @@
+{
+  "date": "2026-11-23",
+  "source_branch": "v1-prototype-design-1-piston-pump",
+  "source_commit": "b5c1c42ccc11ed548dca2c163450246532ae94f3",
+  "pdf": {
+    "file": "Piston_Pump_Team_Report.pdf",
+    "pages": 32,
+    "sha256": "3641c63be9695a317b4e683b340954c0e15940401cd6159ba995e76b1f44e598"
+  },
+  "build": {
+    "compiler": "pdfTeX 1.40.26, local pdflatex format",
+    "passes": 3,
+    "all_passes_exit_code": 0,
+    "shell_escape_enabled": false,
+    "remote_compiler_used": false,
+    "overfull_boxes": 0,
+    "underfull_boxes": 0,
+    "undefined_references": false,
+    "benign_warning": "epstopdf shell escape disabled"
+  },
+  "document_checks": {
+    "all_32_pages_rendered_and_visually_reviewed": true,
+    "source_table_and_sketch_caption_layout_corrected": true,
+    "final_geometry_and_rear_pressure_pages_rechecked": true,
+    "pdf_replacement_characters": 0,
+    "original_sketches_included": 3,
+    "original_sketch_bytes_preserved": true,
+    "enlarged_excerpts_use_pdf_clipping_only": true
+  },
+  "scope": {
+    "new_hydraulic_simulation_run": false,
+    "new_matlab_execution": false,
+    "hardware_validation_performed": false,
+    "unified_enforced_valve_solver_complete": false,
+    "maximum_drive_force_rating_established": false,
+    "historical_results_labelled": true
+  },
+  "assets": [
+    {
+      "path": "assets/early_pump_schematic.png",
+      "source": "image(20261121-112131).png",
+      "sha256": "0233fd09e3d1520b376708035a12cccdada92bb66137524c81654231194471de",
+      "source_bytes_preserved": true
+    },
+    {
+      "path": "assets/early_opposed_sketch.jpeg",
+      "source": "clipboard_2026-11-21_11-24.jpeg",
+      "sha256": "3a0d0748958508ba9a97477c8e06acc0bcb2663a74fa44c7da5a22d3e397525f",
+      "source_bytes_preserved": true
+    },
+    {
+      "path": "assets/concept_development.jpeg",
+      "source": "prototypes/v1/design-1-piston-pump/references/concept_sketch_2026-11-21.jpeg",
+      "sha256": "f95400c1e1e5c872362223a18ad26872cb9b4345c3d1f3702f6cd0ea6879527e",
+      "source_bytes_preserved": true
+    },
+    {
+      "path": "assets/waveforms.png",
+      "source": "prototypes/v1/design-1-piston-pump/research/waveforms/waveform_comparison.png",
+      "sha256": "4de14cee1a9baf722a121995393de2450cae05c5b8dc8971e10dff03841518dd",
+      "source_bytes_preserved": true
+    },
+    {
+      "path": "assets/waveform_smoothing.png",
+      "source": "prototypes/v1/design-1-piston-pump/research/waveforms/smooth_waveform_comparison.png",
+      "sha256": "fdd6917e20ab1853da861d8cc9dd939771bf577aec1866a7d8f1d82cd857d7bb",
+      "source_bytes_preserved": true
+    },
+    {
+      "path": "assets/pressure_reference.png",
+      "source": "prototypes/v1/design-1-piston-pump/research/pressure_cycle/pressure_reference_comparison.png",
+      "sha256": "6b200dd30ea07ba147b8b4f297fa986fe341842d4b49abca27085cc8eeb8a2d0",
+      "source_bytes_preserved": true
+    },
+    {
+      "path": "assets/historical_force_trends.png",
+      "source": "prototypes/v1/design-1-piston-pump/archive/pump_hydraulic_sweep/Hydraulic_force_trends.png",
+      "sha256": "dd28ec364d5d01b76ab79412521bde2a221de410124c0cb0ffff08d4cb1db06c",
+      "source_bytes_preserved": true
+    }
+  ]
+}

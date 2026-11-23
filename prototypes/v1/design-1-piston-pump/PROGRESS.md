@@ -262,3 +262,10 @@ been completed by the Python packaging and register update.
 Immediate next decision: select the compatible flow/rate/load combinations
 and define the shared-chamber routing/timing alongside the dual-chamber phase
 relationship. Then extend the hydraulic model only enough to assess those cases.
+
+
+## 23 November 2026 — team report and complete derivation record
+
+Created the LaTeX team report with all three supplied concept images, enlarged original-image excerpts, unranked mechanism benefits/limitations, consolidated derivations, archived waveform/pressure/force plots, verification scope and a gated roadmap. The force expressions use the current effective wet/rear areas and explicit rear pressure. Historical passive-valve results and deferred finite-closure/drive work are labelled.
+
+The report was compiled locally and visually checked. Its source and figure assets are retained under `reports/team_review/`. This documentation task did not run a new hydraulic simulation, execute MATLAB, select components or change the current solver.
