@@ -1,5 +1,7 @@
 # Pump goal and concept comparison
 
+**Subsequent assessment, 23 November 2026:** [weighted C1–C10 matrix](WEIGHTED_DESIGN_MATRIX.md) applies the user’s supplied weights. The qualitative comparison below remains its architecture background; provisional scores do not close either concept.
+
 Working record · updated 22 November 2026 · both concepts remain under consideration.
 
 Both concepts use **enforced valve states coordinated with piston position/phase**.

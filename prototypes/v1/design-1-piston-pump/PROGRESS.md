@@ -269,3 +269,8 @@ relationship. Then extend the hydraulic model only enough to assess those cases.
 Created the LaTeX team report with all three supplied concept images, enlarged original-image excerpts, unranked mechanism benefits/limitations, consolidated derivations, archived waveform/pressure/force plots, verification scope and a gated roadmap. The force expressions use the current effective wet/rear areas and explicit rear pressure. Historical passive-valve results and deferred finite-closure/drive work are labelled.
 
 The report was compiled locally and visually checked. Its source and figure assets are retained under `reports/team_review/`. This documentation task did not run a new hydraulic simulation, execute MATLAB, select components or change the current solver.
+
+
+## 23 November 2026 — user-weighted concept assessment
+
+Applied the supplied C1–C10 weights to 1A shared sequential duties and 1B dual dedicated chambers, on an explicit provisional 1–5 scale. Totals are 2.84/5 and 3.45/5 respectively. The dual lead arises from hydraulic scheduling, waveform freedom and circuit interfaces. Equal holding scores cover 55% of the weight where cost, repeatability, manufacture, materials, maintenance, wear or interference evidence is missing. Recorded rationale, sensitivity and remaining feasibility checks in `WEIGHTED_DESIGN_MATRIX.md` and a CSV. No architecture was selected and no new hydraulic or hardware tests were run.
