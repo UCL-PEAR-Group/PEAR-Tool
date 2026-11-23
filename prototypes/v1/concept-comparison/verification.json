@@ -1,0 +1,36 @@
+{
+  "checks": [
+    "Blank inputs do not yield totals",
+    "Blank inputs do not yield ranks",
+    "Known scores produce expected weighted totals",
+    "Ranking follows totals",
+    "Changing inputs changes ranking",
+    "Missing score suppresses only its concept total",
+    "Incomplete comparison has no ranking",
+    "Invalid score 0 suppresses total",
+    "Invalid score 6 suppresses total",
+    "Invalid score 2.5 suppresses total",
+    "Invalid score \"unknown\" suppresses total",
+    "Invalid score \"3\" suppresses total",
+    "Equal totals share rank",
+    "Weights not summing to one suppress totals",
+    "Final score inputs restored to blank",
+    "Original weights preserved"
+  ],
+  "inspection": "{\"kind\":\"table\",\"sheet\":\"Comparison\",\"address\":\"C18:H21\",\"rows\":4,\"cols\":6,\"values\":[[\"Weighted total / 5\",1,\"\",\"\",\"\",\"\"],[\"Valid scores entered\",null,0,0,0,0],[\"Rank (1 = highest)\",\"Weights OK\",\"\",\"\",\"\",\"\"],[\"Score status\",null,\"Add scores\",\"Add scores\",\"Add scores\",\"Add scores\"]]}",
+  "error_scan": "{\"kind\":\"notice\",\"message\":\"Cell search matched 0 entries.\"}",
+  "native_excel_or_libreoffice_execution": false,
+  "date": "2026-11-23",
+  "source_commit": "22a1f358fd40f3f43fdc741a60972f928042fd91",
+  "sheets_visually_reviewed": [
+    "Comparison",
+    "Criteria and notes"
+  ],
+  "export_inspected": {
+    "sheet_count": 2,
+    "score_input_cells_blank": true,
+    "whole_number_validation_1_to_5_present": true,
+    "formulas_preserved": true
+  },
+  "xlsx_sha256": "c8f39af01cf24bcccf6ff12d161fad92458c0fd843aa3d49cc55c4f65721f0bb"
+}

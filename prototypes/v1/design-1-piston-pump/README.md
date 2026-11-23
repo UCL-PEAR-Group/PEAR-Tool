@@ -1,5 +1,7 @@
 # Design 1: Piston Pump
 
+**[Editable four-concept comparison](../concept-comparison/Pump_Concept_Comparison.xlsx)**: blank score and evidence fields for piston, diaphragm, impeller and peristaltic concepts, with the supplied criteria and automatic weighted totals/ranking.
+
 **[Weighted concept assessment](WEIGHTED_DESIGN_MATRIX.md)** ([CSV](WEIGHTED_DESIGN_MATRIX.csv)): user-supplied C1–C10 weights, applied provisionally on 23 November 2026. Single chamber 2.84/5; dual chambers 3.45/5. Holding scores cover unresolved evidence; neither concept is declared PDS-compliant.
 
 **[Team report: sketches, derivations and roadmap](reports/team_review/Piston_Pump_Team_Report.pdf)** ([source and assets](reports/team_review/README.md)). Consolidated 23 November 2026; qualitative mechanism trade-offs, all three supplied concept images and current modelling limits.
