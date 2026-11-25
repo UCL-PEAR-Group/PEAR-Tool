@@ -1,5 +1,7 @@
 # Piston pump model checkpoint
 
+**Historical checkpoint:** the user restarted the derivation on 25 November 2026 with an air-free wet chamber and variable commanded stroke. See [the current chamber/waveform foundation](research/restart/01_CHAMBER_AND_VARIABLE_STROKE.md). The 22 November assessment below preserves the preceding retained-air, fixed-travel direction; its calculations have not been converted or rerun.
+
 22 November 2026. Consolidated assessment of the model and its implementation,
 including the user's correction that the rear piston face need not be atmospheric.
 

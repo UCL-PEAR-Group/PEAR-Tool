@@ -1,5 +1,7 @@
 # Design 1: Piston Pump
 
+**Current derivation restart — 25 November 2026:** [chamber geometry, variable stroke and position-waveform input](research/restart/01_CHAMBER_AND_VARIABLE_STROKE.md). The new baseline has an air-free wet chamber and actuator-commanded variable travel within cylinder length minus plunger thickness. Volumetric efficiency is retained, with unity in the ideal loss-free limit. This supersedes the older fixed-travel/retained-front-air baseline for new development. Existing solvers, reports and scores below remain historical references until explicitly revised.
+
 **[Editable four-concept comparison](../concept-comparison/Pump_Concept_Comparison.xlsx)**: blank score and evidence fields for piston, diaphragm, impeller and peristaltic concepts, with the supplied criteria and automatic weighted totals/ranking.
 
 **[Weighted concept assessment](WEIGHTED_DESIGN_MATRIX.md)** ([CSV](WEIGHTED_DESIGN_MATRIX.csv)): user-supplied C1–C10 weights, applied provisionally on 23 November 2026. Single chamber 2.84/5; dual chambers 3.45/5. Holding scores cover unresolved evidence; neither concept is declared PDS-compliant.

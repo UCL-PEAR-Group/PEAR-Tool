@@ -1,5 +1,17 @@
 # Decision record
 
+## Derivation restart — 25 November 2026
+
+- Restart in stages, beginning with chamber geometry and piston extension versus swept volume.
+- Replace fixed working stroke with adjustable commanded stroke. Actuation/transmission design is deferred; prescribed piston position is the model input.
+- Use an air-free, completely liquid-filled wet chamber for the new ideal baseline. Retained-front-air calculations are historical comparators.
+- Use internal cylinder length minus plunger thickness as the ideal geometric travel limit. Dimensions remain symbolic for later CAD.
+- Retain volumetric efficiency in delivered-volume calculations and set it to one for the loss-free ideal case. It does not modify geometric chamber volume.
+- Use a normalised position waveform with separate amplitude, duration and shape. Derive inlet/outlet flow and pressure in subsequent stages.
+- Keep both architectures and earlier calculations. No solver rerun, force rating, dimension selection or revised concept score is implied.
+
+See [Restart 01](research/restart/01_CHAMBER_AND_VARIABLE_STROKE.md). These instructions supersede earlier fixed-stroke and retained-front-air baseline decisions for the restarted derivation.
+
 ## Waveform and timing flexibility — 22 November 2026
 
 - User wants to compare different waveform shapes and different ejection/filling
