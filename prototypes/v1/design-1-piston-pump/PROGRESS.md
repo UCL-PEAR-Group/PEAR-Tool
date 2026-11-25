@@ -284,3 +284,8 @@ Created `../concept-comparison/Pump_Concept_Comparison.xlsx` for the user to sco
 ## 25 November 2026 — staged derivation restarted
 
 Recorded the revised baseline: air-free wet chamber, variable actuator-commanded stroke, symbolic geometry and maximum travel equal to cylinder length minus plunger thickness. Listed the coupled model blocks and derived chamber volume from extension, geometric sweep, efficiency-adjusted delivery, target-volume travel and a normalised position waveform. Checked dimensions, signs and limiting cases analytically. Separated displacement rate from inlet/outlet flows and preserved earlier results as historical references. Next: chamber continuity and enforced valve routing. No new simulation, hardware test or matrix re-scoring was performed.
+
+
+## 25 November 2026 — valve continuity and pressure-control explanation
+
+Derived the ideal moving-chamber balance and direction-matched, exactly-one-open valve schedule. Distinguished chamber and downstream outlet pressure, introduced an illustrative external resistance/compliance balance, and explained compatible pressure/flow targets and control alternatives. Recorded primary-source support from Kung/Taylor, Meskin et al. and Franzetti et al. The current prescribed-position model remains the forward formulation; no controller or hydraulic hardware was selected and no simulation or experiment was run.

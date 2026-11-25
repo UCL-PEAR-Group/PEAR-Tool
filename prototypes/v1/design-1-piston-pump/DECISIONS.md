@@ -1,5 +1,15 @@
 # Decision record
 
+## Valve availability and pressure-control scope — 25 November 2026
+
+- User confirms one valve is open while the piston moves. In the ideal model, use inlet open/outlet closed during return and outlet open/inlet closed during advance. Both-closed switching requires stationary piston motion under the current incompressible, rigid, leak-free assumptions.
+- Exactly-one-open routing is a design rule; conservation alone proves only that a changing chamber volume needs an available flow path.
+- Distinguish chamber pressure from pressure downstream of the outlet valve. The latter is the assumed outlet control plane for this explanatory step; phantom pressures may require another node.
+- Retain the prescribed-position forward model. Pressure is calculated from flow and circuit loading. The two-element Windkessel used to explain controllability is illustrative, not a replacement hardware specification.
+- No pressure/flow controller, pressure target or resistance/compliance value is selected. Later feedback and joint pump/load adjustment remain options.
+
+See [Restart 02](research/restart/02_CONTINUITY_AND_PRESSURE_CONTROL.md).
+
 ## Derivation restart — 25 November 2026
 
 - Restart in stages, beginning with chamber geometry and piston extension versus swept volume.

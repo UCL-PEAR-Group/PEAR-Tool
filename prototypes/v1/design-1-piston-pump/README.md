@@ -1,5 +1,7 @@
 # Design 1: Piston Pump
 
+**Next restart step:** [continuity, enforced valve routing and pressure/flow control](research/restart/02_CONTINUITY_AND_PRESSURE_CONTROL.md). The moving-chamber balance supports an available flow path during motion. A simple external load explains why prescribed motion and fixed circuit properties determine pressure; joint pressure/flow targets must be compatible.
+
 **Current derivation restart — 25 November 2026:** [chamber geometry, variable stroke and position-waveform input](research/restart/01_CHAMBER_AND_VARIABLE_STROKE.md). The new baseline has an air-free wet chamber and actuator-commanded variable travel within cylinder length minus plunger thickness. Volumetric efficiency is retained, with unity in the ideal loss-free limit. This supersedes the older fixed-travel/retained-front-air baseline for new development. Existing solvers, reports and scores below remain historical references until explicitly revised.
 
 **[Editable four-concept comparison](../concept-comparison/Pump_Concept_Comparison.xlsx)**: blank score and evidence fields for piston, diaphragm, impeller and peristaltic concepts, with the supplied criteria and automatic weighted totals/ranking.
